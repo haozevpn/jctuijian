@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /redirect.html
+Disallow: /api/
+
+Sitemap: https://jctuijian.com/sitemap.xml

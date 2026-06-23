@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>正在跳转至机场官网... - JcTuijian</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://jctuijian.com/" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230EA5E9'/><text y='22' x='5' font-size='20'>✈</text></svg>" />
+</head>
+<body>
+
+<div class="redirect-page">
+  <div class="redirect-box">
+    <div class="redirect-spinner" id="spinner" aria-label="加载中"></div>
+    <h1 class="redirect-title" id="redirect-title">正在跳转...</h1>
+    <p class="redirect-desc" id="redirect-desc">即将前往机场官网，请稍候。</p>
+    <div class="redirect-cta" id="redirect-cta" style="display:none;">
+      <a href="#" id="redirect-manual-link">点击此处手动跳转 →</a>
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script>
+/* ── 点击中转页核心逻辑 ── */
+(function () {
+  const params    = new URLSearchParams(window.location.search);
+  const airportId = params.get('id')      || '';
+  const encodedUrl= params.get('url')     || '';
+  const from      = params.get('from')    || 'unknown';
+  const charged   = params.get('charged') || '0';  // 1 = 计费成功, 0 = 防刷跳过
+
+  // 解码目标 URL
+  let targetUrl = '';
+  try {
+    targetUrl = decodeURIComponent(encodedUrl);
+  } catch (e) {
+    targetUrl = encodedUrl;
+  }
+
+  // 校验基本合法性（只允许 http/https）
+  if (!targetUrl || !/^https?:\/\//i.test(targetUrl)) {
+    document.getElementById('redirect-title').textContent = '链接无效';
+    document.getElementById('redirect-desc').textContent  = '跳转目标地址不合法，即将返回首页。';
+    document.getElementById('spinner').style.display = 'none';
+    setTimeout(() => { window.location.href = '/'; }, 2000);
+    return;
+  }
+
+  // 从数据源查找机场名称
+  const airports = window.AIRPORTS_DATA || [];
+  const airport  = airports.find(a => a.id === airportId);
+  const name     = airport ? airport.name : '目标机场';
+
+  // 更新页面文字
+  document.getElementById('redirect-title').textContent =
+    `正在跳转至 ${name} 官网...`;
+  document.getElementById('redirect-desc').textContent =
+    charged === '1'
+      ? `本次跳转已计入有效点击统计。如未自动跳转，请点击下方按钮。`
+      : `本次跳转（来源：${from}）。如未自动跳转，请点击下方按钮。`;
+
+  // 3 秒后显示手动跳转按钮（兜底方案）
+  const ctaEl   = document.getElementById('redirect-cta');
+  const linkEl  = document.getElementById('redirect-manual-link');
+  linkEl.href   = targetUrl;
+  linkEl.setAttribute('target', '_blank');
+  linkEl.setAttribute('rel', 'noopener noreferrer');
+
+  const fallbackTimer = setTimeout(() => {
+    ctaEl.style.display = 'block';
+  }, 3000);
+
+  // 上报点击到后端（可选 - 生产阶段启用）
+  // fetch('/api/v1/redirect-confirm', {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify({ id: airportId, from, charged: charged === '1', ts: Date.now() }),
+  //   keepalive: true,
+  // }).catch(() => {});
+
+  // 立即执行跳转（新 Tab 模式：window.open；同 Tab 模式：location.href）
+  // 此处选择同 Tab 跳转，与"官网"按钮在新 Tab 打开不同
+  setTimeout(() => {
+    clearTimeout(fallbackTimer);
+    window.location.href = targetUrl;
+  }, 800);
+
+})();
+</script>
+
+</body>
+</html>
