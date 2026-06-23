@@ -607,18 +607,29 @@
         </div>
 
         <div class="form-group">
-          <label for="edit-tags">分类标签 (JSON格式，如: ["IPLC专线","大带宽"])</label>
-          <input type="text" id="edit-tags" class="form-control" />
+          <label for="edit-tags">分类标签 (使用逗号或空格隔开，如: IPLC专线, 大带宽, 解锁流媒体)</label>
+          <input type="text" id="edit-tags" class="form-control" placeholder="例如: 晚高峰稳定, IEPL专线, 解锁流媒体" />
         </div>
 
         <div class="form-group">
-          <label for="edit-tag-colors">标签颜色 (JSON格式，如: ["blue","green"])</label>
-          <input type="text" id="edit-tag-colors" class="form-control" placeholder='["blue", "green", "purple", "orange", "red"]' />
-        </div>
-
-        <div class="form-group">
-          <label for="edit-category">所处版块 (JSON格式，如: ["today","stable"])</label>
-          <input type="text" id="edit-category" class="form-control" placeholder='["today", "stable", "value", "new"]' />
+          <label>所处版块 (勾选加入相应榜单)</label>
+          <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; background: #f8fafc; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
+            <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer; color: #475569;">
+              <input type="checkbox" name="edit-cat-cb" value="today" style="width: 16px; height: 16px;" /> 今日推荐
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer; color: #475569;">
+              <input type="checkbox" name="edit-cat-cb" value="stable" style="width: 16px; height: 16px;" /> 长期稳定
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer; color: #475569;">
+              <input type="checkbox" name="edit-cat-cb" value="value" style="width: 16px; height: 16px;" /> 性价比
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer; color: #475569;">
+              <input type="checkbox" name="edit-cat-cb" value="new" style="width: 16px; height: 16px;" /> 新入榜
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer; color: #475569;">
+              <input type="checkbox" name="edit-cat-cb" value="risk" style="width: 16px; height: 16px;" /> 风险预警
+            </label>
+          </div>
         </div>
 
         <div class="form-group">
@@ -1023,9 +1034,13 @@
       document.getElementById('edit-price').value = a.price || '';
       document.getElementById('edit-bid').value = a.bid_price || 0.50;
       document.getElementById('edit-days').value = a.days_online || 0;
-      document.getElementById('edit-tags').value = JSON.stringify(a.tags || []);
-      document.getElementById('edit-tag-colors').value = JSON.stringify(a.tag_colors || []);
-      document.getElementById('edit-category').value = JSON.stringify(a.category || []);
+      document.getElementById('edit-tags').value = (a.tags || []).join(', ');
+      
+      // 所处版块多选框初始化
+      document.querySelectorAll('input[name="edit-cat-cb"]').forEach(cb => {
+        cb.checked = (a.category || []).includes(cb.value);
+      });
+      
       document.getElementById('edit-highlight').value = a.highlight || '';
       document.getElementById('edit-conclusion').value = a.conclusion || '';
 
@@ -1044,9 +1059,13 @@
       document.getElementById('edit-price').value = '¥15/月起';
       document.getElementById('edit-bid').value = 0.50;
       document.getElementById('edit-days').value = 365;
-      document.getElementById('edit-tags').value = '["中转专线","BGP线路"]';
-      document.getElementById('edit-tag-colors').value = '["blue","green"]';
-      document.getElementById('edit-category').value = '["today","stable"]';
+      document.getElementById('edit-tags').value = '中转专线, BGP线路';
+      
+      // 默认勾选今日推荐与长期稳定
+      document.querySelectorAll('input[name="edit-cat-cb"]').forEach(cb => {
+        cb.checked = (cb.value === 'today' || cb.value === 'stable');
+      });
+      
       document.getElementById('edit-highlight').value = '特价首发';
       document.getElementById('edit-conclusion').value = '亮点：手动录入审核完成的优质机场。';
 
@@ -1063,10 +1082,16 @@
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
       };
 
-      let tagsVal, tagColorsVal, catVal;
-      try { tagsVal = JSON.parse(document.getElementById('edit-tags').value || '[]'); } catch { tagsVal = []; }
-      try { tagColorsVal = JSON.parse(document.getElementById('edit-tag-colors').value || '[]'); } catch { tagColorsVal = []; }
-      try { catVal = JSON.parse(document.getElementById('edit-category').value || '[]'); } catch { catVal = []; }
+      // 解析标签：支持逗号、空格分隔
+      const tagsRaw = document.getElementById('edit-tags').value || '';
+      const tagsVal = tagsRaw.split(/[,，\s]+/).map(t => t.trim()).filter(Boolean);
+
+      // 自动循环配置颜色
+      const colorPalette = ['blue', 'green', 'purple', 'orange', 'red'];
+      const tagColorsVal = tagsVal.map((_, index) => colorPalette[index % colorPalette.length]);
+
+      // 获取选中的版块
+      const catVal = Array.from(document.querySelectorAll('input[name="edit-cat-cb"]:checked')).map(cb => cb.value);
 
       const payload = {
         id: id,
