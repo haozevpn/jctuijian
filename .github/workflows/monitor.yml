@@ -25,6 +25,13 @@ jobs:
       - name: Install Dependencies
         run: pip install -r monitor/requirements.txt
 
+      - name: Execute Debug Connection
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: python monitor/debug_api.py
+
       - name: Execute Monitor Script
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
