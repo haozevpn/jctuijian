@@ -11,9 +11,9 @@
   const CLICK_COOLDOWN_MS  = 5 * 60 * 1000; // 5分钟防刷冷却
   const REDIRECT_PAGE      = 'redirect.html';
 
-  // Supabase 实时数据（填入后自动从数据库拉取最新评分，留空则用 data.js 静态数据）
-  const SUPABASE_URL      = '';  // e.g. 'https://xxxx.supabase.co'
-  const SUPABASE_ANON_KEY = '';  // e.g. 'eyJ...'
+  // Supabase 实时数据
+  const SUPABASE_URL      = 'https://jsdvhryfmuadxaijmsjb.supabase.co';
+  const SUPABASE_ANON_KEY = '';  // ⬅ 填入你的 sb_publishable_... 可发布密钥
 
   /* ── DOM 就绪 ─────────────────────────────────────────── */
   document.addEventListener('DOMContentLoaded', async () => {
@@ -292,8 +292,7 @@
       };
       console.info('[JCT Click]', payload);
 
-      // 生产阶段启用：
-      /*
+      // 上报点击到 Supabase（已启用）
       if (SUPABASE_URL && SUPABASE_ANON_KEY) {
         fetch(`${SUPABASE_URL}/rest/v1/click_logs`, {
           method: 'POST',
@@ -312,7 +311,6 @@
           keepalive: true,
         }).catch(() => {});
       }
-      */
     },
   };
 
