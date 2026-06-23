@@ -680,6 +680,80 @@
     </div>
   </div>
 
+  <!-- ── 弹窗 3：编辑优惠活动 ────────────────────── -->
+  <div class="modal-overlay" id="edit-promo-overlay">
+    <div class="modal-box" style="max-width: 500px;">
+      <h3 class="modal-title">编辑优惠活动</h3>
+      <form id="edit-promo-form">
+        <input type="hidden" id="edit-promo-id" />
+        
+        <div class="form-group">
+          <label>机场商户 ID</label>
+          <input type="text" id="edit-promo-airport-id" class="form-control" disabled style="background:#f1f5f9; color:#64748b;" />
+        </div>
+
+        <div class="form-group">
+          <label for="edit-promo-code">优惠码 *</label>
+          <input type="text" id="edit-promo-code" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+          <label for="edit-promo-title">活动标题 *</label>
+          <input type="text" id="edit-promo-title" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+          <label for="edit-promo-desc">折扣说明/描述 *</label>
+          <textarea id="edit-promo-desc" class="form-control" rows="3" required style="resize:none; font-family:inherit;"></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label for="edit-promo-packages">适用套餐 *</label>
+            <input type="text" id="edit-promo-packages" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label for="edit-promo-pct">折扣百分比</label>
+            <input type="number" id="edit-promo-pct" class="form-control" min="0" max="100" />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label for="edit-promo-status">状态 *</label>
+            <select id="edit-promo-status" class="form-control" required>
+              <option value="active">投放中 (active)</option>
+              <option value="expired">已下架 (expired)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="edit-promo-expires">过期时间 *</label>
+            <input type="datetime-local" id="edit-promo-expires" class="form-control" required />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-action btn-secondary" onclick="closeModal('edit-promo-overlay')">取消</button>
+          <button type="submit" class="btn-action">保存修改</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── 弹窗：申请人详情 ────────────────────────────────── -->
+  <div class="modal-overlay" id="app-details-overlay">
+    <div class="modal-box" style="max-width:560px;">
+      <h3 class="modal-title" id="app-details-title">商户申请详情</h3>
+      <div id="app-details-body" style="font-size:0.85rem; color:#334155; line-height:1.8;">
+        <!-- 动态填充 -->
+      </div>
+      <div class="modal-footer" style="margin-top:24px;">
+        <button type="button" class="btn-action btn-secondary" onclick="closeModal('app-details-overlay')">关闭</button>
+        <button type="button" class="btn-action" id="app-details-approve-btn">✅ 通过并上架</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ── 脚本逻辑 ────────────────────────────────────── -->
   <script>
     const SUPABASE_URL      = 'https://jsdvhryfmuadxaijmsjb.supabase.co';
@@ -708,6 +782,7 @@
 
       document.getElementById('edit-airport-form').addEventListener('submit', handleSaveAirport);
       document.getElementById('balance-form').addEventListener('submit', handleAdjustBalance);
+      document.getElementById('edit-promo-form').addEventListener('submit', handleSavePromo);
     });
 
     function checkLoginStatus() {
@@ -801,23 +876,30 @@
       const tbody = document.getElementById('pending-list-tbody');
       tbody.innerHTML = '';
       if (pendings.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#64748b;">✅ 暂无待审核入驻商户</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#64748b;">✅ 暂无待审核入驻商户</td></tr>';
         return;
       }
 
       pendings.forEach(a => {
+        // 检查是否已有已确认的entry订单
+        const hasPaid = (ordersList || []).some(o => o.airport_id === a.id && o.order_type === 'entry' && o.status === 'confirmed');
+        const payBadge = hasPaid
+          ? '<span style="background:#dcfce7;color:#166534;font-size:0.7rem;font-weight:700;padding:3px 8px;border-radius:6px;border:1px solid #bbf7d0;">💰 已付入驻费</span>'
+          : '<span style="background:#f1f5f9;color:#94a3b8;font-size:0.7rem;font-weight:700;padding:3px 8px;border-radius:6px;border:1px solid #e2e8f0;">❌ 未付入驻费</span>';
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td style="font-weight:700;">${escapeHtml(a.name)}</td>
           <td><a href="mailto:${escapeHtml(a.merchant_email)}" style="color:#0ea5e9;">${escapeHtml(a.merchant_email)}</a></td>
           <td><a href="${escapeHtml(a.website_url)}" target="_blank">${escapeHtml(a.website_url)}</a></td>
-          <td>${a.sub_url ? `<span style="font-family:monospace; font-size:0.75rem; color:#64748b;">${escapeHtml(a.sub_url.substring(0,35))}...</span>` : '<span style="color:#94a3b8;">无</span>'}</td>
+          <td>${a.sub_url ? `<span style="font-family:monospace;font-size:0.75rem;color:#64748b;">${escapeHtml(a.sub_url.substring(0,35))}...</span>` : '<span style="color:#94a3b8;">无</span>'}</td>
           <td>${a.days_online || 0} 天</td>
-          <td><span class="status-badge status-pending">待审核</span></td>
+          <td>${payBadge}</td>
           <td>
-            <div style="display:flex;gap:6px;">
-              <button class="btn-action btn-success" style="font-size:0.75rem;padding:4px 8px;" onclick="approveAirport('${a.id}')">通过并上架</button>
-              <button class="btn-action btn-danger" style="font-size:0.75rem;padding:4px 8px;" onclick="deleteAirport('${a.id}')">拒绝/删除</button>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button class="btn-action" style="font-size:0.72rem;padding:4px 8px;background:#f8fafc;color:#334155;border:1px solid #e2e8f0;" onclick="openAppDetails('${a.id}')">🔍 详情</button>
+              <button class="btn-action btn-success" style="font-size:0.72rem;padding:4px 8px;" onclick="approveAirport('${a.id}')">通过并上架</button>
+              <button class="btn-action btn-danger" style="font-size:0.72rem;padding:4px 8px;" onclick="deleteAirport('${a.id}')">拒绝/删除</button>
             </div>
           </td>
         `;
@@ -940,7 +1022,10 @@
           <td>${expireDate}</td>
           <td>${statusBadge}</td>
           <td>
-            <button class="btn-action btn-danger" style="font-size:0.7rem;padding:2px 6px;" onclick="deletePromo(${p.id})">删除</button>
+            <div style="display:flex;gap:4px;">
+              <button class="btn-action" style="font-size:0.7rem;padding:2px 6px;" onclick="openEditPromoModal(${p.id})">编辑</button>
+              <button class="btn-action btn-danger" style="font-size:0.7rem;padding:2px 6px;" onclick="deletePromo(${p.id})">删除</button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
@@ -973,15 +1058,15 @@
           'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
         };
 
+        // 获取商户当前信息，保留原有价格
+        const airport = airportsList.find(a => a.id === airportId);
         const payload = {
-          status: 'active',
-          price: '¥15/月起',
-          tags: ["CN2专线", "解锁流媒体", "多端支持"],
-          tag_colors: ["blue", "green", "purple"],
-          highlight: '官方推荐入驻',
-          conclusion: '亮点：该商户已完成实名入驻与资料审核，线路正处于全天候监测中，节点通畅度高。',
-          category: ["today", "new"],
-          score: 75.0,
+          status:      'active',
+          tags:        airport && airport.tags && airport.tags.length ? airport.tags : ['CN2专线', '解锁流媒体', '多端支持'],
+          tag_colors:  airport && airport.tag_colors && airport.tag_colors.length ? airport.tag_colors : ['blue', 'green', 'purple'],
+          highlight:   airport && airport.highlight && airport.highlight !== '待审核入驻' ? airport.highlight : '官方推荐入驻',
+          category:    ['today', 'new'],
+          score:       75.0,
           score_delta: '+0.00'
         };
 
@@ -992,11 +1077,59 @@
         });
 
         if (!resp.ok) throw new Error(await resp.text());
-        alert('审核通过！商户已上架并开启监测评分！');
+        alert('✅ 审核通过！商户已上架，初始评分 75.0，开始全天候监测！');
+        closeModal('app-details-overlay');
         loadAllData();
       } catch (e) {
         alert('修改失败: ' + e.message);
       }
+    }
+
+    // 申请人详情弹窗
+    function openAppDetails(airportId) {
+      const a = airportsList.find(item => item.id === airportId);
+      if (!a) return;
+
+      document.getElementById('app-details-title').textContent = `申请详情 — ${a.name}`;
+
+      // 尝试解析 conclusion 中的 JSON 扩展信息
+      let extra = {};
+      try { extra = JSON.parse(a.conclusion || '{}'); } catch(e) { extra = {}; }
+
+      const hasPaid = (ordersList || []).some(o => o.airport_id === a.id && o.order_type === 'entry' && o.status === 'confirmed');
+
+      const rows = [
+        ['机场名称',     a.name],
+        ['联系邮箱',     `<a href="mailto:${a.merchant_email}" style="color:#0ea5e9;">${a.merchant_email}</a>`],
+        ['Telegram',    extra.tg ? `<a href="https://t.me/${extra.tg.replace('@','')}" target="_blank" style="color:#0ea5e9;">${extra.tg}</a>` : '未填写'],
+        ['主官网地址',   `<a href="${a.website_url}" target="_blank" style="color:#0ea5e9;">${a.website_url}</a>`],
+        ['推广链接',     `<a href="${a.affiliate_url}" target="_blank" style="color:#0ea5e9;">${a.affiliate_url}</a>`],
+        ['订阅链接',     a.sub_url ? `<span style="font-family:monospace;font-size:0.8rem;">${a.sub_url}</span>` : '<span style="color:#94a3b8;">未填写</span>'],
+        ['月付价格',     a.price || '待定'],
+        ['成立时间',     extra.founded || '未填写'],
+        ['已运营天数',   (a.days_online || 0) + ' 天'],
+        ['支持试用',     extra.trial ? '✅ 支持' : '❌ 不支持'],
+        ['机场简介',     extra.intro || a.conclusion || '未填写'],
+        ['测试账号',     extra.test_user || '未填写'],
+        ['测试密码',     extra.test_pass || '未填写'],
+        ['入驻费支付',   hasPaid ? '<span style="color:#166534;font-weight:700;">💰 已支付确认</span>' : '<span style="color:#dc2626;font-weight:700;">❌ 尚未支付</span>'],
+      ];
+
+      document.getElementById('app-details-body').innerHTML = `
+        <table style="width:100%;border-collapse:collapse;">
+          ${rows.map(([label, val]) => `
+            <tr style="border-bottom:1px solid #f1f5f9;">
+              <td style="padding:8px 4px;font-weight:700;color:#64748b;white-space:nowrap;width:110px;">${label}</td>
+              <td style="padding:8px 4px;">${val}</td>
+            </tr>
+          `).join('')}
+        </table>
+      `;
+
+      const approveBtn = document.getElementById('app-details-approve-btn');
+      approveBtn.onclick = () => approveAirport(airportId);
+
+      openModal('app-details-overlay');
     }
 
     // 删除/拒绝商户
@@ -1299,6 +1432,79 @@
         loadAllData();
       } catch (e) {
         alert('删除失败: ' + e.message);
+      }
+    }
+
+    // 优惠活动编辑 Modal
+    function openEditPromoModal(promoId) {
+      const p = promosList.find(item => item.id === promoId);
+      if (!p) return;
+      document.getElementById('edit-promo-id').value = p.id;
+      document.getElementById('edit-promo-airport-id').value = p.airport_id;
+      document.getElementById('edit-promo-code').value = p.promo_code;
+      document.getElementById('edit-promo-title').value = p.title;
+      document.getElementById('edit-promo-desc').value = p.description;
+      document.getElementById('edit-promo-packages').value = p.packages || '';
+      document.getElementById('edit-promo-pct').value = p.discount_pct || 0;
+      document.getElementById('edit-promo-status').value = p.status || 'active';
+      
+      if (p.expires_at) {
+        const d = new Date(p.expires_at);
+        const pad = n => String(n).padStart(2, '0');
+        const formatted = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        document.getElementById('edit-promo-expires').value = formatted;
+      } else {
+        document.getElementById('edit-promo-expires').value = '';
+      }
+      
+      openModal('edit-promo-overlay');
+    }
+
+    async function handleSavePromo(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-promo-id').value;
+      const code = document.getElementById('edit-promo-code').value.trim();
+      const title = document.getElementById('edit-promo-title').value.trim();
+      const desc = document.getElementById('edit-promo-desc').value.trim();
+      const packages = document.getElementById('edit-promo-packages').value.trim();
+      const pct = parseInt(document.getElementById('edit-promo-pct').value, 10) || 0;
+      const status = document.getElementById('edit-promo-status').value;
+      const expiresVal = document.getElementById('edit-promo-expires').value;
+
+      if (!code || !title || !desc || !packages || !expiresVal) {
+        alert('请填齐必填项！');
+        return;
+      }
+
+      const expires_at = new Date(expiresVal).toISOString();
+
+      try {
+        const headers = {
+          'Content-Type':  'application/json',
+          'apikey':         SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        };
+
+        const resp = await fetch(`${SUPABASE_URL}/rest/v1/promotions?id=eq.${id}`, {
+          method: 'PATCH',
+          headers,
+          body: JSON.stringify({
+            promo_code: code,
+            title: title,
+            description: desc,
+            packages: packages,
+            discount_pct: pct,
+            status: status,
+            expires_at: expires_at
+          })
+        });
+
+        if (!resp.ok) throw new Error(await resp.text());
+        alert('修改优惠活动成功！');
+        closeModal('edit-promo-overlay');
+        loadAllData();
+      } catch (err) {
+        alert('保存错误: ' + err.message);
       }
     }
 
