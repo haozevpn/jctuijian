@@ -125,7 +125,7 @@
         local.conclusion = row.conclusion || local.conclusion;
         local.price      = row.price || local.price;
         local.category   = row.category || local.category;
-        local.score      = row.score;
+        local.score      = (row.score !== null && row.score !== undefined && Number(row.score) !== 0) ? Number(row.score) : (local.score || 75.0);
         local.scoreDelta = row.score_delta || '+0.00';
         local.daysOnline = row.days_online || 0;
         local.status     = row.status;
