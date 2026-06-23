@@ -499,7 +499,8 @@
     btn.disabled = true;
     btn.textContent = '提交申请中...';
 
-    const cleanId = email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '');
+    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+    const cleanId = email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '') + randomSuffix;
 
     const payload = {
       id: cleanId,
