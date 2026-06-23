@@ -209,11 +209,11 @@ window.TAG_COLOR_MAP = {
 
 // ── 分类配置 ──────────────────────────────────────────────
 window.CATEGORIES = [
-  { key: "today",  label: "今日推荐", icon: "🔥" },
-  { key: "stable", label: "长期稳定", icon: "🛡️" },
-  { key: "value",  label: "性价比",   icon: "💰" },
-  { key: "new",    label: "新入榜",   icon: "✨" },
-  { key: "risk",   label: "风险预警", icon: "⚠️" },
+  { key: "today",  label: "今日推荐", icon: "" },
+  { key: "stable", label: "长期稳定", icon: "" },
+  { key: "value",  label: "性价比",   icon: "" },
+  { key: "new",    label: "新入榜",   icon: "" },
+  { key: "risk",   label: "风险预警", icon: "" },
 ];
 
 // ── 站点统计 ──────────────────────────────────────────────

@@ -34,35 +34,40 @@
       await syncFromSupabase();
     }
 
-    renderSection('today');
+    // 根据当前网页文件名进行路由渲染
+    const path = window.location.pathname;
+    if (path.includes('all.html') || path.endsWith('/all')) {
+      setActiveNavbar('all');
+      renderFullList();
+    } else if (path.includes('promo.html') || path.endsWith('/promo')) {
+      setActiveNavbar('promo');
+      renderPromos();
+    } else if (path.includes('risk.html') || path.endsWith('/risk')) {
+      setActiveNavbar('risk');
+      renderRisks();
+    } else if (path.includes('method.html') || path.endsWith('/method')) {
+      setActiveNavbar('method');
+      renderMethods();
+    } else {
+      setActiveNavbar('today');
+      renderSection('today');
+    }
   });
+
+  function setActiveNavbar(navId) {
+    const navLinks = document.querySelectorAll('.navbar-nav a');
+    navLinks.forEach(link => {
+      if (link.id === `nav-${navId}`) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  }
 
   /* ── 导航栏联动 ─────────────────────────────────────────── */
   function initNavbarLinks() {
-    const navLinks = document.querySelectorAll('.navbar-nav a[data-nav]');
-    navLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        navLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-
-        const section = link.dataset.nav;
-        if (section === 'today') {
-          switchTab('today');
-        } else if (section === 'all') {
-          renderFullList();
-        } else if (section === 'promo') {
-          renderPromos();
-        } else if (section === 'risk') {
-          renderRisks();
-        } else if (section === 'method') {
-          renderMethods();
-        }
-
-        const target = document.getElementById('ranking-section');
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
+    // 允许浏览器正常导航，无需拦截
   }
 
   function switchTab(catId) {
@@ -84,7 +89,7 @@
   async function syncFromSupabase() {
     try {
       const resp = await fetch(
-        `${SUPABASE_URL}/rest/v1/airports?select=id,score,score_delta,days_online,status&status=eq.active`,
+        `${SUPABASE_URL}/rest/v1/airports?select=id,name,website_url,affiliate_url,tags,tag_colors,highlight,conclusion,price,category,score,score_delta,days_online,status&status=eq.active`,
         {
           headers: {
             'apikey':        SUPABASE_ANON_KEY,
@@ -95,15 +100,36 @@
       if (!resp.ok) return;
       const rows = await resp.json();
 
-      // 用数据库中的最新评分覆盖本地静态数据
       rows.forEach(row => {
-        const local = (window.AIRPORTS_DATA || []).find(a => a.id === row.id);
-        if (local) {
-          local.score      = row.score;
-          local.scoreDelta = row.score_delta || '+0.00';
-          local.daysOnline = row.days_online || local.daysOnline;
-          local.status     = row.status;
+        let local = (window.AIRPORTS_DATA || []).find(a => a.id === row.id);
+        if (!local) {
+          local = {
+            id: row.id,
+            name: row.name,
+            url: row.affiliate_url || row.website_url,
+            tags: row.tags || [],
+            tagColors: row.tag_colors || [],
+            highlight: row.highlight,
+            conclusion: row.conclusion,
+            price: row.price,
+            category: row.category || ["today"],
+            status: row.status,
+          };
+          window.AIRPORTS_DATA.push(local);
         }
+        local.name       = row.name || local.name;
+        local.url        = row.affiliate_url || row.website_url || local.url;
+        local.tags       = row.tags || local.tags;
+        local.tagColors  = row.tag_colors || local.tagColors;
+        local.highlight  = row.highlight || local.highlight;
+        local.conclusion = row.conclusion || local.conclusion;
+        local.price      = row.price || local.price;
+        local.category   = row.category || local.category;
+        local.score      = row.score;
+        local.scoreDelta = row.score_delta || '+0.00';
+        local.daysOnline = row.days_online || 0;
+        local.status     = row.status;
+        local.risk       = row.status === 'risk' || (row.category && row.category.includes('risk')) ? 'high' : null;
       });
 
       // 更新统计数字
@@ -233,7 +259,7 @@
     const t = document.getElementById('section-title-text');
     const i = document.getElementById('section-icon-text');
     if (t) t.textContent = '全量机场测评榜单';
-    if (i) i.textContent  = '📊';
+    if (i) i.textContent  = '';
 
     const airports = [...(window.AIRPORTS_DATA || [])];
     airports.sort((a, b) => {
@@ -262,7 +288,7 @@
     const t = document.getElementById('section-title-text');
     const i = document.getElementById('section-icon-text');
     if (t) t.textContent = '限时折扣与机场优惠券';
-    if (i) i.textContent  = '🎁';
+    if (i) i.textContent  = '';
 
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--color-text-muted);padding:40px;">正在获取最新特惠活动...</div>';
 
@@ -344,8 +370,7 @@
       } else {
         html += `
           <div class="promo-card empty-promo-card">
-            <div style="font-size: 2.2rem; filter: grayscale(1); opacity: 0.65; margin-bottom: 8px;">🎁</div>
-            <div class="empty-promo-title">虚位以待</div>
+            <div class="empty-promo-title" style="margin-top: 8px;">虚位以待</div>
             <p style="font-size: 0.78rem; color: var(--color-text-muted); margin-top: 8px; line-height: 1.5;">
               该广告位空闲中<br/>商户可在控制台自助投放广告上架
             </p>
@@ -368,7 +393,7 @@
     const t = document.getElementById('section-title-text');
     const i = document.getElementById('section-icon-text');
     if (t) t.textContent = '异常与跑路预警通报';
-    if (i) i.textContent  = '🛑';
+    if (i) i.textContent  = '';
 
     grid.innerHTML = `
       <div class="warning-log-list" style="grid-column: 1 / -1; width: 100%;">
@@ -428,7 +453,7 @@
     const t = document.getElementById('section-title-text');
     const i = document.getElementById('section-icon-text');
     if (t) t.textContent = '科学上网机场测评方法与评分标准说明';
-    if (i) i.textContent  = '📝';
+    if (i) i.textContent  = '';
 
     grid.innerHTML = `
       <div class="method-container" style="grid-column: 1 / -1; width: 100%;">
@@ -439,24 +464,20 @@
 
         <div class="method-grid">
           <div class="method-step">
-            <span class="method-step-icon">⏱️</span>
             <h4>全天候可用性监测</h4>
             <p>每隔30分钟，监测脚本从美国、新加坡、日本、中国香港等4个机房节点，向机场官网及订阅地址发起探测。</p>
           </div>
           <div class="method-step">
-            <span class="method-step-icon">⚡</span>
             <h4>订阅可用率 (50%)</h4>
             <p>评估订阅内容获取是否顺畅。如果订阅解析接口频繁超时或返回空配置，将会导致分值严重下滑。</p>
           </div>
           <div class="method-step">
-            <span class="method-step-icon">🌐</span>
             <h4>官网可用率 (30%)</h4>
             <p>官网是用户充值、找回密码、更换配置的唯一通道，官网的可用性与是否被污染直接影响最终评分。</p>
           </div>
           <div class="method-step">
-            <span class="method-step-icon">🛡️</span>
             <h4>运营天数与信誉 (20%)</h4>
-            <p>老牌机场拥有更丰富的运营经验和冗余带宽，新机场在初期会获得新秀分值保护，但高风险机场会被扣减分值。</p>
+            <p>老牌机场拥有更丰富的运营经验 and 冗余带宽，新机场在初期会获得新秀分值保护，但高风险机场会被扣减分值。</p>
           </div>
         </div>
 
@@ -576,7 +597,6 @@
     article.setAttribute('data-id', airport.id);
     article.innerHTML = `
       <div style="text-align:center;padding:28px 16px;">
-        <div style="font-size:1.8rem;margin-bottom:10px;">🔜</div>
         <div style="font-family:var(--font-display);font-size:1rem;font-weight:700;
                     color:var(--color-text-primary);margin-bottom:6px;">
           ${escHtml(airport.name)}

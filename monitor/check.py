@@ -122,15 +122,20 @@ async def check_airport(client: httpx.AsyncClient, airport: dict) -> dict:
 # ════════════════════════════════════════════════════════════
 #  评分计算
 # ════════════════════════════════════════════════════════════
-def compute_score(airport_id: str) -> float:
+def compute_score(airport_id: str, airport: dict) -> float:
     """
     从数据库读取近30天的检测记录，计算可靠性评分（0-100）。
+    按照如下办法执行：
+      1. 订阅可用率 (50%)
+      2. 官网可用率 (30%)
+      3. 运营天数与信誉 (20%)
+    并对最终得分进行向中心压缩（0-100 映射至 45-90）以避免极端值。
     """
     try:
         # 近30天所有记录
         rows = (
             supabase.table("speed_logs")
-            .select("website_ok, website_ms")
+            .select("website_ok, website_ms, sub_ok")
             .eq("airport_id", airport_id)
             .gte("checked_at", "now() - interval '30 days'")
             .execute()
@@ -138,36 +143,52 @@ def compute_score(airport_id: str) -> float:
         )
 
         if not rows:
-            return 0.0
+            # 没有历史数据时，给定一个基础可用率
+            web_avail_rate = 1.0
+            sub_avail_rate = 1.0
+        else:
+            total_rows = len(rows)
+            web_ok_count = sum(1 for r in rows if r["website_ok"])
+            web_avail_rate = web_ok_count / total_rows
 
-        total         = len(rows)
-        ok_count      = sum(1 for r in rows if r["website_ok"])
-        availability  = ok_count / total  # 0~1
+            sub_rows = [r for r in rows if r.get("sub_ok") is not None]
+            if sub_rows:
+                sub_ok_count = sum(1 for r in sub_rows if r["sub_ok"])
+                sub_avail_rate = sub_ok_count / len(sub_rows)
+            else:
+                sub_avail_rate = 1.0  # 若没有拉取过订阅，默认为100%
 
-        ms_list       = [r["website_ms"] for r in rows if r["website_ms"] is not None]
-        avg_ms        = sum(ms_list) / len(ms_list) if ms_list else 9999
+        # 1. 订阅可用率得分 (满分 50)
+        sub_score = sub_avail_rate * 50.0
 
-        # 速度得分：响应时间越短越好，< 300ms 满分，> 3000ms 得0分
-        speed_score   = max(0.0, 1.0 - (avg_ms - 300) / 2700) if avg_ms > 300 else 1.0
+        # 2. 官网可用率得分 (满分 30)
+        web_score = web_avail_rate * 30.0
 
-        # 延迟得分（同速度得分，略有不同权重）
-        latency_score = speed_score
+        # 3. 运营天数与信誉得分 (满分 20)
+        days_online = airport.get("days_online") or 0
+        # 基础信誉分 18.0，每上线 1 天加 2/180 分，满 180 天得满分 20.0
+        reputation_score = 18.0 + min(2.0, days_online / 180.0 * 2.0)
 
-        # 连续7天无中断（检查最近 7 × 48 = 336 条记录有无连续失败）
-        recent7 = rows[-min(336, len(rows)):]
-        consistency = 1.0 if all(r["website_ok"] for r in recent7) else 0.7
+        raw_score = sub_score + web_score + reputation_score
 
-        score = (
-            availability  * SCORE_WEIGHTS["availability_30d"] * 100
-          + speed_score   * SCORE_WEIGHTS["speed_score"]      * 100
-          + latency_score * SCORE_WEIGHTS["latency_score"]    * 100
-          + consistency   * SCORE_WEIGHTS["consistency"]      * 100
-        )
+        # 扣分规则：如果属于风险预警类别 (category 包含 "risk")，扣减 50 分
+        category = airport.get("category") or []
+        if isinstance(category, str):
+            try:
+                category = json.loads(category)
+            except Exception:
+                category = []
+        if "risk" in category:
+            raw_score = max(0.0, raw_score - 50.0)
+
+        # 向中心压缩分值：避免产生 0 或 100 这样的极端评分
+        # raw_score (0~100) -> final_score (45~90)
+        score = 45.0 + (raw_score * 0.45)
         return round(score, 2)
 
     except Exception as e:
         log.error(f"评分计算失败 {airport_id}: {e}")
-        return 0.0
+        return 65.0  # 异常情况返回中位评分
 
 
 # ════════════════════════════════════════════════════════════
@@ -181,11 +202,11 @@ async def main():
     # ── 从数据库读取待监测的机场列表 ────────────────────────
     airports = (
         supabase.table("airports")
-        .select("id, name, website_url, sub_url, status")
+        .select("id, name, website_url, sub_url, status, days_online, category")
         .eq("status", "active")
         .execute()
         .data
-    )
+     )
     log.info(f"共监测 {len(airports)} 个机场")
 
     if not airports:
@@ -222,7 +243,7 @@ async def main():
 
     # ── 重新计算并更新每个机场评分 ───────────────────────────
     for airport in airports:
-        new_score = compute_score(airport["id"])
+        new_score = compute_score(airport["id"], airport)
         supabase.table("airports").update({
             "score":      new_score,
             "updated_at": datetime.now(timezone.utc).isoformat(),
