@@ -92,6 +92,22 @@ CREATE TABLE IF NOT EXISTS recharge_orders (
   completed_at   TIMESTAMPTZ
 );
 
+-- ── 6. 优惠活动广告表 (promotions) ───────────────────────
+CREATE TABLE IF NOT EXISTS promotions (
+  id              BIGSERIAL PRIMARY KEY,
+  airport_id      TEXT REFERENCES airports(id) ON DELETE CASCADE,
+  promo_code      TEXT NOT NULL,
+  title           TEXT NOT NULL,
+  description     TEXT NOT NULL,
+  packages        TEXT,                    -- 适用套餐 (如: 月付/季付)
+  discount_pct    INTEGER DEFAULT 0,       -- 折扣百分比 (如 20 代表 8 折)
+  months          INTEGER DEFAULT 1,       -- 购买时长
+  amount_spent    NUMERIC(10,2) NOT NULL,  -- 累计投放花费金额
+  status          TEXT DEFAULT 'active',   -- active / expired
+  created_at      TIMESTAMPTZ DEFAULT NOW(),
+  expires_at      TIMESTAMPTZ NOT NULL
+);
+
 -- ── 索引 ─────────────────────────────────────────────────
 CREATE INDEX IF NOT EXISTS idx_speed_logs_airport_time
   ON speed_logs (airport_id, checked_at DESC);
@@ -99,13 +115,16 @@ CREATE INDEX IF NOT EXISTS idx_click_logs_airport_time
   ON click_logs (airport_id, clicked_at DESC);
 CREATE INDEX IF NOT EXISTS idx_airports_score
   ON airports (score DESC);
+CREATE INDEX IF NOT EXISTS idx_promotions_airport_time
+  ON promotions (airport_id, created_at DESC);
 
 -- ── RLS 安全策略 ──────────────────────────────────────────
-ALTER TABLE airports       ENABLE ROW LEVEL SECURITY;
-ALTER TABLE speed_logs     ENABLE ROW LEVEL SECURITY;
-ALTER TABLE click_logs     ENABLE ROW LEVEL SECURITY;
-ALTER TABLE applications   ENABLE ROW LEVEL SECURITY;
+ALTER TABLE airports        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE speed_logs      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE click_logs      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE applications    ENABLE ROW LEVEL SECURITY;
 ALTER TABLE recharge_orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE promotions      ENABLE ROW LEVEL SECURITY;
 
 -- 先删除旧策略（避免重复运行报错）
 DROP POLICY IF EXISTS "anon read airports"         ON airports;
@@ -118,6 +137,10 @@ DROP POLICY IF EXISTS "service all speed_logs"     ON speed_logs;
 DROP POLICY IF EXISTS "service all click_logs"     ON click_logs;
 DROP POLICY IF EXISTS "service all applications"   ON applications;
 DROP POLICY IF EXISTS "service all recharge_orders" ON recharge_orders;
+DROP POLICY IF EXISTS "anon read promotions"       ON promotions;
+DROP POLICY IF EXISTS "anon insert promotions"     ON promotions;
+DROP POLICY IF EXISTS "anon update promotions"     ON promotions;
+DROP POLICY IF EXISTS "service all promotions"     ON promotions;
 
 -- 匿名用户可读机场基本信息（不含 sub_url / merchant 字段）
 -- 为了支持商家在 portal.html 里用邮箱密码查询登录，放宽 SELECT 权限为所有人可见
@@ -152,12 +175,18 @@ CREATE POLICY "anon insert recharge_orders"
 CREATE POLICY "anon read recharge_orders"
   ON recharge_orders FOR SELECT TO anon USING (TRUE);
 
+-- 优惠活动广告策略
+CREATE POLICY "anon read promotions"       ON promotions FOR SELECT TO anon USING (TRUE);
+CREATE POLICY "anon insert promotions"     ON promotions FOR INSERT TO anon WITH CHECK (TRUE);
+CREATE POLICY "anon update promotions"     ON promotions FOR UPDATE TO anon USING (TRUE) WITH CHECK (TRUE);
+
 -- service_role 可以做任何操作（监测脚本用）
 CREATE POLICY "service all airports"        ON airports        FOR ALL TO service_role USING (TRUE);
 CREATE POLICY "service all speed_logs"      ON speed_logs      FOR ALL TO service_role USING (TRUE);
 CREATE POLICY "service all click_logs"      ON click_logs      FOR ALL TO service_role USING (TRUE);
 CREATE POLICY "service all applications"    ON applications    FOR ALL TO service_role USING (TRUE);
 CREATE POLICY "service all recharge_orders" ON recharge_orders FOR ALL TO service_role USING (TRUE);
+CREATE POLICY "service all promotions"     ON promotions     FOR ALL TO service_role USING (TRUE);
 
 -- ── 站点统计辅助函数（供前端直接调用）────────────────────
 CREATE OR REPLACE FUNCTION get_site_stats()

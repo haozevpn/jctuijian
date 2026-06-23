@@ -251,7 +251,8 @@
   }
 
   /* ── 渲染：活动优惠 ─────────────────────────────────────── */
-  function renderPromos() {
+  /* ── 渲染：活动优惠 ─────────────────────────────────────── */
+  async function renderPromos() {
     const tabsContainer = document.getElementById('category-tabs');
     if (tabsContainer) tabsContainer.style.display = 'none';
 
@@ -263,54 +264,113 @@
     if (t) t.textContent = '限时折扣与机场优惠券';
     if (i) i.textContent  = '🎁';
 
-    // 拼装优惠券HTML
-    grid.innerHTML = `
-      <div class="promo-list" style="grid-column: 1 / -1;">
-        <div class="promo-card">
-          <span class="promo-badge">九折特惠</span>
-          <div class="promo-airport-name">极连云</div>
-          <div class="promo-title">2026年中专属折扣码</div>
-          <div class="promo-code-wrap">
-            <span class="promo-code">jilian90</span>
-            <button class="promo-copy-btn" onclick="navigator.clipboard.writeText('jilian90').then(() => alert('折扣码已复制！'))">复制</button>
-          </div>
-          <p class="promo-desc">适用于所有IEPL专线季付及以上套餐，极连云晚高峰稳定不跑路，流媒体全解锁。</p>
-        </div>
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--color-text-muted);padding:40px;">正在获取最新特惠活动...</div>';
 
-        <div class="promo-card">
-          <span class="promo-badge">首单立减</span>
-          <div class="promo-airport-name">瞬云</div>
-          <div class="promo-title">新用户注册专享优惠</div>
-          <div class="promo-code-wrap">
-            <span class="promo-code">shun_new</span>
-            <button class="promo-copy-btn" onclick="navigator.clipboard.writeText('shun_new').then(() => alert('折扣码已复制！'))">复制</button>
-          </div>
-          <p class="promo-desc">新注册用户首次订阅任意 Anycast 高速节点套餐可享受立减 5 元优惠，直连中转无倍率。</p>
-        </div>
+    // 辅助防 XSS 函数
+    function escHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
 
-        <div class="promo-card">
-          <span class="promo-badge">年付8折</span>
-          <div class="promo-airport-name">边界云</div>
-          <div class="promo-title">年付计划专享折扣</div>
-          <div class="promo-code-wrap">
-            <span class="promo-code">bianjie80</span>
-            <button class="promo-copy-btn" onclick="navigator.clipboard.writeText('bianjie80').then(() => alert('折扣码已复制！'))">复制</button>
-          </div>
-          <p class="promo-desc">购买任意专属 IEPL 优化线路年付套餐，使用此码可立享八折特惠，支持主流流媒体。</p>
-        </div>
+    let dbPromos = [];
+    try {
+      if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+        const resp = await fetch(
+          `${SUPABASE_URL}/rest/v1/promotions?select=*,airports(name)&status=eq.active&order=created_at.desc`,
+          {
+            headers: {
+              'apikey':        SUPABASE_ANON_KEY,
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            }
+          }
+        );
+        if (resp.ok) {
+          dbPromos = await resp.json();
+          // 过滤掉本地判断已过期的数据
+          dbPromos = dbPromos.filter(item => new Date(item.expires_at) >= new Date());
+        }
+      }
+    } catch (e) {
+      console.warn('[JCT] 拉取动态优惠失败，将降级使用本地预设优惠', e);
+    }
 
-        <div class="promo-card">
-          <span class="promo-badge">限时好礼</span>
-          <div class="promo-airport-name">寰宇云</div>
-          <div class="promo-title">AnyTLS 尝鲜体验折扣</div>
-          <div class="promo-code-wrap">
-            <span class="promo-code">huanyu_anytls</span>
-            <button class="promo-copy-btn" onclick="navigator.clipboard.writeText('huanyu_anytls').then(() => alert('折扣码已复制！'))">复制</button>
+    if (!dbPromos || dbPromos.length === 0) {
+      // 静态/本地 fallback 优惠活动列表
+      grid.innerHTML = `
+        <div class="promo-list" style="grid-column: 1 / -1;">
+          <div class="promo-card">
+            <span class="promo-badge">九折特惠</span>
+            <div class="promo-airport-name">极连云</div>
+            <div class="promo-title">2026年中专属折扣码</div>
+            <div class="promo-code-wrap">
+              <span class="promo-code">jilian90</span>
+              <button class="promo-copy-btn" onclick="navigator.clipboard.writeText('jilian90').then(() => alert('折扣码已复制！'))">复制</button>
+            </div>
+            <p class="promo-desc">适用于所有IEPL专线季付及以上套餐，极连云晚高峰稳定不跑路，流媒体全解锁。</p>
           </div>
-          <p class="promo-desc">体验最新 AnyTLS 协议高安全节点，首月订阅使用该优惠码立享 8.5 折。</p>
+
+          <div class="promo-card">
+            <span class="promo-badge">首单立减</span>
+            <div class="promo-airport-name">瞬云</div>
+            <div class="promo-title">新用户注册专享优惠</div>
+            <div class="promo-code-wrap">
+              <span class="promo-code">shun_new</span>
+              <button class="promo-copy-btn" onclick="navigator.clipboard.writeText('shun_new').then(() => alert('折扣码已复制！'))">复制</button>
+            </div>
+            <p class="promo-desc">新注册用户首次订阅任意 Anycast 高速节点套餐可享受立减 5 元优惠，直连中转无倍率。</p>
+          </div>
+
+          <div class="promo-card">
+            <span class="promo-badge">年付8折</span>
+            <div class="promo-airport-name">边界云</div>
+            <div class="promo-title">年付计划专享折扣</div>
+            <div class="promo-code-wrap">
+              <span class="promo-code">bianjie80</span>
+              <button class="promo-copy-btn" onclick="navigator.clipboard.writeText('bianjie80').then(() => alert('折扣码已复制！'))">复制</button>
+            </div>
+            <p class="promo-desc">购买任意专属 IEPL 优化线路年付套餐，使用此码可立享八折特惠，支持主流流媒体。</p>
+          </div>
+
+          <div class="promo-card">
+            <span class="promo-badge">限时好礼</span>
+            <div class="promo-airport-name">寰宇云</div>
+            <div class="promo-title">AnyTLS 尝鲜体验折扣</div>
+            <div class="promo-code-wrap">
+              <span class="promo-code">huanyu_anytls</span>
+              <button class="promo-copy-btn" onclick="navigator.clipboard.writeText('huanyu_anytls').then(() => alert('折扣码已复制！'))">复制</button>
+            </div>
+            <p class="promo-desc">体验最新 AnyTLS 协议高安全节点，首月订阅使用该优惠码立享 8.5 折。</p>
+          </div>
         </div>
-      </div>
-    `;
+      `;
+      return;
+    }
+
+    // 动态渲染获取到的 promotions
+    let html = '<div class="promo-list" style="grid-column: 1 / -1;">';
+    dbPromos.forEach(item => {
+      const airportName = item.airports ? item.airports.name : '未知机场';
+      const pctBadge = item.discount_pct > 0 ? `${(10 - (item.discount_pct / 10)).toFixed(1)}折特惠` : '优惠活动';
+      const codeEsc = escHtml(item.promo_code);
+      html += `
+        <div class="promo-card">
+          <span class="promo-badge">${escHtml(pctBadge)}</span>
+          <div class="promo-airport-name">${escHtml(airportName)}</div>
+          <div class="promo-title">${escHtml(item.title)}</div>
+          <div class="promo-code-wrap">
+            <span class="promo-code">${codeEsc}</span>
+            <button class="promo-copy-btn" onclick="navigator.clipboard.writeText('${codeEsc}').then(() => alert('折扣码已复制！'))">复制</button>
+          </div>
+          <p class="promo-desc">${escHtml(item.description)}</p>
+          <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:12px; display:flex; justify-content:space-between; border-top: 1px dashed var(--color-border); padding-top:10px;">
+            <span>适用套餐: ${escHtml(item.packages || '全部套餐')}</span>
+            <span>有效期至: ${new Date(item.expires_at).toLocaleDateString('zh-CN')}</span>
+          </div>
+        </div>
+      `;
+    });
+    html += '</div>';
+    grid.innerHTML = html;
   }
 
   /* ── 渲染：跑路预警 ─────────────────────────────────────── */
