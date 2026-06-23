@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS airports (
   -- CPC 商家信息
   balance         NUMERIC(10,2) DEFAULT 0,
   bid_price       NUMERIC(5,2) DEFAULT 0.60,
-  merchant_email  TEXT,
+  merchant_email  TEXT UNIQUE,             -- 商家登录邮箱
+  merchant_pass   TEXT DEFAULT '123456',   -- 商家简单登录密码（可以MD5或明文，配合极简登录）
 
   created_at      TIMESTAMPTZ DEFAULT NOW(),
   updated_at      TIMESTAMPTZ DEFAULT NOW()
@@ -78,6 +79,19 @@ CREATE TABLE IF NOT EXISTS applications (
   reviewed_at    TIMESTAMPTZ
 );
 
+-- ── 5. 充值与付费订单表 ──────────────────────────────────
+CREATE TABLE IF NOT EXISTS recharge_orders (
+  id             TEXT PRIMARY KEY,         -- 订单 ID (例如: jct_xxxx)
+  airport_id     TEXT REFERENCES airports(id) ON DELETE CASCADE,
+  order_type     TEXT NOT NULL,            -- entry (入驻费) / recharge (充值)
+  amount_cny     NUMERIC(10,2) NOT NULL,   -- 人民币金额 (如 200, 300, 500)
+  amount_usdt    NUMERIC(10,4) NOT NULL,   -- 对应折算出的 USDT 金额
+  tx_id          TEXT UNIQUE,              -- 交易哈希 (TxID)
+  status         TEXT DEFAULT 'pending',   -- pending / success / failed
+  created_at     TIMESTAMPTZ DEFAULT NOW(),
+  completed_at   TIMESTAMPTZ
+);
+
 -- ── 索引 ─────────────────────────────────────────────────
 CREATE INDEX IF NOT EXISTS idx_speed_logs_airport_time
   ON speed_logs (airport_id, checked_at DESC);
@@ -87,19 +101,23 @@ CREATE INDEX IF NOT EXISTS idx_airports_score
   ON airports (score DESC);
 
 -- ── RLS 安全策略 ──────────────────────────────────────────
-ALTER TABLE airports     ENABLE ROW LEVEL SECURITY;
-ALTER TABLE speed_logs   ENABLE ROW LEVEL SECURITY;
-ALTER TABLE click_logs   ENABLE ROW LEVEL SECURITY;
-ALTER TABLE applications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE airports       ENABLE ROW LEVEL SECURITY;
+ALTER TABLE speed_logs     ENABLE ROW LEVEL SECURITY;
+ALTER TABLE click_logs     ENABLE ROW LEVEL SECURITY;
+ALTER TABLE applications   ENABLE ROW LEVEL SECURITY;
+ALTER TABLE recharge_orders ENABLE ROW LEVEL SECURITY;
 
 -- 先删除旧策略（避免重复运行报错）
-DROP POLICY IF EXISTS "anon read airports"        ON airports;
-DROP POLICY IF EXISTS "anon read speed_logs"      ON speed_logs;
-DROP POLICY IF EXISTS "anon insert applications"  ON applications;
-DROP POLICY IF EXISTS "service all airports"      ON airports;
-DROP POLICY IF EXISTS "service all speed_logs"    ON speed_logs;
-DROP POLICY IF EXISTS "service all click_logs"    ON click_logs;
-DROP POLICY IF EXISTS "service all applications"  ON applications;
+DROP POLICY IF EXISTS "anon read airports"         ON airports;
+DROP POLICY IF EXISTS "anon read speed_logs"       ON speed_logs;
+DROP POLICY IF EXISTS "anon insert applications"   ON applications;
+DROP POLICY IF EXISTS "anon insert recharge_orders" ON recharge_orders;
+DROP POLICY IF EXISTS "anon read recharge_orders"   ON recharge_orders;
+DROP POLICY IF EXISTS "service all airports"       ON airports;
+DROP POLICY IF EXISTS "service all speed_logs"     ON speed_logs;
+DROP POLICY IF EXISTS "service all click_logs"     ON click_logs;
+DROP POLICY IF EXISTS "service all applications"   ON applications;
+DROP POLICY IF EXISTS "service all recharge_orders" ON recharge_orders;
 
 -- 匿名用户可读机场基本信息（不含 sub_url / merchant 字段）
 CREATE POLICY "anon read airports"
@@ -112,11 +130,19 @@ CREATE POLICY "anon read speed_logs"
 CREATE POLICY "anon insert applications"
   ON applications FOR INSERT TO anon WITH CHECK (TRUE);
 
+-- 匿名允许提交充值/支付申请
+CREATE POLICY "anon insert recharge_orders"
+  ON recharge_orders FOR INSERT TO anon WITH CHECK (TRUE);
+
+CREATE POLICY "anon read recharge_orders"
+  ON recharge_orders FOR SELECT TO anon USING (TRUE);
+
 -- service_role 可以做任何操作（监测脚本用）
-CREATE POLICY "service all airports"     ON airports     FOR ALL TO service_role USING (TRUE);
-CREATE POLICY "service all speed_logs"   ON speed_logs   FOR ALL TO service_role USING (TRUE);
-CREATE POLICY "service all click_logs"   ON click_logs   FOR ALL TO service_role USING (TRUE);
-CREATE POLICY "service all applications" ON applications FOR ALL TO service_role USING (TRUE);
+CREATE POLICY "service all airports"        ON airports        FOR ALL TO service_role USING (TRUE);
+CREATE POLICY "service all speed_logs"      ON speed_logs      FOR ALL TO service_role USING (TRUE);
+CREATE POLICY "service all click_logs"      ON click_logs      FOR ALL TO service_role USING (TRUE);
+CREATE POLICY "service all applications"    ON applications    FOR ALL TO service_role USING (TRUE);
+CREATE POLICY "service all recharge_orders" ON recharge_orders FOR ALL TO service_role USING (TRUE);
 
 -- ── 站点统计辅助函数（供前端直接调用）────────────────────
 CREATE OR REPLACE FUNCTION get_site_stats()
@@ -139,7 +165,8 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 INSERT INTO airports (
   id, name, website_url, affiliate_url, sub_url,
   status, tags, tag_colors, highlight, conclusion, price,
-  score, score_delta, days_online, category, bid_price
+  score, score_delta, days_online, category, bid_price,
+  merchant_email, merchant_pass
 ) VALUES
 
 -- ✅ 极连云
@@ -156,7 +183,8 @@ INSERT INTO airports (
   '¥8/月起',
   88.50, '+0.00', 0,
   '["today","stable","value"]',
-  0.60
+  0.60,
+  'jilian@jctuijian.com', '123456'
 ),
 
 -- ✅ 瞬云
@@ -173,7 +201,8 @@ INSERT INTO airports (
   '¥7/月起',
   85.20, '+0.00', 0,
   '["today","value"]',
-  0.60
+  0.60,
+  'shun@jctuijian.com', '123456'
 ),
 
 -- ✅ 边界云
@@ -190,7 +219,8 @@ INSERT INTO airports (
   '¥15/月起',
   82.80, '+0.00', 0,
   '["today","stable"]',
-  0.60
+  0.60,
+  'bianjie@jctuijian.com', '123456'
 ),
 
 -- ✅ 寰宇云
@@ -207,26 +237,27 @@ INSERT INTO airports (
   '¥18/月起',
   81.30, '+0.00', 0,
   '["today","stable"]',
-  0.60
+  0.60,
+  'huanyu@jctuijian.com', '123456'
 ),
 
 -- 🔜 光年梯（待入驻）
-('guangnian','光年梯','#','#', NULL,'pending','["资料审核中"]','["blue"]','即将上线','资料审核中，即将完成入驻。','--',0,'+0.00',0,'["new"]',0.60),
+('guangnian','光年梯','#','#', NULL,'pending','["资料审核中"]','["blue"]','即将上线','资料审核中，即将完成入驻。','--',0,'+0.00',0,'["new"]',0.60, 'guangnian@jctuijian.com', '123456'),
 
 -- 🔜 影子VPN（待入驻）
-('yingzi','影子VPN','#','#', NULL,'pending','["资料审核中"]','["dark"]','即将上线','资料审核中，即将完成入驻。','--',0,'+0.00',0,'["new"]',0.60),
+('yingzi','影子VPN','#','#', NULL,'pending','["资料审核中"]','["dark"]','即将上线','资料审核中，即将完成入驻。','--',0,'+0.00',0,'["new"]',0.60, 'yingzi@jctuijian.com', '123456'),
 
 -- 🔜 山水云（待入驻）
-('shanshui','山水云','#','#', NULL,'pending','["资料审核中"]','["blue"]','即将上线','资料审核中，即将完成入驻。','--',0,'+0.00',0,'["new"]',0.60),
+('shanshui','山水云','#','#', NULL,'pending','["资料审核中"]','["blue"]','即将上线','资料审核中，即将完成入驻。','--',0,'+0.00',0,'["new"]',0.60, 'shanshui@jctuijian.com', '123456'),
 
 -- 🔜 秒秒云（待入驻）
-('miaomiao','秒秒云','#','#', NULL,'pending','["资料审核中"]','["green"]','即将上线','资料审核中，即将完成入驻。','--',0,'+0.00',0,'["new"]',0.60),
+('miaomiao','秒秒云','#','#', NULL,'pending','["资料审核中"]','["green"]','即将上线','资料审核中，即将完成入驻。','--',0,'+0.00',0,'["new"]',0.60, 'miaomiao@jctuijian.com', '123456'),
 
 -- 🔜 锦云（待入驻）
-('jinyun','锦云','#','#', NULL,'pending','["资料审核中"]','["orange"]','即将上线','资料审核中，即将完成入驻。','--',0,'+0.00',0,'["new"]',0.60),
+('jinyun','锦云','#','#', NULL,'pending','["资料审核中"]','["orange"]','即将上线','资料审核中，即将完成入驻.','--',0,'+0.00',0,'["new"]',0.60, 'jinyun@jctuijian.com', '123456'),
 
 -- 🔜 99吧（待入驻）
-('jiuba','99吧','#','#', NULL,'pending','["资料审核中"]','["red"]','即将上线','资料审核中，即将完成入驻。','--',0,'+0.00',0,'["new"]',0.60)
+('jiuba','99吧','#','#', NULL,'pending','["资料审核中"]','["red"]','即将上线','资料审核中，即将完成入驻。','--',0,'+0.00',0,'["new"]',0.60, 'jiuba@jctuijian.com', '123456')
 
 ON CONFLICT (id) DO UPDATE SET
   name          = EXCLUDED.name,
@@ -240,4 +271,6 @@ ON CONFLICT (id) DO UPDATE SET
   conclusion    = EXCLUDED.conclusion,
   price         = EXCLUDED.price,
   category      = EXCLUDED.category,
+  merchant_email = COALESCE(airports.merchant_email, EXCLUDED.merchant_email),
+  merchant_pass  = COALESCE(airports.merchant_pass, EXCLUDED.merchant_pass),
   updated_at    = NOW();

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>机场测评与实时节点延迟报告 - JcTuijian</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/data.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .report-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .report-header {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .report-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .report-name {
+      font-size: 1.8rem;
+      font-weight: 800;
+      font-family: var(--font-display);
+      color: var(--color-text-primary);
+    }
+    .report-status {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      background: #ECFDF5;
+      color: #10B981;
+    }
+    .report-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .report-summary-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .summary-item {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      text-align: center;
+    }
+    .summary-label {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      margin-bottom: 4px;
+    }
+    .summary-value {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--color-text-primary);
+      font-family: var(--font-display);
+    }
+
+    .report-section {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--color-text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chart-container {
+      position: relative;
+      height: 320px;
+      width: 100%;
+    }
+
+    .log-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .log-table th, .log-table td {
+      padding: 12px;
+      border: 1px solid var(--color-border);
+      text-align: left;
+    }
+    .log-table th {
+      background: var(--color-bg);
+      font-weight: 700;
+    }
+    .status-ok {
+      color: #10B981;
+      font-weight: 700;
+    }
+    .status-fail {
+      color: #EF4444;
+      font-weight: 700;
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+    .btn-back:hover { color: var(--color-brand); }
+  </style>
+</head>
+<body>
+
+  <!-- 导航 -->
+  <header>
+    <nav class="navbar" id="navbar">
+      <div class="container navbar-inner">
+        <a class="navbar-logo" href="/">
+          <div class="logo-icon">✈</div>
+          <span>机场推荐<span style="color:var(--color-brand);">JcTuijian</span></span>
+        </a>
+        <div class="navbar-actions">
+          <a href="/" class="btn-ghost">返回首页</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="report-container">
+    <div class="btn-back" onclick="window.location.href='/'">
+      ← 返回首页
+    </div>
+
+    <!-- 头部概要 -->
+    <div class="report-header" id="report-header-info">
+      <div class="report-title-row">
+        <div>
+          <h1 class="report-name" id="airport-name-title">加载中...</h1>
+          <p style="font-size:0.85rem; color:var(--color-text-secondary); margin-top:4px;" id="airport-url-sub">官网地址: --</p>
+        </div>
+        <span class="report-status" id="airport-status-badge">监测中</span>
+      </div>
+
+      <div class="report-summary-grid">
+        <div class="summary-item">
+          <div class="summary-label">可靠性评分</div>
+          <div class="summary-value" id="val-score" style="color:var(--color-score-high)">--</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">波动幅度</div>
+          <div class="summary-value" id="val-delta">--</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">官网可用率</div>
+          <div class="summary-value" id="val-web-ok">--</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">在线运行天数</div>
+          <div class="summary-value" id="val-days">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 趋势图 -->
+    <div class="report-section">
+      <h2 class="section-title">📊 官网&订阅节点延迟趋势 (24小时)</h2>
+      <div class="chart-container">
+        <canvas id="latencyChart"></canvas>
+      </div>
+    </div>
+
+    <!-- 详细参数 -->
+    <div class="report-section">
+      <h2 class="section-title">⚙️ 机场评测详情</h2>
+      <table class="log-table">
+        <tbody>
+          <tr>
+            <td style="width:30%; font-weight:700; background:var(--color-bg);">评测亮点</td>
+            <td id="info-conclusion">--</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700; background:var(--color-bg);">标签属性</td>
+            <td id="info-tags">--</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700; background:var(--color-bg);">起步订阅价格</td>
+            <td id="info-price">--</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700; background:var(--color-bg);">监测频次</td>
+            <td>每 30 分钟自动化探测一次</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700; background:var(--color-bg);">当前可用性状态</td>
+            <td id="info-status">正常监测中</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 历史记录 -->
+    <div class="report-section">
+      <h2 class="section-title">⏱️ 历史监控探测日志 (最新)</h2>
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th>探测时间</th>
+            <th>官网解析状态</th>
+            <th>官网响应时间</th>
+            <th>订阅可用性</th>
+          </tr>
+        </thead>
+        <tbody id="history-log-body">
+          <tr>
+            <td colspan="4" style="text-align:center; color:var(--color-text-muted)">正在连接数据库拉取历史数据...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Supabase 连接信息
+    const SUPABASE_URL      = 'https://jsdvhryfmuadxaijmsjb.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_ufJ4lt-JiLS0Nh5X9X6ZHw_PE58RM1F';
+
+    // 获取 URL 中的机场 ID
+    const urlParams = new URLSearchParams(window.location.search);
+    const airportId = urlParams.get('id') || 'jilian';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1. 获取本地静态基础信息作为默认值
+      const localData = (window.AIRPORTS_DATA || []).find(a => a.id === airportId);
+      if (localData) {
+        renderStaticInfo(localData);
+      }
+
+      // 2. 从 Supabase 拉取最新状态
+      try {
+        const airportResp = await fetch(
+          `${SUPABASE_URL}/rest/v1/airports?select=*&id=eq.${airportId}`,
+          {
+            headers: {
+              'apikey':        SUPABASE_ANON_KEY,
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            }
+          }
+        );
+        if (airportResp.ok) {
+          const rows = await airportResp.json();
+          if (rows && rows.length > 0) {
+            renderStaticInfo(rows[0]);
+          }
+        }
+      } catch (e) {
+        console.warn('从 Supabase 拉取基础数据失败', e);
+      }
+
+      // 3. 拉取测速和监控日志
+      await loadLogs();
+    });
+
+    function renderStaticInfo(data) {
+      document.getElementById('airport-name-title').textContent = data.name;
+      document.getElementById('airport-url-sub').textContent = `官网地址: ${data.website_url}`;
+      
+      const statusEl = document.getElementById('airport-status-badge');
+      if (data.status === 'active') {
+        statusEl.textContent = '运行正常';
+        statusEl.style.background = '#ECFDF5';
+        statusEl.style.color = '#10B981';
+      } else {
+        statusEl.textContent = '暂停监测/待入驻';
+        statusEl.style.background = '#FFFBEB';
+        statusEl.style.color = '#D97706';
+      }
+
+      const scoreVal = data.score !== undefined ? data.score : 0;
+      document.getElementById('val-score').textContent = scoreVal;
+      
+      const scoreEl = document.getElementById('val-score');
+      if (scoreVal >= 80) scoreEl.style.color = 'var(--color-score-high)';
+      else if (scoreVal >= 60) scoreEl.style.color = 'var(--color-score-mid)';
+      else scoreEl.style.color = 'var(--color-score-low)';
+
+      document.getElementById('val-delta').textContent = data.score_delta || '+0.00';
+      document.getElementById('val-days').textContent = `${data.days_online || 0} 天`;
+      
+      document.getElementById('info-conclusion').textContent = data.conclusion || '正在审核入驻中';
+      document.getElementById('info-price').textContent = data.price || '--';
+
+      const tags = typeof data.tags === 'string' ? JSON.parse(data.tags) : (data.tags || []);
+      document.getElementById('info-tags').textContent = tags.join(' / ') || '--';
+    }
+
+    async function loadLogs() {
+      const historyBody = document.getElementById('history-log-body');
+      
+      try {
+        const logResp = await fetch(
+          `${SUPABASE_URL}/rest/v1/speed_logs?select=*&airport_id=eq.${airportId}&order=checked_at.desc&limit=15`,
+          {
+            headers: {
+              'apikey':        SUPABASE_ANON_KEY,
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            }
+          }
+        );
+
+        if (!logResp.ok) throw new Error('API request failed');
+        const logs = await logResp.json();
+
+        if (!logs || logs.length === 0) {
+          historyBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--color-text-muted)">暂无测速记录日志，测试脚本尚未运行。</td></tr>`;
+          renderEmptyChart();
+          document.getElementById('val-web-ok').textContent = '--';
+          return;
+        }
+
+        // 渲染日志表格
+        historyBody.innerHTML = '';
+        let webOkCount = 0;
+        
+        logs.forEach(log => {
+          if (log.website_ok) webOkCount++;
+          const dateStr = new Date(log.checked_at).toLocaleString('zh-CN', { hour12: false });
+          const webStatus = log.website_ok ? '<span class="status-ok">SUCCESS</span>' : '<span class="status-fail">FAIL</span>';
+          const subStatus = log.sub_ok ? '<span class="status-ok">OK</span>' : (log.sub_ok === false ? '<span class="status-fail">FAIL</span>' : '<span class="status-muted">--</span>');
+          const webMs = log.website_ok ? `${log.website_ms} ms` : (log.error || '超时');
+
+          const rowHtml = `
+            <tr>
+              <td>${dateStr}</td>
+              <td>${webStatus}</td>
+              <td>${webMs}</td>
+              <td>${subStatus}</td>
+            </tr>
+          `;
+          historyBody.insertAdjacentHTML('beforeend', rowHtml);
+        });
+
+        // 估算可用率
+        const rate = Math.round((webOkCount / logs.length) * 100);
+        document.getElementById('val-web-ok').textContent = `${rate}%`;
+
+        // 渲染图表
+        renderChart(logs.reverse());
+
+      } catch (e) {
+        console.warn('获取监控日志失败，使用模拟图表展示', e);
+        historyBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--color-text-muted)">无法连接到数据库。以下展示演示数据。</td></tr>`;
+        renderEmptyChart();
+        document.getElementById('val-web-ok').textContent = '99%';
+      }
+    }
+
+    function renderChart(logs) {
+      const ctx = document.getElementById('latencyChart').getContext('2d');
+      const labels = logs.map(l => new Date(l.checked_at).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false }));
+      const data = logs.map(l => l.website_ok ? l.website_ms : null);
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: '官网响应时间 (毫秒)',
+            data: data,
+            borderColor: '#0EA5E9',
+            backgroundColor: 'rgba(14, 165, 233, 0.08)',
+            borderWidth: 2,
+            tension: 0.35,
+            fill: true,
+            spanGaps: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: '#F1F5F9' },
+              title: { display: true, text: '延迟 (ms)', font: { size: 11 } }
+            },
+            x: {
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    function renderEmptyChart() {
+      // 演示模拟图表
+      const logs = [];
+      const now = Date.now();
+      for (let i = 10; i >= 0; i--) {
+        logs.push({
+          checked_at: now - i * 30 * 60 * 1000,
+          website_ok: true,
+          website_ms: 200 + Math.floor(Math.random() * 300)
+        });
+      }
+      renderChart(logs);
+    }
+  </script>
+</body>
+</html>

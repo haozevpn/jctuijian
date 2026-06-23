@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>申请入驻测试 | 机场推荐 JcTuijian</title>
+  <title>商户自助支付与广告控制台 - JcTuijian</title>
   <meta name="robots" content="noindex, nofollow" />
   <link rel="stylesheet" href="assets/style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230EA5E9'/><text y='22' x='5' font-size='20'>✈</text></svg>" />
   <style>
-    /* ── Portal 专属样式 ─────────────────────────────────── */
+    /* ── Control Console Style ──────────────────────────────── */
     .portal-wrap {
       min-height: 100vh;
       background: linear-gradient(135deg, #EFF6FF 0%, #F8FAFC 60%, #F5F3FF 100%);
@@ -22,402 +22,771 @@
     }
     .portal-nav .brand { font-weight: 700; font-size: .95rem; display: flex; align-items: center; gap: 8px; }
     .portal-nav .brand span { color: var(--color-brand); }
-    .portal-nav-links { display: flex; gap: 12px; }
+    .portal-nav-links { display: flex; align-items: center; gap: 16px; }
     .portal-nav-links a {
       font-size: .83rem; color: var(--color-text-secondary);
       padding: 5px 12px; border-radius: var(--radius-sm);
       transition: all var(--transition);
     }
     .portal-nav-links a:hover { background: var(--color-brand-bg); color: var(--color-brand); }
+    
+    .portal-body { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 40px 24px 80px; gap: 32px; }
+    
+    @media (max-width: 900px) {
+      .portal-body { flex-direction: column; align-items: stretch; }
+    }
 
-    .portal-body { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 48px 24px 80px; gap: 32px; }
-
-    /* 左侧说明面板 */
-    .portal-info {
-      flex: 0 0 300px; max-width: 300px;
-      position: sticky; top: 100px;
-    }
-    .info-card {
-      background: var(--color-surface); border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg); padding: 24px;
-      box-shadow: var(--shadow-sm); margin-bottom: 16px;
-    }
-    .info-card h3 {
-      font-family: var(--font-display); font-size: 1rem; font-weight: 700;
-      margin-bottom: 14px; color: var(--color-text-primary);
-    }
-    .step-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-    .step-list li { display: flex; gap: 10px; align-items: flex-start; font-size: .85rem; color: var(--color-text-secondary); line-height: 1.5; }
-    .step-num {
-      flex-shrink: 0; width: 22px; height: 22px;
-      background: var(--color-brand); color: #fff;
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: .72rem; font-weight: 700; margin-top: 1px;
-    }
-    .price-badge {
-      display: inline-flex; align-items: baseline; gap: 4px;
-      background: linear-gradient(135deg, #0EA5E9, #6366F1);
-      color: #fff; border-radius: var(--radius-sm); padding: 10px 16px;
-      margin-top: 4px; width: 100%;
-    }
-    .price-badge .amount { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; }
-    .price-badge .unit { font-size: .78rem; opacity: .85; }
-
-    /* 右侧表单 */
-    .portal-form-wrap {
-      flex: 1; max-width: 620px;
-    }
-    .form-card {
-      background: var(--color-surface); border: 1px solid var(--color-border);
-      border-radius: var(--radius-xl); padding: 36px;
+    .console-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 32px;
       box-shadow: var(--shadow-md);
-    }
-    .form-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
-    .form-desc { font-size: .875rem; color: var(--color-text-secondary); margin-bottom: 28px; line-height: 1.6; }
-
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-group.full { grid-column: 1 / -1; }
-    .form-label { font-size: .8rem; font-weight: 600; color: var(--color-text-secondary); }
-    .form-label .req { color: #EF4444; margin-left: 2px; }
-    .form-input, .form-select, .form-textarea {
-      padding: 10px 14px; border-radius: var(--radius-sm);
-      border: 1.5px solid var(--color-border);
-      font-family: var(--font-body); font-size: .875rem;
-      color: var(--color-text-primary);
-      background: var(--color-bg);
-      transition: border-color var(--transition), box-shadow var(--transition);
-      outline: none;
       width: 100%;
     }
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
-      border-color: var(--color-brand);
-      box-shadow: 0 0 0 3px rgba(14,165,233,.12);
-      background: #fff;
+    .console-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: var(--color-text-primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .form-textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
-    .form-hint { font-size: .75rem; color: var(--color-text-muted); margin-top: 2px; }
+    
+    /* 登录面板 */
+    .login-box {
+      max-width: 420px;
+      margin: 40px auto;
+    }
+    
+    /* 数据卡片排版 */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 600px) {
+      .stats-row { grid-template-columns: 1fr; }
+    }
+    .stat-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      position: relative;
+    }
+    .stat-card-title { font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600; margin-bottom: 6px; }
+    .stat-card-value { font-size: 1.6rem; font-weight: 800; font-family: var(--font-display); color: var(--color-text-primary); }
+    .stat-card-unit { font-size: 0.8rem; font-weight: 500; color: var(--color-text-muted); margin-left: 4px; }
 
-    .form-divider { grid-column: 1/-1; border: none; border-top: 1px solid var(--color-border); margin: 4px 0; }
+    /* 支付区域 */
+    .payment-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      border-top: 1px solid var(--color-border);
+      padding-top: 24px;
+    }
+    @media (max-width: 768px) {
+      .payment-grid { grid-template-columns: 1fr; }
+    }
+    .pay-amount-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 14px 0 20px;
+    }
+    .pay-opt {
+      border: 1.5px solid var(--color-border);
+      background: var(--color-surface);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all var(--transition);
+    }
+    .pay-opt:hover {
+      border-color: var(--color-brand);
+      background: var(--color-brand-bg);
+    }
+    .pay-opt.active {
+      border-color: var(--color-brand);
+      background: var(--color-brand-bg);
+      color: var(--color-brand);
+    }
 
-    .form-check { display: flex; align-items: flex-start; gap: 10px; font-size: .83rem; color: var(--color-text-secondary); line-height: 1.5; cursor: pointer; }
-    .form-check input { margin-top: 3px; accent-color: var(--color-brand); width: 16px; height: 16px; flex-shrink: 0; }
-    .form-check a { color: var(--color-brand); }
-
-    .btn-submit {
-      width: 100%; padding: 13px;
+    .qr-container {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      background: var(--color-bg);
+    }
+    .qr-code {
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 12px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .wallet-addr {
+      font-family: monospace;
+      font-size: 0.82rem;
+      background: #fff;
+      padding: 8px;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      word-break: break-all;
+      user-select: all;
+      margin: 8px 0;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .status-badge.active { background: #ECFDF5; color: #10B981; }
+    .status-badge.pending { background: #FFFBEB; color: #D97706; }
+    
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .form-label { font-size: .8rem; font-weight: 600; color: var(--color-text-secondary); }
+    .form-input {
+      padding: 10px 14px; border-radius: var(--radius-sm);
+      border: 1.5px solid var(--color-border);
+      font-size: .875rem; background: var(--color-bg);
+      outline: none; width: 100%; transition: all var(--transition);
+    }
+    .form-input:focus { border-color: var(--color-brand); background: #fff; }
+    
+    .btn-action {
       background: linear-gradient(135deg, #0EA5E9, #6366F1);
       color: #fff; border: none; border-radius: var(--radius-sm);
-      font-family: var(--font-body); font-size: 1rem; font-weight: 700;
-      cursor: pointer; margin-top: 8px;
-      transition: all var(--transition);
+      padding: 12px; font-weight: 700; font-size: 0.9rem;
+      cursor: pointer; transition: all var(--transition);
       display: flex; align-items: center; justify-content: center; gap: 8px;
     }
-    .btn-submit:hover { opacity: .9; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(14,165,233,.35); }
-    .btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
-
-    /* 成功提示 */
-    .success-box {
-      display: none; text-align: center; padding: 40px 24px;
-    }
-    .success-icon { font-size: 3rem; margin-bottom: 16px; display: block; }
-    .success-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; }
-    .success-desc { color: var(--color-text-secondary); font-size: .9rem; line-height: 1.6; }
-    .success-back { display: inline-block; margin-top: 20px; padding: 10px 24px; background: var(--color-brand); color: #fff; border-radius: var(--radius-sm); font-weight: 600; }
-
-    @media (max-width: 768px) {
-      .portal-body { flex-direction: column; align-items: stretch; }
-      .portal-info { flex: none; max-width: 100%; position: static; }
-      .form-grid { grid-template-columns: 1fr; }
-      .form-card { padding: 24px 18px; }
-    }
+    .btn-action:hover { opacity: 0.95; transform: translateY(-1px); }
+    .btn-action:disabled { opacity: 0.6; cursor: not-allowed; }
   </style>
 </head>
 <body>
 <div class="portal-wrap">
 
-  <!-- 顶部导航 -->
+  <!-- 导航栏 -->
   <nav class="portal-nav">
     <a class="brand" href="/">
       <span style="background:linear-gradient(135deg,#0EA5E9,#6366F1);color:#fff;width:28px;height:28px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;">✈</span>
       机场推荐 <span>JcTuijian</span>
     </a>
-    <div class="portal-nav-links">
+    <div class="portal-nav-links" id="nav-actions">
       <a href="/">← 返回首页</a>
     </div>
   </nav>
 
-  <!-- 主体 -->
   <div class="portal-body">
-
-    <!-- 左侧说明 -->
-    <aside class="portal-info">
-      <div class="info-card">
-        <h3>📋 入驻流程</h3>
-        <ul class="step-list">
-          <li><span class="step-num">1</span>填写申请表，提交机场基本信息</li>
-          <li><span class="step-num">2</span>管理员 24 小时内完成人工审核</li>
-          <li><span class="step-num">3</span>审核通过后，发送账户登录信息至邮箱</li>
-          <li><span class="step-num">4</span>登录后台，充值 CPC 余额</li>
-          <li><span class="step-num">5</span>机场自动上架排行榜，按点击扣费</li>
-        </ul>
+    
+    <!-- ==========================================
+         1. 商家登录卡片
+         ========================================== -->
+    <div class="console-card login-box" id="login-section">
+      <h2 class="console-title">🔑 商家控制台登录</h2>
+      <div style="font-size: 0.8rem; color: var(--color-text-secondary); margin-bottom: 20px;">
+        提示：已入驻机场请使用申请时的邮箱与密码登录。默认密码为 <strong>123456</strong>。如需申请入驻，请点击下方切换。
       </div>
-
-      <div class="info-card">
-        <h3>💰 点击计费说明</h3>
-        <div class="price-badge">
-          <span class="amount">¥0.60</span>
-          <span class="unit">/ 次有效点击</span>
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="l-email">商户邮箱</label>
+          <input class="form-input" id="l-email" type="email" placeholder="you@jctuijian.com" required />
         </div>
-        <ul class="step-list" style="margin-top:14px;">
-          <li><span style="font-size:1rem">🔒</span>同一 IP 5分钟内重复点击不计费</li>
-          <li><span style="font-size:1rem">📊</span>实时查看访问记录和扣费明细</li>
-          <li><span style="font-size:1rem">💳</span>余额不足自动暂停展示</li>
-          <li><span style="font-size:1rem">📈</span>出价越高，排名越靠前</li>
-        </ul>
+        <div class="form-group" style="margin-bottom: 24px;">
+          <label class="form-label" for="l-pass">密码</label>
+          <input class="form-input" id="l-pass" type="password" placeholder="请输入密码" required />
+        </div>
+        <button class="btn-action" style="width:100%" type="submit" id="btn-login-submit">立即登录</button>
+      </form>
+      <div style="text-align: center; margin-top: 18px; font-size: 0.8rem;">
+        没有账号？<a href="#" style="color:var(--color-brand); font-weight:600;" onclick="toggleLoginApply(false)">申请入驻新机场 →</a>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         2. 商家入驻申请卡片 (由登录卡片切换而来)
+         ========================================== -->
+    <div class="console-card" id="apply-section" style="display:none; max-width: 680px;">
+      <h2 class="console-title">✈ 申请入驻本站测试</h2>
+      <form id="apply-form">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+          <div class="form-group">
+            <label class="form-label">机场名称*</label>
+            <input class="form-input" id="f-name" required placeholder="例: 极连云" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">已运营天数*</label>
+            <input class="form-input" id="f-days" type="number" required placeholder="例: 180" />
+          </div>
+          <div class="form-group" style="grid-column: 1/-1;">
+            <label class="form-label">官网注册地址*</label>
+            <input class="form-input" id="f-website" required placeholder="https://..." />
+          </div>
+          <div class="form-group" style="grid-column: 1/-1;">
+            <label class="form-label">推广/邀请链接*</label>
+            <input class="form-input" id="f-affiliate" required placeholder="https://..." />
+          </div>
+          <div class="form-group" style="grid-column: 1/-1;">
+            <label class="form-label">订阅链接 (用于节点测速监测)</label>
+            <input class="form-input" id="f-sub" placeholder="https://..." />
+          </div>
+          <div class="form-group">
+            <label class="form-label">商户登录邮箱*</label>
+            <input class="form-input" id="f-email" type="email" required placeholder="you@example.com" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">商户登录密码*</label>
+            <input class="form-input" id="f-pass" type="password" required value="123456" />
+          </div>
+        </div>
+        <button class="btn-action" style="width:100%; margin-top:20px;" type="submit" id="btn-apply-submit">提交申请</button>
+      </form>
+      <div style="text-align: center; margin-top: 18px; font-size: 0.8rem;">
+        已有账号？<a href="#" style="color:var(--color-brand); font-weight:600;" onclick="toggleLoginApply(true)">立即登录商户面板 →</a>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         3. 商家主控台面板 (登录后显示)
+         ========================================== -->
+    <div class="console-card" id="console-section" style="display:none; max-width: 900px;">
+      <div class="console-title">
+        <div>
+          <span id="merchant-name">--</span>
+          <span class="status-badge active" id="merchant-status">运行中</span>
+        </div>
+        <button class="btn-ghost" onclick="logoutMerchant()">退出登录</button>
       </div>
 
-      <div class="info-card">
-        <h3>🛡️ 测评标准</h3>
-        <p style="font-size:.83rem;color:var(--color-text-secondary);line-height:1.6;">
-          入驻后将自动加入可靠性监测体系，每30分钟检测一次官网可用性、响应延迟和稳定性，评分完全客观，不受充值金额影响。
-        </p>
+      <!-- 核心指标 -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-card-title">当前推广CPC账户余额</div>
+          <div class="stat-card-value" style="color:var(--color-brand);" id="dash-balance">0.00<span class="stat-card-unit">CNY</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-title">当前CPC出价价格</div>
+          <div class="stat-card-value" id="dash-bid">0.60<span class="stat-card-unit">CNY/点击</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-title">可靠性测评得分</div>
+          <div class="stat-card-value" id="dash-score" style="color:#10B981;">0.0</div>
+        </div>
       </div>
-    </aside>
 
-    <!-- 右侧表单 -->
-    <div class="portal-form-wrap">
-      <div class="form-card">
+      <!-- USDT 充值网关 -->
+      <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:8px;">💳 USDT (TRC-20) 广告账户充值网关</h3>
+      <p style="font-size:0.8rem; color:var(--color-text-secondary); margin-bottom:20px;">
+        本站支持 USDT-TRC20 智能充值与入驻费用自助扣费。转账后输入 TxID 交易哈希即可实现 **零人工、秒级全自动到账**。
+      </p>
 
-        <!-- 表单内容 -->
-        <div id="form-section">
-          <h1 class="form-title">申请入驻测试</h1>
-          <p class="form-desc">
-            请如实填写机场信息，审核通过后系统将自动为您创建后台账户。所有信息均会严格保密，仅用于测评展示。
-          </p>
+      <div class="payment-grid">
+        <!-- 支付选项 -->
+        <div>
+          <h4 style="font-size:0.9rem; font-weight:700;">第一步：选择充值金额</h4>
+          <div class="pay-amount-selector">
+            <div class="pay-opt" data-cny="200" id="opt-entry">
+              <div>¥200</div>
+              <div style="font-size:0.65rem; font-weight:500; color:var(--color-text-muted); margin-top:2px;">(入驻费套餐)</div>
+            </div>
+            <div class="pay-opt active" data-cny="300">
+              <div>¥300</div>
+              <div style="font-size:0.65rem; font-weight:500; color:var(--color-text-muted); margin-top:2px;">(充值 300 元)</div>
+            </div>
+            <div class="pay-opt" data-cny="500">
+              <div>¥500</div>
+              <div style="font-size:0.65rem; font-weight:500; color:var(--color-text-muted); margin-top:2px;">(充值 500 元)</div>
+            </div>
+          </div>
 
-          <form id="apply-form" novalidate>
-            <div class="form-grid">
+          <div style="margin-bottom: 20px;">
+            <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:6px;">
+              <span>实时折算 USDT 金额:</span>
+              <strong style="color:var(--color-brand);" id="calc-usdt-val">加载中...</strong>
+            </div>
+            <div style="font-size:0.75rem; color:var(--color-text-muted);">
+              汇率采用实时公允价格，当前参考汇率: <span id="current-exchange-rate">1 USD ≈ 7.23 CNY</span>
+            </div>
+          </div>
 
-              <!-- 机场名称 -->
-              <div class="form-group">
-                <label class="form-label" for="f-name">机场名称<span class="req">*</span></label>
-                <input class="form-input" id="f-name" type="text" placeholder="例：大象网络" required maxlength="30" />
-              </div>
-
-              <!-- 运营时长 -->
-              <div class="form-group">
-                <label class="form-label" for="f-days">已运营天数<span class="req">*</span></label>
-                <input class="form-input" id="f-days" type="number" placeholder="例：180" min="1" required />
-              </div>
-
-              <!-- 官网地址 -->
-              <div class="form-group full">
-                <label class="form-label" for="f-website">官网地址<span class="req">*</span></label>
-                <input class="form-input" id="f-website" type="url" placeholder="https://your-airport.com" required />
-                <span class="form-hint">用于官网可达性自动检测，请填写实际可访问地址</span>
-              </div>
-
-              <!-- 推广链接 -->
-              <div class="form-group full">
-                <label class="form-label" for="f-affiliate">推广/邀请链接<span class="req">*</span></label>
-                <input class="form-input" id="f-affiliate" type="url" placeholder="https://your-airport.com/?ref=xxx" required />
-                <span class="form-hint">用户点击「官网」按钮时将跳转到此链接，通常含有您的推广参数</span>
-              </div>
-
-              <!-- 订阅链接（可选） -->
-              <div class="form-group full">
-                <label class="form-label" for="f-sub">订阅链接（可选）</label>
-                <input class="form-input" id="f-sub" type="url" placeholder="https://your-airport.com/sub?token=xxx" />
-                <span class="form-hint">用于订阅有效性深度检测，可不填（建议填写以获得更准确评分）</span>
-              </div>
-
-              <hr class="form-divider" />
-
-              <!-- 联系邮箱 -->
-              <div class="form-group">
-                <label class="form-label" for="f-email">联系邮箱<span class="req">*</span></label>
-                <input class="form-input" id="f-email" type="email" placeholder="you@example.com" required />
-                <span class="form-hint">审核结果及账户信息将发送至此</span>
-              </div>
-
-              <!-- Telegram -->
-              <div class="form-group">
-                <label class="form-label" for="f-tg">Telegram 联系方式</label>
-                <input class="form-input" id="f-tg" type="text" placeholder="@yourname 或 群链接" />
-              </div>
-
-              <!-- 套餐价格 -->
-              <div class="form-group">
-                <label class="form-label" for="f-price">最低月付价格</label>
-                <input class="form-input" id="f-price" type="text" placeholder="例：¥15/月" maxlength="20" />
-              </div>
-
-              <!-- 主要特色 -->
-              <div class="form-group">
-                <label class="form-label" for="f-tag">核心特色标签</label>
-                <select class="form-select" id="f-tag">
-                  <option value="">请选择主要特色</option>
-                  <option value="IEPL专线">IEPL 专线</option>
-                  <option value="晚高峰稳定">晚高峰稳定</option>
-                  <option value="解锁流媒体">解锁流媒体</option>
-                  <option value="AI全解锁">AI 全解锁</option>
-                  <option value="自研客户端">自研客户端</option>
-                  <option value="性价比高">性价比高</option>
-                  <option value="新手友好">新手友好</option>
-                </select>
-              </div>
-
-              <!-- 机场简介 -->
-              <div class="form-group full">
-                <label class="form-label" for="f-desc">机场简介（可选）</label>
-                <textarea class="form-textarea" id="f-desc" placeholder="请简要介绍机场特点、节点分布、适用人群等（100字内）" maxlength="200"></textarea>
-              </div>
-
-              <!-- 初始竞价 -->
-              <div class="form-group full">
-                <label class="form-label" for="f-bid">初始竞价（元/次）</label>
-                <select class="form-select" id="f-bid">
-                  <option value="0.60">¥0.60（默认，标准排名）</option>
-                  <option value="0.80">¥0.80（较高排名）</option>
-                  <option value="1.00">¥1.00（优先排名）</option>
-                  <option value="1.50">¥1.50（顶部展示）</option>
-                </select>
-                <span class="form-hint">出价仅影响同评分段内的排名，不影响客观可靠性评分</span>
-              </div>
-
-              <!-- 同意条款 -->
-              <div class="form-group full">
-                <label class="form-check">
-                  <input type="checkbox" id="f-agree" required />
-                  我已阅读并同意 <a href="#" target="_blank">《入驻服务协议》</a> 和
-                  <a href="#" target="_blank">《测评标准说明》</a>，确认所填信息真实有效。
-                </label>
-              </div>
-
-              <!-- 提交 -->
-              <div class="form-group full">
-                <button class="btn-submit" type="submit" id="submit-btn">
-                  <span id="submit-text">提交申请</span>
-                  <span id="submit-spinner" style="display:none;">⏳ 提交中...</span>
-                </button>
-              </div>
-
-            </div><!-- /form-grid -->
-          </form>
-        </div><!-- /form-section -->
-
-        <!-- 成功提示 -->
-        <div class="success-box" id="success-section">
-          <span class="success-icon">🎉</span>
-          <h2 class="success-title">申请已提交！</h2>
-          <p class="success-desc">
-            我们已收到您的入驻申请，将在 <strong>24 小时内</strong>完成审核。<br />
-            审核结果会发送到您填写的邮箱，请注意查收。<br /><br />
-            如有疑问，请联系系统管理员：<strong>@jctuijian_admin</strong>
-          </p>
-          <a class="success-back" href="/">← 返回首页</a>
+          <h4 style="font-size:0.9rem; font-weight:700; margin-bottom:10px;">第二步：转账完成后，提交交易哈希 (TxID)</h4>
+          <div class="form-group">
+            <input class="form-input" id="pay-txid" placeholder="请输入64位 Tron 交易哈希 TxID (波场流水号)" style="font-family:monospace;" />
+          </div>
+          <button class="btn-action" style="width:100%;" id="btn-validate-tx">立即在线验证 TxID 并到账</button>
+          
+          <div id="tx-validation-msg" style="margin-top:10px; font-size:0.8rem; font-weight:600; display:none;"></div>
         </div>
 
-      </div><!-- /form-card -->
-    </div><!-- /portal-form-wrap -->
+        <!-- 钱包二维码 -->
+        <div>
+          <div class="qr-container">
+            <h4 style="font-size:0.85rem; font-weight:700; margin-bottom:10px;">TRC20-USDT 收款二维码</h4>
+            <div class="qr-code" id="pay-qr-code">
+              <!-- 二维码图像 -->
+              <img id="qr-img" src="" style="width:160px; height:160px;" alt="QR Code" />
+            </div>
+            <div style="font-size:0.7rem; color:var(--color-text-secondary); margin-bottom:8px;">收款人波场钱包地址:</div>
+            <div class="wallet-addr" id="wallet-addr-text">TAAwuaeYNhCwophqB45LiUXQYNX6nFcajS</div>
+            <button class="btn-ghost" style="font-size:0.75rem; padding:4px 10px; width:100%;" onclick="copyWalletAddr()">复制钱包地址</button>
+          </div>
+        </div>
+      </div>
 
-  </div><!-- /portal-body -->
-</div><!-- /portal-wrap -->
+    </div>
 
-<script src="assets/data.js"></script>
+  </div>
+</div>
+
 <script>
-/* ── 申请表单提交逻辑 ───────────────────────────────────── */
-document.getElementById('apply-form').addEventListener('submit', async function (e) {
-  e.preventDefault();
+  // ── 配置 ──────────────────────────────────────────────────
+  const SUPABASE_URL       = 'https://jsdvhryfmuadxaijmsjb.supabase.co';
+  const SUPABASE_ANON_KEY  = 'sb_publishable_ufJ4lt-JiLS0Nh5X9X6ZHw_PE58RM1F';
+  const WALLET_ADDRESS     = 'TAAwuaeYNhCwophqB45LiUXQYNX6nFcajS';
 
-  // 基础校验
-  const required = ['f-name', 'f-days', 'f-website', 'f-affiliate', 'f-email'];
-  let valid = true;
-  required.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el.value.trim()) {
-      el.style.borderColor = '#EF4444';
-      el.focus();
-      valid = false;
-    } else {
-      el.style.borderColor = '';
+  let currentMerchant = null;
+  let currentCNYAmount = 300;
+  let currentUSDTRate = 7.23; // 汇率默认值
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    // 1. 初始化汇率
+    await fetchExchangeRate();
+
+    // 2. 检查本地缓存登录状态
+    const cachedId = localStorage.getItem('jct_merchant_id');
+    const cachedEmail = localStorage.getItem('jct_merchant_email');
+    if (cachedId && cachedEmail) {
+      await loadMerchantConsole(cachedId);
+    }
+
+    // 3. 绑定充值金额切换
+    initPaymentSelectors();
+
+    // 4. 绑定二维码
+    updateQRCode();
+  });
+
+  // 切换登录/注册表单
+  function toggleLoginApply(showLogin) {
+    document.getElementById('login-section').style.display = showLogin ? 'block' : 'none';
+    document.getElementById('apply-section').style.display = showLogin ? 'none' : 'block';
+  }
+
+  // 获取实时汇率
+  async function fetchExchangeRate() {
+    try {
+      const resp = await fetch('https://open.er-api.com/v6/latest/USD');
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data && data.rates && data.rates.CNY) {
+          currentUSDTRate = parseFloat(data.rates.CNY);
+          document.getElementById('current-exchange-rate').textContent = `1 USD ≈ ${currentUSDTRate.toFixed(2)} CNY`;
+        }
+      }
+    } catch (e) {
+      console.warn('获取实时汇率失败，采用备用固定汇率 7.23', e);
+    }
+    updateUSDTCalculated();
+  }
+
+  function updateUSDTCalculated() {
+    const usdt = (currentCNYAmount / currentUSDTRate).toFixed(4);
+    document.getElementById('calc-usdt-val').textContent = `${usdt} USDT`;
+  }
+
+  function updateQRCode() {
+    // 生产 TRC20 转移格式的二维码，可以直接支持钱包扫码
+    const tronLink = `tron:${WALLET_ADDRESS}?token=TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t&amount=${(currentCNYAmount / currentUSDTRate).toFixed(4)}`;
+    document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(tronLink)}`;
+  }
+
+  function initPaymentSelectors() {
+    const opts = document.querySelectorAll('.pay-opt');
+    opts.forEach(opt => {
+      opt.addEventListener('click', () => {
+        opts.forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        currentCNYAmount = parseInt(opt.dataset.cny, 10);
+        updateUSDTCalculated();
+        updateQRCode();
+      });
+    });
+  }
+
+  function copyWalletAddr() {
+    navigator.clipboard.writeText(WALLET_ADDRESS).then(() => {
+      alert('钱包地址已复制到剪贴板，请在波场 TRC-20 网络中进行支付！');
+    });
+  }
+
+  /* ── 商家登录 ───────────────────────────────────────────── */
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('l-email').value.trim();
+    const pass = document.getElementById('l-pass').value.trim();
+    const btn = document.getElementById('btn-login-submit');
+
+    btn.disabled = true;
+    btn.textContent = '登录中...';
+
+    try {
+      const resp = await fetch(
+        `${SUPABASE_URL}/rest/v1/airports?select=*&merchant_email=eq.${encodeURIComponent(email)}`,
+        {
+          headers: {
+            'apikey':        SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          }
+        }
+      );
+      if (!resp.ok) throw new Error('网络请求异常');
+      const rows = await resp.json();
+
+      if (!rows || rows.length === 0) {
+        alert('该商户邮箱尚未在本站入驻或已禁用，请先提交申请。');
+        btn.disabled = false;
+        btn.textContent = '立即登录';
+        return;
+      }
+
+      const merchant = rows[0];
+      if (merchant.merchant_pass !== pass) {
+        alert('登录密码错误，请重试。默认密码为 123456');
+        btn.disabled = false;
+        btn.textContent = '立即登录';
+        return;
+      }
+
+      // 登录成功
+      localStorage.setItem('jct_merchant_id', merchant.id);
+      localStorage.setItem('jct_merchant_email', email);
+      await loadMerchantConsole(merchant.id);
+
+    } catch (err) {
+      alert('登录失败: ' + err.message);
+      btn.disabled = false;
+      btn.textContent = '立即登录';
     }
   });
 
-  if (!document.getElementById('f-agree').checked) {
-    alert('请先阅读并同意入驻服务协议。');
-    return;
+  /* ── 申请入驻提交 ───────────────────────────────────────── */
+  document.getElementById('apply-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('f-name').value.trim();
+    const days = parseInt(document.getElementById('f-days').value, 10);
+    const website = document.getElementById('f-website').value.trim();
+    const affiliate = document.getElementById('f-affiliate').value.trim();
+    const sub = document.getElementById('f-sub').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const pass = document.getElementById('f-pass').value.trim();
+    const btn = document.getElementById('btn-apply-submit');
+
+    btn.disabled = true;
+    btn.textContent = '提交申请中...';
+
+    const cleanId = email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '');
+
+    const payload = {
+      id: cleanId,
+      name: name,
+      website_url: website,
+      affiliate_url: affiliate,
+      sub_url: sub || null,
+      status: 'pending', // 默认待入驻
+      days_online: days,
+      price: '¥200入驻费未付',
+      merchant_email: email,
+      merchant_pass: pass,
+      category: ['new']
+    };
+
+    try {
+      // 写入到 airports 表
+      const resp = await fetch(`${SUPABASE_URL}/rest/v1/airports`, {
+        method: 'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'apikey':         SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Prefer':        'return=minimal',
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!resp.ok) throw new Error('该商户邮箱或ID可能已被注册');
+
+      alert('入驻申请提交成功！您的临时账号已创建。系统将在收到入驻费后正式开通监控。您现在可以直接登录。');
+      toggleLoginApply(true);
+      document.getElementById('l-email').value = email;
+      document.getElementById('l-pass').value = pass;
+
+    } catch (err) {
+      alert('提交失败: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '提交申请';
+    }
+  });
+
+  /* ── 加载商家中心 ───────────────────────────────────────── */
+  async function loadMerchantConsole(airportId) {
+    try {
+      const resp = await fetch(
+        `${SUPABASE_URL}/rest/v1/airports?select=*&id=eq.${airportId}`,
+        {
+          headers: {
+            'apikey':        SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          }
+        }
+      );
+      if (!resp.ok) throw new Error('商户资料获取失败');
+      const rows = await resp.json();
+      if (!rows || rows.length === 0) throw new Error('未找到商户信息');
+
+      currentMerchant = rows[0];
+
+      // 更新主控面板的 DOM
+      document.getElementById('merchant-name').textContent = currentMerchant.name;
+      document.getElementById('dash-balance').innerHTML = `${parseFloat(currentMerchant.balance || 0).toFixed(2)}<span class="stat-card-unit">CNY</span>`;
+      document.getElementById('dash-bid').innerHTML = `${parseFloat(currentMerchant.bid_price || 0.6).toFixed(2)}<span class="stat-card-unit">CNY/点击</span>`;
+      document.getElementById('dash-score').textContent = currentMerchant.score || '0.0';
+
+      const statusEl = document.getElementById('merchant-status');
+      if (currentMerchant.status === 'active') {
+        statusEl.textContent = '监控中/展现中';
+        statusEl.className = 'status-badge active';
+      } else {
+        statusEl.textContent = '待付入驻费/暂停';
+        statusEl.className = 'status-badge pending';
+      }
+
+      // 如果尚未激活，强制充值金额默认为 200 元入驻费
+      if (currentMerchant.status !== 'active') {
+        const optEntry = document.getElementById('opt-entry');
+        if (optEntry) optEntry.click();
+      }
+
+      // 显示控制台，隐藏登录
+      document.getElementById('login-section').style.display = 'none';
+      document.getElementById('apply-section').style.display = 'none';
+      document.getElementById('console-section').style.display = 'block';
+
+    } catch (err) {
+      alert('加载控制台出错: ' + err.message);
+      logoutMerchant();
+    }
   }
 
-  if (!valid) {
-    alert('请填写所有必填项（标有 * 的字段）。');
-    return;
+  function logoutMerchant() {
+    localStorage.removeItem('jct_merchant_id');
+    localStorage.removeItem('jct_merchant_email');
+    currentMerchant = null;
+    document.getElementById('console-section').style.display = 'none';
+    document.getElementById('login-section').style.display = 'block';
   }
 
-  // 收集表单数据
-  const payload = {
-    airport_name:  document.getElementById('f-name').value.trim(),
-    days_online:   parseInt(document.getElementById('f-days').value, 10),
-    website_url:   document.getElementById('f-website').value.trim(),
-    affiliate_url: document.getElementById('f-affiliate').value.trim(),
-    sub_url:       document.getElementById('f-sub').value.trim() || null,
-    contact_email: document.getElementById('f-email').value.trim(),
-    contact_tg:    document.getElementById('f-tg').value.trim() || null,
-    price_info:    document.getElementById('f-price').value.trim() || null,
-    tag:           document.getElementById('f-tag').value || null,
-    description:   document.getElementById('f-desc').value.trim() || null,
-    bid_price:     parseFloat(document.getElementById('f-bid').value),
-    status:        'pending',
-  };
+  /* ── 波场 TxID 在线全自动校验（最震撼部分） ─────────────────────── */
+  document.getElementById('btn-validate-tx').addEventListener('click', async () => {
+    const txId = document.getElementById('pay-txid').value.trim();
+    const msgEl = document.getElementById('tx-validation-msg');
 
-  // 禁用按钮，显示加载状态
-  const btn = document.getElementById('submit-btn');
-  btn.disabled = true;
-  document.getElementById('submit-text').style.display = 'none';
-  document.getElementById('submit-spinner').style.display = '';
+    if (!txId || txId.length !== 64) {
+      alert('请输入合法的64位波场 TxID 交易哈希！');
+      return;
+    }
 
-  try {
-    // ── 提交到 Supabase（需配置 SUPABASE_URL 和 ANON_KEY）────
-    // 生产阶段：取消注释以下代码，并在 index.html 中引入配置
-    /*
-    const SUPABASE_URL      = 'https://xxxx.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJ...';
+    msgEl.style.display = 'block';
+    msgEl.style.color = 'var(--color-text-secondary)';
+    msgEl.textContent = '正在连接波场公链节点，拉取区块数据进行验证...';
 
-    const resp = await fetch(`${SUPABASE_URL}/rest/v1/applications`, {
-      method: 'POST',
-      headers: {
-        'Content-Type':  'application/json',
-        'apikey':         SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Prefer':        'return=minimal',
-      },
-      body: JSON.stringify(payload),
-    });
+    try {
+      // 1. 查询波场浏览器 API (TronScan 公开数据)
+      const tronResp = await fetch(`https://apilist.tronscanapi.com/api/transaction-info?hash=${txId}`);
+      if (!tronResp.ok) throw new Error('公链数据源响应失败，请重试');
+      
+      const txInfo = await tronResp.json();
+      
+      // 2. 校验 TxID 的存在性
+      if (!txInfo || !txInfo.hash) {
+        msgEl.style.color = 'red';
+        msgEl.textContent = '验证失败：波场链上未查到该 TxID，请确认交易是否已广播并确认。';
+        return;
+      }
 
-    if (!resp.ok) throw new Error('提交失败');
-    */
+      // 3. 校验是否成功
+      if (txInfo.contractRet !== 'SUCCESS') {
+        msgEl.style.color = 'red';
+        msgEl.textContent = '验证失败：该交易的公链执行状态为失败 (FAILED)。';
+        return;
+      }
 
-    // 演示阶段：模拟 1.2 秒延迟
-    await new Promise(r => setTimeout(r, 1200));
+      // 4. 校验接收人是否是我们的收款钱包
+      let toAddress = '';
+      let transferAmount = 0;
+      let tokenSymbol = '';
 
-    // 显示成功页面
-    document.getElementById('form-section').style.display = 'none';
-    document.getElementById('success-section').style.display = 'block';
+      if (txInfo.tokenTransferInfo) {
+        toAddress = txInfo.tokenTransferInfo.to_address;
+        transferAmount = parseFloat(txInfo.tokenTransferInfo.amount_str) / 1000000; // USDT 为 6 位精度
+        tokenSymbol = txInfo.tokenTransferInfo.symbol;
+      } else if (txInfo.trigger_info && txInfo.trigger_info.parameter) {
+        // 部分交易格式降级手动解析
+        const params = txInfo.trigger_info.parameter;
+        // 在这解析 TRC-20 transfer(address,uint256)
+        if (txInfo.trigger_info.methodName === 'transfer(address,uint256)') {
+          tokenSymbol = 'USDT';
+          // TronScan API 能够完美返回 tokenTransferInfo，这里作为备用
+        }
+      }
 
-  } catch (err) {
-    alert('提交失败，请稍后重试或联系管理员。\n' + err.message);
-    btn.disabled = false;
-    document.getElementById('submit-text').style.display = '';
-    document.getElementById('submit-spinner').style.display = 'none';
-  }
-});
+      if (!toAddress) {
+        // 兼容更通用的 TronScan 返回字段
+        if (txInfo.trc20TransferInfo && txInfo.trc20TransferInfo.length > 0) {
+          const item = txInfo.trc20TransferInfo[0];
+          toAddress = item.to_address;
+          transferAmount = parseFloat(item.amount_str) / Math.pow(10, item.decimals || 6);
+          tokenSymbol = item.symbol;
+        }
+      }
 
-// 输入时清除红色边框
-document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(el => {
-  el.addEventListener('input', () => { el.style.borderColor = ''; });
-});
+      if (toAddress !== WALLET_ADDRESS) {
+        msgEl.style.color = 'red';
+        msgEl.textContent = `验证失败：接收地址 (${toAddress}) 不匹配，我们要求的收款钱包是: ${WALLET_ADDRESS}`;
+        return;
+      }
+
+      if (tokenSymbol !== 'USDT') {
+        msgEl.style.color = 'red';
+        msgEl.textContent = '验证失败：此交易不是 USDT 代币转账交易！';
+        return;
+      }
+
+      // 5. 校验交易金额 (允许微弱汇率波动，只要不低于 98%)
+      const expectedUSDT = currentCNYAmount / currentUSDTRate;
+      if (transferAmount < (expectedUSDT * 0.98)) {
+        msgEl.style.color = 'red';
+        msgEl.textContent = `验证失败：转账金额不足！检测到您转账了 ${transferAmount.toFixed(4)} USDT，但当前订单需要至少 ${(expectedUSDT * 0.98).toFixed(4)} USDT。`;
+        return;
+      }
+
+      // 6. 校验交易时间是否在最近的 2 小时内，防止使用一年前的旧交易记录行骗
+      const txTime = txInfo.timestamp;
+      const timeDiffMs = Date.now() - txTime;
+      if (timeDiffMs > 2 * 60 * 60 * 1000) {
+        msgEl.style.color = 'red';
+        msgEl.textContent = '验证失败：该交易的区块时间为 2 小时前，请勿使用历史旧 TxID 刷充值。';
+        return;
+      }
+
+      // 7. 查重防止相同 TxID 二次利用
+      const checkDup = await fetch(
+        `${SUPABASE_URL}/rest/v1/recharge_orders?select=id&tx_id=eq.${txId}`,
+        {
+          headers: {
+            'apikey':        SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          }
+        }
+      );
+      if (checkDup.ok) {
+        const dupRows = await checkDup.json();
+        if (dupRows && dupRows.length > 0) {
+          msgEl.style.color = 'red';
+          msgEl.textContent = '验证失败：该交易哈希 (TxID) 已经被其他充值订单使用，请勿重复提交。';
+          return;
+        }
+      }
+
+      // ==========================================
+      // 💰 验证通过！执行自动入账与激活
+      // ==========================================
+      msgEl.style.color = '#10B981';
+      msgEl.textContent = `🎉 公链验证成功！检测到已到账 ${transferAmount.toFixed(2)} USDT。正在更新您的账户余额...`;
+
+      // a. 插入订单表
+      const orderId = 'jct_' + Date.now();
+      const orderPayload = {
+        id: orderId,
+        airport_id: currentMerchant.id,
+        order_type: (currentCNYAmount === 200 && currentMerchant.status !== 'active') ? 'entry' : 'recharge',
+        amount_cny: currentCNYAmount,
+        amount_usdt: transferAmount,
+        tx_id: txId,
+        status: 'success',
+        completed_at: new Date().toISOString()
+      };
+
+      await fetch(`${SUPABASE_URL}/rest/v1/recharge_orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'apikey':         SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify(orderPayload)
+      });
+
+      // b. 更新商户表余额 (balance + currentCNYAmount)
+      // 如果充值的是入驻费 200 且商家还没被 active，我们顺便把状态激活为 active，价格改回正常，category加个today！
+      const currentBalance = parseFloat(currentMerchant.balance || 0);
+      const newBalance = currentBalance + (currentCNYAmount === 200 ? 0 : currentCNYAmount); // 入驻费不作为广告余额
+      
+      const updatePayload = {
+        balance: newBalance,
+        updated_at: new Date().toISOString()
+      };
+
+      if (currentCNYAmount === 200 && currentMerchant.status !== 'active') {
+        updatePayload.status = 'active';
+        updatePayload.price = '¥12/月起'; // 默认修改为常规价格
+        updatePayload.category = ['today', 'stable']; // 开启展示
+      }
+
+      const updateResp = await fetch(
+        `${SUPABASE_URL}/rest/v1/airports?id=eq.${currentMerchant.id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type':  'application/json',
+            'apikey':         SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          },
+          body: JSON.stringify(updatePayload)
+        }
+      );
+
+      if (updateResp.ok) {
+        msgEl.textContent = `🎉 充值成功！您的余额已更新。当前余额：¥${newBalance.toFixed(2)} CNY。网页即将在3秒后刷新。`;
+        setTimeout(() => {
+          loadMerchantConsole(currentMerchant.id);
+          document.getElementById('pay-txid').value = '';
+          msgEl.style.display = 'none';
+        }, 3000);
+      } else {
+        throw new Error('数据库更新失败');
+      }
+
+    } catch (err) {
+      msgEl.style.color = 'red';
+      msgEl.textContent = '验证发生异常错误: ' + err.message + '。如果支付确实已成功，请联系客服处理。';
+    }
+  });
 </script>
-
 </body>
 </html>
