@@ -17,7 +17,7 @@ import json
 import time
 import asyncio
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 import httpx
@@ -51,19 +51,8 @@ SUPABASE_SERVICE_KEY = os.environ["SUPABASE_SERVICE_KEY"].strip()
 # ── Supabase 客户端 ─────────────────────────────────────────
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
-# ── 测试目标列表（与 data.js 保持同步，通过数据库读取）──────
-# 脚本启动时从数据库读取 airports 表，无需硬编码
-TEST_URL       = "https://www.google.com/generate_204"  # 可用性测试目标（204 = 正常）
 TIMEOUT_SEC    = 12
 MAX_CONCURRENT = 10  # 最大并发数（避免 IP 被封）
-
-# ── 评分权重 ────────────────────────────────────────────────
-SCORE_WEIGHTS = {
-    "availability_30d": 0.40,   # 30天可用率
-    "speed_score":       0.30,   # 官网响应速度得分
-    "latency_score":     0.20,   # 延迟得分
-    "consistency":       0.10,   # 连续7天无中断
-}
 
 
 # ════════════════════════════════════════════════════════════
@@ -99,13 +88,13 @@ async def check_airport(client: httpx.AsyncClient, airport: dict) -> dict:
             result["http_status"] = resp.status_code
             result["website_ms"]  = ms
             result["website_ok"]  = resp.status_code < 400
-            log.info(f"  ✅ {airport['name']:12s}  官网 {resp.status_code}  {ms:.0f}ms")
+            log.info(f"  OK  {airport['name']:12s}  官网 {resp.status_code}  {ms:.0f}ms")
         except httpx.TimeoutException:
             result["error"] = "timeout"
-            log.warning(f"  ⏰ {airport['name']:12s}  官网超时")
+            log.warning(f"  TO  {airport['name']:12s}  官网超时")
         except Exception as e:
             result["error"] = str(e)[:120]
-            log.warning(f"  ❌ {airport['name']:12s}  官网错误: {e}")
+            log.warning(f"  ERR {airport['name']:12s}  官网错误: {e}")
 
     # ── 2. 订阅链接有效性测试（选配）────────────────────────
     if sub_url:
@@ -122,41 +111,58 @@ async def check_airport(client: httpx.AsyncClient, airport: dict) -> dict:
 # ════════════════════════════════════════════════════════════
 #  评分计算
 # ════════════════════════════════════════════════════════════
-def compute_score(airport_id: str, airport: dict) -> float:
+def compute_score(airport_id: str, airport: dict) -> tuple:
     """
     从数据库读取近30天的检测记录，计算可靠性评分（0-100）。
-    按照如下办法执行：
+    返回 (new_score: float, score_delta_str: str) 元组。
+
+    评分维度：
       1. 订阅可用率 (50%)
       2. 官网可用率 (30%)
       3. 运营天数与信誉 (20%)
     并对最终得分进行向中心压缩（0-100 映射至 45-90）以避免极端值。
+
+    关键修复：
+      原代码用 .gte("checked_at", "now() - interval '30 days'") 传 SQL 表达式，
+      Supabase Python SDK 的 .gte() 只接受字面值，SQL 表达式会导致查询异常，
+      触发兜底 return 75.0，因此所有机场评分永远是 75。
+      修复方法：用 Python datetime 计算 30 天前的 ISO 字符串传入。
     """
     try:
-        # 近30天所有记录
+        # ✅ 用 Python 计算 30 天前的 ISO 时间字符串（而非 SQL 表达式）
+        cutoff_time = (datetime.now(timezone.utc) - timedelta(days=30)).isoformat()
+
         rows = (
             supabase.table("speed_logs")
             .select("website_ok, website_ms, sub_ok")
             .eq("airport_id", airport_id)
-            .gte("checked_at", "now() - interval '30 days'")
+            .gte("checked_at", cutoff_time)
             .execute()
             .data
         )
 
         if not rows:
-            # 没有历史数据时，给定一个基础可用率
+            # 没有历史数据时，给定满可用率（新入驻机场）
             web_avail_rate = 1.0
             sub_avail_rate = 1.0
+            log.info(f"  {airport_id}: 暂无历史记录，使用默认可用率 100%")
         else:
-            total_rows = len(rows)
+            total_rows   = len(rows)
             web_ok_count = sum(1 for r in rows if r["website_ok"])
             web_avail_rate = web_ok_count / total_rows
 
             sub_rows = [r for r in rows if r.get("sub_ok") is not None]
             if sub_rows:
-                sub_ok_count = sum(1 for r in sub_rows if r["sub_ok"])
+                sub_ok_count   = sum(1 for r in sub_rows if r["sub_ok"])
                 sub_avail_rate = sub_ok_count / len(sub_rows)
             else:
                 sub_avail_rate = 1.0  # 若没有拉取过订阅，默认为100%
+
+            log.info(
+                f"  {airport_id}: {total_rows} 条记录，"
+                f"官网可用率 {web_avail_rate:.1%}，"
+                f"订阅可用率 {sub_avail_rate:.1%}"
+            )
 
         # 1. 订阅可用率得分 (满分 50)
         sub_score = sub_avail_rate * 50.0
@@ -181,14 +187,24 @@ def compute_score(airport_id: str, airport: dict) -> float:
         if "risk" in category:
             raw_score = max(0.0, raw_score - 50.0)
 
-        # 向中心压缩分值：避免产生 0 或 100 这样的极端评分
-        # raw_score (0~100) -> final_score (45~90)
-        score = 45.0 + (raw_score * 0.45)
-        return round(score, 2)
+        # 向中心压缩分值：raw_score (0~100) -> final_score (45~90)
+        new_score = round(45.0 + (raw_score * 0.45), 2)
+
+        # 计算与上次的变化量
+        old_score = float(airport.get("score") or 75.0)
+        delta     = new_score - old_score
+        if delta > 0:
+            delta_str = f"+{delta:.2f}"
+        elif delta < 0:
+            delta_str = f"{delta:.2f}"
+        else:
+            delta_str = "+0.00"
+
+        return new_score, delta_str
 
     except Exception as e:
-        log.error(f"评分计算失败 {airport_id}: {e}")
-        return 75.0  # 异常情况返回中位评分
+        log.error(f"评分计算失败 {airport_id}: {e}", exc_info=True)
+        return 75.0, "+0.00"  # 异常情况返回中位评分
 
 
 # ════════════════════════════════════════════════════════════
@@ -199,14 +215,14 @@ async def main():
     log.info(f"  机场监测开始  {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     log.info("=" * 60)
 
-    # ── 从数据库读取待监测的机场列表 ────────────────────────
+    # ── 从数据库读取待监测的机场列表（包含 score 字段用于计算 delta）
     airports = (
         supabase.table("airports")
-        .select("id, name, website_url, sub_url, status, days_online, category")
+        .select("id, name, website_url, sub_url, status, days_online, category, score")
         .eq("status", "active")
         .execute()
         .data
-     )
+    )
     log.info(f"共监测 {len(airports)} 个机场")
 
     if not airports:
@@ -215,7 +231,6 @@ async def main():
 
     # ── 并发检测 ─────────────────────────────────────────────
     semaphore = asyncio.Semaphore(MAX_CONCURRENT)
-    results   = []
 
     async def guarded_check(client, airport):
         async with semaphore:
@@ -243,12 +258,13 @@ async def main():
 
     # ── 重新计算并更新每个机场评分 ───────────────────────────
     for airport in airports:
-        new_score = compute_score(airport["id"], airport)
+        new_score, delta_str = compute_score(airport["id"], airport)
         supabase.table("airports").update({
-            "score":      new_score,
-            "updated_at": datetime.now(timezone.utc).isoformat(),
+            "score":       new_score,
+            "score_delta": delta_str,
+            "updated_at":  datetime.now(timezone.utc).isoformat(),
         }).eq("id", airport["id"]).execute()
-        log.info(f"  📊 {airport['name']:12s}  新评分: {new_score}")
+        log.info(f"  SCORE {airport['name']:12s}  {new_score}  ({delta_str})")
 
     log.info("=" * 60)
     log.info("  监测完成")
