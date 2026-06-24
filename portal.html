@@ -1677,7 +1677,7 @@
       document.getElementById('card-balance').textContent = `¥ ${parseFloat(currentMerchant.balance || 0).toFixed(2)}`;
       document.getElementById('card-bid').textContent     = '¥ 0.50/次';
       document.getElementById('card-status').textContent  = '在线展现中';
-      loadCampaignsAndSlots(currentMerchant.id);
+      if (typeof loadCampaignsAndSlots === 'function') loadCampaignsAndSlots(currentMerchant.id);
     } else {
       if (active) active.style.display = 'none';
       if (guide)  guide.style.display  = 'block';
@@ -1923,70 +1923,8 @@
     }
   });
 
-  /* ── 加载商家控制台 ─────────────────────────────────────── */
-  async function loadMerchantConsole(airportId) {
-    try {
-      const resp = await fetch(
-        `${SUPABASE_URL}/rest/v1/airports?select=*&id=eq.${airportId}`,
-        {
-          headers: {
-            'apikey':        SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          }
-        }
-      );
-      if (!resp.ok) throw new Error('读取商户数据失败');
-      const rows = await resp.json();
-      if (!rows || rows.length === 0) throw new Error('商户账户不存在');
+  // （旧版 loadMerchantConsole 已删除，请见上方新版实现）
 
-      currentMerchant = rows[0];
-
-      // 1. 更新侧边栏数据
-      document.getElementById('sb-email').textContent = currentMerchant.merchant_email;
-      document.getElementById('sb-balance').textContent = `¥ ${parseFloat(currentMerchant.balance || 0).toFixed(2)}`;
-
-      // 2. 更新面板核心卡片数据
-      document.getElementById('card-name').textContent = currentMerchant.name;
-      document.getElementById('card-balance').textContent = `¥ ${parseFloat(currentMerchant.balance || 0).toFixed(2)}`;
-      document.getElementById('card-bid').textContent = `¥ 0.50/次`;
-      document.getElementById('card-status').textContent = currentMerchant.status === 'active' ? '在线展现中' : '未付入驻费';
-
-      // 3. 更新顶栏监控徽标状态
-      const badge = document.getElementById('merchant-status');
-      if (currentMerchant.status === 'active') {
-        badge.textContent = '监测中/正常展现';
-        badge.className = 'badge-status active';
-      } else {
-        badge.textContent = '未付入驻费/下线暂停';
-        badge.className = 'badge-status pending';
-      }
-
-      // 4. 填充“修改资料”表单默认值
-      document.getElementById('p-name').value = currentMerchant.name;
-      document.getElementById('p-email').value = currentMerchant.merchant_email;
-      document.getElementById('p-website').value = currentMerchant.website_url;
-      document.getElementById('p-affiliate').value = currentMerchant.affiliate_url;
-      document.getElementById('p-sub').value = currentMerchant.sub_url || '';
-
-      // 6. 切换面板显示
-      document.getElementById('login-section').style.display = 'none';
-      document.getElementById('apply-section').style.display = 'none';
-      document.getElementById('console-section').style.display = 'flex';
-
-      // 如果尚未缴纳 200 入驻费，默认直接定位到“充值中心”
-      if (currentMerchant.status !== 'active') {
-        switchTab('tab-deposit');
-        const optEntry = document.getElementById('opt-entry');
-        if (optEntry) optEntry.click();
-      } else {
-        switchTab('tab-overview');
-      }
-
-    } catch (err) {
-      alert('初始化控制台失败: ' + err.message);
-      logoutMerchant();
-    }
-  }
 
   function logoutMerchant() {
     localStorage.removeItem('jct_merchant_id');
