@@ -542,3 +542,193 @@ img { max-width: 100%; }
   color: var(--color-text-secondary);
 }
 
+/* ══════════════════════════════════════════════════════════
+   测评方法页 v2 — 专属样式
+══════════════════════════════════════════════════════════ */
+
+/* 方法页 section 间距 */
+.method-section { padding: 32px 0; }
+.method-section + .method-section {
+  border-top: 1px solid var(--color-border);
+}
+
+/* 0. 总述框 */
+.method-overview-box {
+  background: linear-gradient(135deg, #EFF6FF 0%, #F5F3FF 100%);
+  border: 1px solid #BFDBFE;
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+}
+.method-overview-text {
+  font-size: 0.97rem; line-height: 1.9;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+.method-overview-text strong { color: var(--color-text-primary); }
+
+/* 1. 四大监测模块卡片行 */
+.method-cards-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+@media (max-width: 900px) { .method-cards-row { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px)  { .method-cards-row { grid-template-columns: 1fr; } }
+
+.method-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 22px 20px;
+  transition: all var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+.method-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-brand);
+}
+.method-card-icon { font-size: 1.8rem; margin-bottom: 12px; display: block; line-height: 1; }
+.method-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--color-text-primary); margin-bottom: 8px; }
+.method-card p { font-size: 0.78rem; line-height: 1.65; color: var(--color-text-secondary); }
+.method-card strong { color: var(--color-text-primary); }
+
+/* 2. 六维评分权重分布 */
+.score-dimensions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+@media (max-width: 900px) { .score-dimensions-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px)  { .score-dimensions-grid { grid-template-columns: 1fr; } }
+
+.score-dim-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  transition: all var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+.score-dim-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.score-dim-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.score-dim-icon { font-size: 1.2rem; }
+.score-dim-name { font-size: 0.9rem; font-weight: 700; color: var(--color-text-primary); flex: 1; }
+.score-dim-pts {
+  font-family: var(--font-display);
+  font-size: 0.95rem; font-weight: 800;
+  color: var(--color-brand);
+  background: var(--color-brand-bg);
+  padding: 2px 8px; border-radius: 20px;
+  white-space: nowrap;
+}
+.score-dim-bar-wrap {
+  height: 6px; background: var(--color-bg);
+  border-radius: 3px; margin-bottom: 12px; overflow: hidden;
+}
+.score-dim-bar { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+.score-dim-desc { font-size: 0.77rem; line-height: 1.65; color: var(--color-text-secondary); margin: 0; }
+
+/* 3. 详细评测表格 */
+.method-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+.method-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+.method-table thead tr { background: var(--color-bg); }
+.method-table th {
+  padding: 13px 16px;
+  border-bottom: 2px solid var(--color-border);
+  text-align: left; font-weight: 700;
+  font-size: 0.8rem; letter-spacing: 0.02em;
+  color: var(--color-text-secondary); white-space: nowrap;
+}
+.method-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  line-height: 1.6; vertical-align: top;
+}
+.method-table tbody tr:last-child td { border-bottom: none; }
+.method-table tbody tr:hover { background: #F8FAFC; }
+.method-table td:first-child { white-space: nowrap; }
+
+/* 4. 评分区间四格 */
+.score-ranges-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+@media (max-width: 900px) { .score-ranges-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px)  { .score-ranges-grid { grid-template-columns: 1fr; } }
+
+.score-range-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition);
+}
+.score-range-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.score-range-label { font-family: var(--font-display); font-size: 1.1rem; font-weight: 800; margin-bottom: 4px; }
+.score-range-title { font-size: 0.88rem; font-weight: 700; color: var(--color-text-primary); margin-bottom: 10px; }
+.score-range-item p { font-size: 0.78rem; line-height: 1.65; color: var(--color-text-secondary); margin: 0; }
+
+/* 5. 监测流程时间线 */
+.method-timeline {
+  display: flex; flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.timeline-item {
+  display: flex; align-items: flex-start; gap: 20px;
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--color-border);
+  transition: background var(--transition);
+}
+.timeline-item:last-child { border-bottom: none; }
+.timeline-item:hover { background: #F8FAFC; }
+.timeline-dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 0.85rem; font-weight: 700;
+  flex-shrink: 0; margin-top: 2px;
+}
+.timeline-content h4 { font-size: 0.95rem; font-weight: 700; color: var(--color-text-primary); margin-bottom: 6px; }
+.timeline-content p { font-size: 0.82rem; line-height: 1.7; color: var(--color-text-secondary); margin: 0; }
+
+/* 6. FAQ 手风琴 */
+.method-faq-list {
+  display: flex; flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.faq-item { border-bottom: 1px solid var(--color-border); }
+.faq-item:last-child { border-bottom: none; }
+.faq-item summary {
+  padding: 18px 24px;
+  font-size: 0.93rem; font-weight: 600;
+  color: var(--color-text-primary);
+  cursor: pointer; list-style: none;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background var(--transition);
+  user-select: none;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: '+'; font-size: 1.3rem; font-weight: 300;
+  color: var(--color-text-muted); flex-shrink: 0;
+}
+.faq-item[open] summary::after { content: '−'; }
+.faq-item summary:hover { background: #F8FAFC; }
+.faq-item p { padding: 0 24px 18px; font-size: 0.84rem; line-height: 1.75; color: var(--color-text-secondary); }
+.faq-item p a { color: var(--color-brand); text-decoration: underline; }

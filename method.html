@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- ── SEO 核心 ────────────────────────────────────────── -->
-  <title>测速评测标准与评分计算公式说明 | 机场数据客观性保证 - JcTuijian</title>
-  <meta name="description" content="为您拆解本站自动评分机制的核心逻辑。从节点可用率、官网响应速度、历史稳定天数等多维度，公开透明地阐述每个机场评分的得出过程，确保排名公平。" />
+  <title>测评方法与评分标准说明 | 6维可靠性评分机制透明公开 - JcTuijian</title>
+  <meta name="description" content="本站采用6维度自动化评分体系：订阅可用率、官网可用率、响应速度、运营稳定性、价格竞争力、线路质量，每30分钟自动监测更新，排名完全由数据说话。" />
   <meta name="keywords" content="机场推荐,VPN机场,科学上网,梯子推荐,便宜机场,稳定机场,Clash机场,2026机场推荐,机场测评" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://jctuijian.com/method.html" />
@@ -171,37 +171,326 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════
-     排行榜主体
-══════════════════════════════════════════════════════════ -->
-<main id="ranking-section">
+<main id="method-main">
   <div class="container">
-    <section class="section">
 
-      <!-- Section Header -->
-      <div class="section-header">
+    <!-- ══ 0. 总述 ══════════════════════════════════════════ -->
+    <section class="method-section" style="margin-top:40px;">
+      <div class="method-overview-box">
+        <p class="method-overview-text">
+          本站致力于建立一个公正、公开、透明的机场可靠性排名平台。所有排名数据均来自部署于不同云厂商的多节点自动化监测脚本，每隔 <strong>30 分钟</strong>全自动运行一次，对每个机场的官网与订阅链接进行探测。为评估一个机场的「可靠性分值」，我们采用 <strong>6 个维度</strong>的加权计算，并对新入驻机场的初始评分引入确定性锚点，避免所有新机场千篇一律得同一分数。
+        </p>
+      </div>
+    </section>
+
+    <!-- ══ 1. 四大监测模块概览卡 ═══════════════════════════ -->
+    <section class="method-section">
+      <div class="method-cards-row">
+
+        <div class="method-card">
+          <div class="method-card-icon" style="color:#0ea5e9">⏱</div>
+          <h3>全天候可用性监测</h3>
+          <p>每 30 分钟，监测脚本从<strong>美国、新加坡、日本、中国香港</strong>等 4 个机房节点，向机场官网及订阅地址发起探测。</p>
+        </div>
+
+        <div class="method-card">
+          <div class="method-card-icon" style="color:#6366f1">📡</div>
+          <h3>订阅可用率（40分）</h3>
+          <p>评估订阅内容获取是否顺畅。如果订阅解析接口频繁超时或返回空配置，将会导致分值严重下滑。Clash/V2Ray 格式均覆盖。</p>
+        </div>
+
+        <div class="method-card">
+          <div class="method-card-icon" style="color:#10b981">🌐</div>
+          <h3>官网可用率（25分）</h3>
+          <p>官网是用户充值、找回密码、更换配置的唯一通道。官网的可用性与是否被污染直接影响最终评分，大面积DNS污染将触发扣分。</p>
+        </div>
+
+        <div class="method-card">
+          <div class="method-card-icon" style="color:#f59e0b">📅</div>
+          <h3>运营稳定性（12分）</h3>
+          <p>老牌机场拥有更丰富的运营经验和冗余带宽。新机场在初期会获得新秀分值保护，但高风险机场将被直接扣减分值。</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ 2. 六维评分权重分布 ═══════════════════════════════ -->
+    <section class="method-section">
+      <div class="section-header" style="margin-bottom:24px">
         <div class="section-title-group">
-          <div class="section-icon" id="section-icon-text" aria-hidden="true" style="display:none"></div>
           <div>
-            <h2 class="section-title" id="section-title-text">今日推荐机场</h2>
-            <p class="section-subtitle">TODAY'S TOP PICK</p>
+            <h2 class="section-title">六维评分权重分布</h2>
+            <p class="section-subtitle">SCORING DIMENSIONS · TOTAL 100 POINTS</p>
           </div>
         </div>
-        <div class="section-meta">
-          <span class="live-dot" aria-hidden="true"></span>
-          报告时间：<span id="stat-update-2">19 小时前</span>
-        </div>
       </div>
 
-      <!-- 卡片网格（由 app.js 动态填充）-->
-      <div class="cards-grid" id="cards-grid" role="list" aria-label="机场推荐列表">
-        <!-- 加载占位 -->
-        <div class="empty-state" style="grid-column:1/-1">
-          <p>数据加载中...</p>
-        </div>
-      </div>
+      <div class="score-dimensions-grid">
 
+        <div class="score-dim-item">
+          <div class="score-dim-header">
+            <span class="score-dim-icon">📡</span>
+            <span class="score-dim-name">订阅可用率</span>
+            <span class="score-dim-pts">40 分</span>
+          </div>
+          <div class="score-dim-bar-wrap">
+            <div class="score-dim-bar" style="width:40%;background:linear-gradient(90deg,#6366f1,#818cf8)"></div>
+          </div>
+          <p class="score-dim-desc">Clash/V2Ray 订阅内容成功拉取率，近30天平均值。订阅失败=节点无法导入，权重最高。</p>
+        </div>
+
+        <div class="score-dim-item">
+          <div class="score-dim-header">
+            <span class="score-dim-icon">🌐</span>
+            <span class="score-dim-name">官网可用率</span>
+            <span class="score-dim-pts">25 分</span>
+          </div>
+          <div class="score-dim-bar-wrap">
+            <div class="score-dim-bar" style="width:25%;background:linear-gradient(90deg,#10b981,#34d399)"></div>
+          </div>
+          <p class="score-dim-desc">机场官网 HTTP 可达性，近30天平均值。官网不可用将导致用户无法充值、找回密码。</p>
+        </div>
+
+        <div class="score-dim-item">
+          <div class="score-dim-header">
+            <span class="score-dim-icon">⚡</span>
+            <span class="score-dim-name">响应速度</span>
+            <span class="score-dim-pts">15 分</span>
+          </div>
+          <div class="score-dim-bar-wrap">
+            <div class="score-dim-bar" style="width:15%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div>
+          </div>
+          <p class="score-dim-desc">官网平均响应延迟：&lt;300ms 满分15分，&gt;1200ms 最低仅得2分，速度越快分越高。</p>
+        </div>
+
+        <div class="score-dim-item">
+          <div class="score-dim-header">
+            <span class="score-dim-icon">📅</span>
+            <span class="score-dim-name">运营稳定性</span>
+            <span class="score-dim-pts">12 分</span>
+          </div>
+          <div class="score-dim-bar-wrap">
+            <div class="score-dim-bar" style="width:12%;background:linear-gradient(90deg,#ec4899,#f472b6)"></div>
+          </div>
+          <p class="score-dim-desc">基础8分+运营天数加成（180天满4分）+基于机场ID的确定性初始锚点（0~1.2分），区分新机场。</p>
+        </div>
+
+        <div class="score-dim-item">
+          <div class="score-dim-header">
+            <span class="score-dim-icon">💰</span>
+            <span class="score-dim-name">价格竞争力</span>
+            <span class="score-dim-pts">5 分</span>
+          </div>
+          <div class="score-dim-bar-wrap">
+            <div class="score-dim-bar" style="width:5%;background:linear-gradient(90deg,#0ea5e9,#38bdf8)"></div>
+          </div>
+          <p class="score-dim-desc">月付门槛：≤¥8满分5分，¥8~¥15得3~5分，¥15~¥30得1~3分，¥30以上仅得0.5分。</p>
+        </div>
+
+        <div class="score-dim-item">
+          <div class="score-dim-header">
+            <span class="score-dim-icon">🏆</span>
+            <span class="score-dim-name">线路质量标签</span>
+            <span class="score-dim-pts">3 分</span>
+          </div>
+          <div class="score-dim-bar-wrap">
+            <div class="score-dim-bar" style="width:3%;background:linear-gradient(90deg,#8b5cf6,#a78bfa)"></div>
+          </div>
+          <p class="score-dim-desc">IEPL/CN2专线+1.5分，直连中转/AnyTLS/无倍率+0.8分，解锁流媒体+0.5分，晚高峰稳定+0.5分。</p>
+        </div>
+
+      </div>
     </section>
+
+    <!-- ══ 3. 详细评测细则表格 ════════════════════════════════ -->
+    <section class="method-section">
+      <div class="section-header" style="margin-bottom:24px">
+        <div class="section-title-group">
+          <div>
+            <h2 class="section-title">详细评测细则与加扣分规则</h2>
+            <p class="section-subtitle">DETAILED SCORING RULES</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="method-table-wrap">
+        <table class="method-table">
+          <thead>
+            <tr>
+              <th>考核维度</th>
+              <th>评测细节</th>
+              <th>扣分规则</th>
+              <th>加分规则</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>订阅可用率</strong></td>
+              <td>Clash 订阅内容拉取测试，响应时间须在 2.5s 内，返回内容长度须 &gt;100 字节</td>
+              <td>获取超时或返回 500 报错，本次检测记为失败，可用率下降影响分值</td>
+              <td>连续 7 天 100% 成功率，触发额外稳定性保护</td>
+            </tr>
+            <tr>
+              <td><strong>官网可用率</strong></td>
+              <td>官网域名在美、新、日、港 4 节点并发探测，记录 HTTP 状态码与响应延迟</td>
+              <td>HTTP 状态码 ≥400 或连接超时，本次记为不可达；大面积 DNS 污染扣 3~5 分</td>
+              <td>提供防污染多域名保护可额外加 1 分（需商家申报）</td>
+            </tr>
+            <tr>
+              <td><strong>响应速度</strong></td>
+              <td>取近30天官网探测平均响应延迟 (ms) 计算得分</td>
+              <td>&lt;300ms → 15分；300~600ms → 10~15分；600~1200ms → 5~10分；&gt;1200ms → 2~5分</td>
+              <td>无历史数据时取 6~12 分的确定性初始值（基于机场ID哈希）</td>
+            </tr>
+            <tr>
+              <td><strong>运营稳定性</strong></td>
+              <td>商家运营天数、历史记录、是否有退款保障、TG 社群活跃度</td>
+              <td>社群关闭/商家断联，直接扣 50 分并拉入异常管控名单</td>
+              <td>有退款保障、大站信用书加 5 分；运营满 180 天加满 4 分</td>
+            </tr>
+            <tr>
+              <td><strong>价格竞争力</strong></td>
+              <td>月付最低档套餐价格（入门套餐）</td>
+              <td>月付 &gt;¥30 仅得 0.5 分</td>
+              <td>月付 ≤¥8 满分 5 分；≤¥15 得 3~5 分</td>
+            </tr>
+            <tr>
+              <td><strong>线路质量标签</strong></td>
+              <td>商家申报并由本站核实的线路技术方案标签</td>
+              <td>标签造假或实测与申报不符，移除标签加分并触发信誉扣分</td>
+              <td>IEPL/CN2专线+1.5分；AnyTLS/直连中转+0.8分；流媒体解锁+0.5分</td>
+            </tr>
+            <tr style="background:#fef2f2">
+              <td><strong style="color:#dc2626">⚠ 风险预警</strong></td>
+              <td>跑路信号：官网连续 3 天不可达、TG 群解散、用户集中投诉无回复</td>
+              <td><strong style="color:#dc2626">直接扣减 50 分，进入风险预警分类</strong>，置顶风险提示卡</td>
+              <td>风险解除后恢复评分，但信誉记录保留 90 天</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══ 4. 分值区间说明 ════════════════════════════════════ -->
+    <section class="method-section">
+      <div class="section-header" style="margin-bottom:24px">
+        <div class="section-title-group">
+          <div>
+            <h2 class="section-title">可靠性评分区间说明</h2>
+            <p class="section-subtitle">SCORE RANGE INTERPRETATION</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="score-ranges-grid">
+        <div class="score-range-item" style="border-left:4px solid #10b981">
+          <div class="score-range-label" style="color:#10b981">90 ~ 100 分</div>
+          <div class="score-range-title">⭐ 卓越稳定</div>
+          <p>全维度近满分，官网+订阅可用率 &gt;98%，响应极快，拥有高质量专线，适合长期重度使用。</p>
+        </div>
+        <div class="score-range-item" style="border-left:4px solid #0ea5e9">
+          <div class="score-range-label" style="color:#0ea5e9">80 ~ 90 分</div>
+          <div class="score-range-title">✅ 推荐可用</div>
+          <p>主力维度表现优秀，偶发小波动但整体可靠，适合大多数日常使用场景，性价比突出。</p>
+        </div>
+        <div class="score-range-item" style="border-left:4px solid #f59e0b">
+          <div class="score-range-label" style="color:#f59e0b">70 ~ 80 分</div>
+          <div class="score-range-title">🔶 一般表现</div>
+          <p>某一维度存在明显短板，如响应较慢或价格偏高，可作为备用方案，不建议作为唯一首选。</p>
+        </div>
+        <div class="score-range-item" style="border-left:4px solid #ef4444">
+          <div class="score-range-label" style="color:#ef4444">70 分以下</div>
+          <div class="score-range-title">❌ 谨慎使用</div>
+          <p>多个维度表现欠佳，或存在风险预警扣分，建议密切关注其状态变化后再决定是否购买。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 5. 监测流程时间线 ══════════════════════════════════ -->
+    <section class="method-section">
+      <div class="section-header" style="margin-bottom:24px">
+        <div class="section-title-group">
+          <div>
+            <h2 class="section-title">自动监测与评分更新流程</h2>
+            <p class="section-subtitle">AUTOMATED PIPELINE · EVERY 30 MINUTES</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="method-timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#6366f1">1</div>
+          <div class="timeline-content">
+            <h4>触发监测（每30分钟）</h4>
+            <p>GitHub Actions 定时任务触发 check.py 脚本，多地云服务器并发启动探测任务，最大并发10个机场同时检测。</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#0ea5e9">2</div>
+          <div class="timeline-content">
+            <h4>双通道探测</h4>
+            <p>对每个机场同时执行：① 官网 HTTP 可达性测试（记录状态码+延迟ms）；② 订阅链接内容拉取测试（验证返回内容有效性）。</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#10b981">3</div>
+          <div class="timeline-content">
+            <h4>写入数据库</h4>
+            <p>探测结果写入 Supabase speed_logs 表，每条记录含：airport_id、检测时间、website_ok、website_ms、sub_ok、HTTP 状态码。</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#f59e0b">4</div>
+          <div class="timeline-content">
+            <h4>六维评分计算</h4>
+            <p>读取该机场近30天 speed_logs，结合其价格、标签、运营天数，代入6维算法计算新得分，并与前次对比生成 score_delta（↑↓变化量）。</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#ec4899">5</div>
+          <div class="timeline-content">
+            <h4>更新排名展示</h4>
+            <p>新评分写回 airports 表，前端通过 Supabase API 实时拉取最新分数并按分值降序排列，用户刷新页面即看到最新榜单。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 6. 常见问题 FAQ ══════════════════════════════════ -->
+    <section class="method-section" style="margin-bottom:60px">
+      <div class="section-header" style="margin-bottom:24px">
+        <div class="section-title-group">
+          <div>
+            <h2 class="section-title">常见问题</h2>
+            <p class="section-subtitle">FAQ</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="method-faq-list">
+        <details class="faq-item">
+          <summary>付费能提高排名吗？</summary>
+          <p>不能。排名完全由自动化监测数据决定，本站商业模式为 CPC 点击广告（机场出价竞争首位广告展示位），与可靠性评分完全隔离。评分高低只取决于机场的实际表现数据。</p>
+        </details>
+        <details class="faq-item">
+          <summary>新入驻机场初始分是多少？</summary>
+          <p>新机场无监测数据时，订阅可用率取 88%~98% 之间的确定性哈希初始值，官网可用率取 92%~100%，响应速度取 6~12 分，所有值均由机场 ID 唯一确定，不同机场不会完全相同，避免全部堆叠在同一分数。</p>
+        </details>
+        <details class="faq-item">
+          <summary>评分为什么突然大幅下降？</summary>
+          <p>最常见原因：① 官网或订阅在过去30天内出现大量失败记录；② 被识别为风险机场，触发 -50 分惩罚；③ 价格调整后价格竞争力分降低。您可在机场报告页查看详细的历史可用率曲线。</p>
+        </details>
+        <details class="faq-item">
+          <summary>我发现某机场数据有误，怎么反馈？</summary>
+          <p>请发送邮件至 <a href="mailto:admin@jctuijian.com">admin@jctuijian.com</a> 并附上机场名称和问题描述，我们会在24小时内核实并处理。</p>
+        </details>
+        <details class="faq-item">
+          <summary>风险预警是怎么触发的？</summary>
+          <p>当出现以下任一信号时自动触发：官网连续 3 天完全不可达、订阅链接返回空内容超过72小时、TG 官方群解散、用户集中投诉且无官方回应超过48小时。触发后扣 50 分并在首页置顶风险提示卡。</p>
+        </details>
+      </div>
+    </section>
+
   </div>
 </main>
 
