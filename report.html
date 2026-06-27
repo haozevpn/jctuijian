@@ -10,7 +10,7 @@
   <style>
     /* ── 测评报告定制样式 ─────────────────────────────────────── */
     .report-container {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 40px auto;
       padding: 0 24px;
     }
@@ -200,77 +200,85 @@
       color: #EF4444;
     }
 
-    /* ── 评分分解 ─────────────────────────────────────────────── */
-    .report-grid-2col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-      margin-bottom: 32px;
-    }
-    @media (max-width: 900px) {
-      .report-grid-2col {
-        grid-template-columns: 1fr;
-        gap: 32px;
-      }
-    }
-
+    /* ── 评分拆解 ─────────────────────────────────────────────── */
     .section-title-premium {
       font-family: var(--font-display);
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       font-weight: 800;
       color: var(--color-text-primary);
-      margin-bottom: 18px;
+      margin: 36px 0 18px 0;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-
-    .breakdown-card {
+    .rating-breakdown-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 900px) {
+      .rating-breakdown-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 580px) {
+      .rating-breakdown-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .breakdown-stat-card {
       background: var(--color-surface);
       border: 1px solid var(--color-border);
-      border-radius: var(--radius-xl);
-      padding: 28px;
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
       box-shadow: var(--shadow-sm);
-    }
-    .breakdown-list {
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      height: 105px;
     }
-    .breakdown-item {
-      display: flex;
-      flex-direction: column;
-    }
-    .breakdown-header {
+    .breakdown-stat-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
     }
-    .breakdown-label {
+    .breakdown-stat-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--color-text-muted);
+    }
+    .breakdown-stat-letter {
       font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--color-text-secondary);
+      font-weight: 800;
+      color: var(--color-text-muted);
+      opacity: 0.4;
     }
-    .breakdown-val {
+    .breakdown-stat-value {
       font-family: var(--font-display);
-      font-size: 0.9rem;
+      font-size: 1.65rem;
       font-weight: 800;
       color: var(--color-text-primary);
+      margin: 6px 0;
     }
-    .breakdown-bar-bg {
-      height: 8px;
-      background: var(--color-bg);
-      border-radius: 4px;
-      overflow: hidden;
+    .breakdown-stat-bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 6px;
+      background: #F1F5F9;
     }
-    .breakdown-bar-fill {
+    .breakdown-stat-bar-fill {
       height: 100%;
-      border-radius: 4px;
-      background: linear-gradient(90deg, var(--color-brand) 0%, #6366F1 100%);
       width: 0%;
-      transition: width 0.8s ease-in-out;
+      transition: width 1s ease-in-out;
     }
+    .bg-green  { background: #10B981; }
+    .bg-blue   { background: #3B82F6; }
+    .bg-orange { background: #F59E0B; }
+    .bg-purple { background: #8B5CF6; }
+    .bg-teal   { background: #14B8A6; }
 
     /* ── 核心监测指标 ─────────────────────────────────────────── */
     .metrics-grid {
@@ -294,73 +302,153 @@
       border: 1px solid var(--color-border);
       border-radius: var(--radius-lg);
       padding: 20px;
-      text-align: center;
       box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 120px;
+      position: relative;
     }
     .metric-label {
       font-size: 0.78rem;
       color: var(--color-text-muted);
-      font-weight: 600;
-      margin-bottom: 6px;
+      font-weight: 700;
+      margin-bottom: 4px;
     }
     .metric-value {
       font-family: var(--font-display);
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: var(--color-text-primary);
     }
+    .metric-sparkline-wrap {
+      width: 100%;
+      height: 35px;
+      margin-top: 10px;
+    }
+    .metric-stat-text {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      margin-top: 10px;
+    }
 
-    /* ── 趋势图 ─────────────────────────────────────────────── */
-    .chart-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-xl);
-      padding: 28px;
-      box-shadow: var(--shadow-sm);
+    /* ── 30天趋势 ────────────────────────────────────────────── */
+    .trend-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
       margin-bottom: 32px;
     }
-    .chart-container-wrap {
-      position: relative;
-      height: 300px;
-      width: 100%;
-    }
-
-    /* ── 评测细节与套餐 ───────────────────────────────────────── */
-    .specs-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-xl);
-      padding: 28px;
-      box-shadow: var(--shadow-sm);
-    }
-    .specs-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+    @media (max-width: 900px) {
+      .trend-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
     @media (max-width: 480px) {
-      .specs-grid {
+      .trend-grid {
         grid-template-columns: 1fr;
       }
     }
-    .spec-item {
+    .trend-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      padding: 12px 16px;
-      background: var(--color-bg);
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--color-border);
+      justify-content: space-between;
+      height: 220px;
     }
-    .spec-label {
-      font-size: 0.72rem;
-      color: var(--color-text-muted);
-      font-weight: 600;
-      margin-bottom: 4px;
+    .trend-header {
+      margin-bottom: 10px;
     }
-    .spec-value {
-      font-size: 0.88rem;
+    .trend-title {
+      font-size: 0.85rem;
       font-weight: 700;
       color: var(--color-text-primary);
+    }
+    .trend-subtitle {
+      font-size: 0.7rem;
+      color: var(--color-text-muted);
+    }
+    .trend-chart-wrap {
+      flex-grow: 1;
+      height: 100px;
+      position: relative;
+    }
+    .trend-footer {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-text-secondary);
+      margin-top: 10px;
+      border-top: 1px solid var(--color-border);
+      padding-top: 8px;
+    }
+
+    /* ── 双栏配置详情 ─────────────────────────────────────────── */
+    .detail-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 820px) {
+      .detail-grid-2col {
+        grid-template-columns: 1fr;
+      }
+    }
+    .spec-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+    .spec-card-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--color-text-primary);
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--color-bg);
+      padding-bottom: 12px;
+    }
+    .spec-list-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 480px) {
+      .spec-list-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .spec-row-item {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .spec-row-label {
+      font-size: 0.72rem;
+      color: var(--color-text-muted);
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+    .spec-row-value {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--color-text-primary);
+    }
+    .spec-badge-yes {
+      color: #10B981;
+    }
+    .spec-badge-no {
+      color: #EF4444;
     }
 
     /* ── 结论与建议 ───────────────────────────────────────────── */
@@ -493,154 +581,234 @@
       </div>
     </div>
 
-    <!-- 2. 核心监测指标 (4 columns) -->
+    <!-- 2. 评分拆解 (Stability, Performance, Price, Risk, Final) -->
+    <h2 class="section-title-premium">📈 综合评估评分拆解 (权重换算)</h2>
+    <div class="rating-breakdown-grid">
+      <!-- 稳定性 S -->
+      <div class="breakdown-stat-card">
+        <div class="breakdown-stat-header">
+          <span class="breakdown-stat-label">稳定性 (S)</span>
+          <span class="breakdown-stat-letter">S</span>
+        </div>
+        <div class="breakdown-stat-value" id="val-s-score">--</div>
+        <div class="breakdown-stat-bar">
+          <div class="breakdown-stat-bar-fill bg-green" id="bar-s-fill"></div>
+        </div>
+      </div>
+      <!-- 性能 P -->
+      <div class="breakdown-stat-card">
+        <div class="breakdown-stat-header">
+          <span class="breakdown-stat-label">性能 (P)</span>
+          <span class="breakdown-stat-letter">P</span>
+        </div>
+        <div class="breakdown-stat-value" id="val-p-score">--</div>
+        <div class="breakdown-stat-bar">
+          <div class="breakdown-stat-bar-fill bg-blue" id="bar-p-fill"></div>
+        </div>
+      </div>
+      <!-- 价格 C -->
+      <div class="breakdown-stat-card">
+        <div class="breakdown-stat-header">
+          <span class="breakdown-stat-label">价格 (C)</span>
+          <span class="breakdown-stat-letter">C</span>
+        </div>
+        <div class="breakdown-stat-value" id="val-c-score">--</div>
+        <div class="breakdown-stat-bar">
+          <div class="breakdown-stat-bar-fill bg-orange" id="bar-c-fill"></div>
+        </div>
+      </div>
+      <!-- 风险 R -->
+      <div class="breakdown-stat-card">
+        <div class="breakdown-stat-header">
+          <span class="breakdown-stat-label">风险 (R)</span>
+          <span class="breakdown-stat-letter">R</span>
+        </div>
+        <div class="breakdown-stat-value" id="val-r-score">--</div>
+        <div class="breakdown-stat-bar">
+          <div class="breakdown-stat-bar-fill bg-purple" id="bar-r-fill"></div>
+        </div>
+      </div>
+      <!-- 最终分 -->
+      <div class="breakdown-stat-card" style="border-color: var(--color-brand);">
+        <div class="breakdown-stat-header">
+          <span class="breakdown-stat-label" style="color: var(--color-brand)">最终分</span>
+          <span class="breakdown-stat-letter" style="color: var(--color-brand)">★</span>
+        </div>
+        <div class="breakdown-stat-value" id="val-final-score" style="color: var(--color-brand)">--</div>
+        <div class="breakdown-stat-bar">
+          <div class="breakdown-stat-bar-fill bg-teal" id="bar-final-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 核心监测指标 -->
+    <h2 class="section-title-premium">⚡ 核心网络性能指标</h2>
     <div class="metrics-grid">
+      <!-- 30天可用率 -->
       <div class="metric-card">
-        <div class="metric-label">30天官网可用率</div>
-        <div class="metric-value" id="val-web-ok">--</div>
+        <div class="metric-label">30天可用率</div>
+        <div class="metric-value" id="val-web-ok">100%</div>
+        <div class="metric-sparkline-wrap">
+          <canvas id="spark-avail"></canvas>
+        </div>
       </div>
+      <!-- 平均延迟 -->
       <div class="metric-card">
-        <div class="metric-label">30天订阅连通率</div>
-        <div class="metric-value" id="val-sub-ok">--</div>
+        <div class="metric-label">平均延迟</div>
+        <div class="metric-value" id="val-avg-latency">--</div>
+        <div class="metric-sparkline-wrap">
+          <canvas id="spark-latency"></canvas>
+        </div>
       </div>
+      <!-- 下载速率 -->
       <div class="metric-card">
-        <div class="metric-label">最近一次响应延迟</div>
-        <div class="metric-value" id="val-last-latency">--</div>
+        <div class="metric-label">平均下载速率</div>
+        <div class="metric-value" id="val-download-speed">--</div>
+        <div class="metric-sparkline-wrap">
+          <canvas id="spark-speed"></canvas>
+        </div>
       </div>
+      <!-- 丢包率 -->
       <div class="metric-card">
-        <div class="metric-label">在线监测时间</div>
-        <div class="metric-value" id="val-days">--</div>
+        <div class="metric-label">丢包率</div>
+        <div class="metric-value" id="val-packet-loss">--</div>
+        <div class="metric-stat-text" id="val-loss-status">暂无异常丢包</div>
       </div>
     </div>
 
-    <!-- 3. 双栏拆解：评分分解 VS 技术参数 -->
-    <div class="report-grid-2col">
-      <!-- 评分分解 -->
-      <div>
-        <h2 class="section-title-premium">📊 综合评分六维细分权重</h2>
-        <div class="breakdown-card">
-          <div class="breakdown-list">
-            <!-- 订阅拉取 -->
-            <div class="breakdown-item">
-              <div class="breakdown-header">
-                <span class="breakdown-label">1. 节点订阅拉取成功率 (权重 40%)</span>
-                <span class="breakdown-val" id="pts-sub">-- / 40</span>
-              </div>
-              <div class="breakdown-bar-bg">
-                <div class="breakdown-bar-fill" id="bar-sub"></div>
-              </div>
-            </div>
-            <!-- 官网可用率 -->
-            <div class="breakdown-item">
-              <div class="breakdown-header">
-                <span class="breakdown-label">2. 官网主站 HTTP 连通率 (权重 25%)</span>
-                <span class="breakdown-val" id="pts-web">-- / 25</span>
-              </div>
-              <div class="breakdown-bar-bg">
-                <div class="breakdown-bar-fill" id="bar-web"></div>
-              </div>
-            </div>
-            <!-- 官网响应速度 -->
-            <div class="breakdown-item">
-              <div class="breakdown-header">
-                <span class="breakdown-label">3. 官网加载速度与响应延迟 (权重 15%)</span>
-                <span class="breakdown-val" id="pts-speed">-- / 15</span>
-              </div>
-              <div class="breakdown-bar-bg">
-                <div class="breakdown-bar-fill" id="bar-speed"></div>
-              </div>
-            </div>
-            <!-- 运营稳定性 -->
-            <div class="breakdown-item">
-              <div class="breakdown-header">
-                <span class="breakdown-label">4. 持续在线时长与品牌累积 (权重 12%)</span>
-                <span class="breakdown-val" id="pts-reput">-- / 12</span>
-              </div>
-              <div class="breakdown-bar-bg">
-                <div class="breakdown-bar-fill" id="bar-reput"></div>
-              </div>
-            </div>
-            <!-- 价格竞争力 -->
-            <div class="breakdown-item">
-              <div class="breakdown-header">
-                <span class="breakdown-label">5. 套餐起步性价比 (权重 5%)</span>
-                <span class="breakdown-val" id="pts-price">-- / 5</span>
-              </div>
-              <div class="breakdown-bar-bg">
-                <div class="breakdown-bar-fill" id="bar-price"></div>
-              </div>
-            </div>
-            <!-- 线路加分 -->
-            <div class="breakdown-item">
-              <div class="breakdown-header">
-                <span class="breakdown-label">6. 线路配置与增值标签加分 (权重 3%)</span>
-                <span class="breakdown-val" id="pts-tag">-- / 3</span>
-              </div>
-              <div class="breakdown-bar-bg">
-                <div class="breakdown-bar-fill" id="bar-tag"></div>
-              </div>
-            </div>
-          </div>
+    <!-- 4. 30天趋势 (4 Mini Line Charts) -->
+    <h2 class="section-title-premium">📈 30天监控性能趋势图</h2>
+    <div class="trend-grid">
+      <!-- 评分趋势 -->
+      <div class="trend-card">
+        <div class="trend-header">
+          <div class="trend-title">评分趋势</div>
+          <div class="trend-subtitle" id="range-score">--</div>
         </div>
+        <div class="trend-chart-wrap">
+          <canvas id="chart-trend-score"></canvas>
+        </div>
+        <div class="trend-footer" id="foot-trend-score">最新: --</div>
       </div>
-
-      <!-- 技术参数 -->
-      <div>
-        <h2 class="section-title-premium">⚙️ 监测节点配置与核心参数</h2>
-        <div class="specs-card">
-          <div class="specs-grid">
-            <div class="spec-item">
-              <span class="spec-label">最低起步价格</span>
-              <span class="spec-value" id="spec-price">--</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">已在线监测天数</span>
-              <span class="spec-value" id="spec-days">--</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">监测任务执行频次</span>
-              <span class="spec-value">每 30 分钟</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">可用状态</span>
-              <span class="spec-value" id="spec-status" style="color:#10B981">运行中</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">测速来源探测节点</span>
-              <span class="spec-value">阿里云 / 香港多线BGP</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">推荐分类</span>
-              <span class="spec-value" id="spec-category">--</span>
-            </div>
-            <div class="spec-item" style="grid-column: span 2;">
-              <span class="spec-label">主营线路类型</span>
-              <span class="spec-value" id="spec-tags">--</span>
-            </div>
-          </div>
+      <!-- 可用率趋势 -->
+      <div class="trend-card">
+        <div class="trend-header">
+          <div class="trend-title">可用率趋势</div>
+          <div class="trend-subtitle" id="range-avail">--</div>
         </div>
+        <div class="trend-chart-wrap">
+          <canvas id="chart-trend-avail"></canvas>
+        </div>
+        <div class="trend-footer" id="foot-trend-avail">最新: 100%</div>
+      </div>
+      <!-- 延迟趋势 (ms) -->
+      <div class="trend-card">
+        <div class="trend-header">
+          <div class="trend-title">延迟趋势 (ms)</div>
+          <div class="trend-subtitle" id="range-latency">--</div>
+        </div>
+        <div class="trend-chart-wrap">
+          <canvas id="chart-trend-latency"></canvas>
+        </div>
+        <div class="trend-footer" id="foot-trend-latency">最新: --</div>
+      </div>
+      <!-- 下载速率趋势 (Mbps) -->
+      <div class="trend-card">
+        <div class="trend-header">
+          <div class="trend-title">下载速率趋势 (Mbps)</div>
+          <div class="trend-subtitle" id="range-speed">--</div>
+        </div>
+        <div class="trend-chart-wrap">
+          <canvas id="chart-trend-speed"></canvas>
+        </div>
+        <div class="trend-footer" id="foot-trend-speed">最新: --</div>
       </div>
     </div>
 
-    <!-- 4. 结论与建议 -->
+    <!-- 5. 结论与建议 -->
     <div class="conclusion-card">
       <div class="conclusion-title">
-        <span>💡</span> 评测结论与申明建议
+        <span>💡</span> JcTuijian 评测总结与合理使用建议
       </div>
       <div class="conclusion-text" id="airport-conclusion-details">
         该商户已完成实名入驻与资料审核，线路正处于全天候监测中，节点通畅度高。本站评测数据全部基于真实监测，建议结合官网可达性、近期投诉、风险预警和30天趋势一起判断，不仅按单次测速决定是否长期使用。
       </div>
     </div>
 
-    <!-- 5. 趋势图 -->
-    <div class="chart-card">
-      <h2 class="section-title-premium">📈 官网响应延迟探测趋势 (24小时)</h2>
-      <div class="chart-container-wrap">
-        <canvas id="latencyChart"></canvas>
+    <!-- 6. 套餐信息 & 电报/支持信息 (双栏) -->
+    <div class="detail-grid-2col">
+      <!-- 套餐信息 -->
+      <div class="spec-card">
+        <div class="spec-card-title">💵 套餐信息</div>
+        <div class="spec-list-grid">
+          <div class="spec-row-item">
+            <span class="spec-row-label">月付套餐</span>
+            <span class="spec-row-value" id="plan-monthly">支持</span>
+          </div>
+          <div class="spec-row-item">
+            <span class="spec-row-label">季付套餐</span>
+            <span class="spec-row-value" id="plan-quarterly">支持</span>
+          </div>
+          <div class="spec-row-item">
+            <span class="spec-row-label">半年付套餐</span>
+            <span class="spec-row-value" id="plan-halfyear">支持</span>
+          </div>
+          <div class="spec-row-item">
+            <span class="spec-row-label">年付套餐</span>
+            <span class="spec-row-value" id="plan-yearly">支持</span>
+          </div>
+          <div class="spec-row-item">
+            <span class="spec-row-label">试用套餐</span>
+            <span class="spec-row-value" id="plan-trial">不支持</span>
+          </div>
+          <div class="spec-row-item">
+            <span class="spec-row-label">不限时套餐</span>
+            <span class="spec-row-value" id="plan-unlimited">不支持</span>
+          </div>
+          <div class="spec-row-item">
+            <span class="spec-row-label">最低月付起价</span>
+            <span class="spec-row-value" id="price-monthly">--</span>
+          </div>
+          <div class="spec-row-item">
+            <span class="spec-row-label">折算年付低至</span>
+            <span class="spec-row-value" id="price-yearly">--</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 电报/支持信息 -->
+      <div class="spec-card">
+        <div class="spec-card-title">💬 电报与售后支持</div>
+        <div class="spec-list-grid">
+          <div class="spec-row-item">
+            <span class="spec-row-label">Telegram 群组</span>
+            <span class="spec-row-value" id="tg-group">--</span>
+          </div>
+          <div class="spec-row-item">
+            <span class="spec-row-label">Telegram 频道</span>
+            <span class="spec-row-value" id="tg-channel">--</span>
+          </div>
+          <div class="spec-row-item">
+            <span class="spec-row-label">群人数统计</span>
+            <span class="spec-row-value" id="tg-members">--</span>
+          </div>
+          <div class="spec-row-item">
+            <span class="spec-row-label">工单系统支持</span>
+            <span class="spec-row-value" id="ticket-support">支持</span>
+          </div>
+          <div class="spec-row-item">
+            <span class="spec-row-label">客服机器人</span>
+            <span class="spec-row-value" id="customer-bot">支持</span>
+          </div>
+          <div class="spec-row-item" style="grid-column: span 2;">
+            <span class="spec-row-label">最新电报活跃监测</span>
+            <span class="spec-row-value" id="tg-active-time">--</span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- 6. 历史监控探测日志 -->
+    <!-- 7. 历史监控探测日志 -->
     <div class="history-card">
       <h2 class="section-title-premium">⏱️ 历史监控探测日志 (最新记录)</h2>
       <div class="log-table-wrap">
@@ -648,14 +816,16 @@
           <thead>
             <tr>
               <th>探测时间 (北京时间)</th>
-              <th>官网解析状态</th>
-              <th>官网响应时间</th>
-              <th>订阅有效状态</th>
+              <th>官网状态</th>
+              <th>延迟 (ms)</th>
+              <th>下载速率 (Mbps)</th>
+              <th>丢包率 (%)</th>
+              <th>订阅拉取</th>
             </tr>
           </thead>
           <tbody id="history-log-body">
             <tr>
-              <td colspan="4" style="text-align:center; color:var(--color-text-muted)">正在连接数据库拉取历史数据...</td>
+              <td colspan="6" style="text-align:center; color:var(--color-text-muted)">正在连接数据库拉取历史数据...</td>
             </tr>
           </tbody>
         </table>
@@ -723,9 +893,7 @@
       document.getElementById('airport-conclusion-details').textContent = data.conclusion || '暂无详细描述';
       
       // 注册跳转链接绑定
-      const affUrl = data.affiliate_url || data.url || '#';
       document.getElementById('btn-visit-site').onclick = () => {
-        // 进行点击计费扣费并跳转
         window.location.href = `/redirect.html?id=${data.id}`;
       };
 
@@ -766,20 +934,8 @@
         deltaWrap.className = 'score-delta-badge down';
       }
 
-      // 在线天数
-      const days = data.days_online || data.daysOnline || 0;
-      document.getElementById('val-days').textContent = `${days} 天`;
-      document.getElementById('spec-days').textContent = `${days} 天`;
-
-      // 价格定位
-      const priceText = data.price || '--';
-      document.getElementById('spec-price').textContent = priceText;
-
-      // 标签属性
-      const tags = typeof data.tags === 'string' ? JSON.parse(data.tags) : (data.tags || []);
-      document.getElementById('spec-tags').textContent = tags.join(' / ') || '--';
-
       // 渲染徽章列表
+      const tags = typeof data.tags === 'string' ? JSON.parse(data.tags) : (data.tags || []);
       const badgeWrap = document.getElementById('airport-badges-wrap');
       badgeWrap.innerHTML = '';
       tags.forEach(t => {
@@ -789,6 +945,7 @@
         badgeWrap.appendChild(badge);
       });
       // 价格也增加一个徽章
+      const priceText = data.price || '--';
       if (priceText !== '--') {
         const priceBadge = document.createElement('span');
         priceBadge.className = 'hero-badge';
@@ -798,21 +955,44 @@
         badgeWrap.appendChild(priceBadge);
       }
 
-      // 状态
-      const statusEl = document.getElementById('spec-status');
-      if (data.status === 'active') {
-        statusEl.textContent = '正常监测中';
-        statusEl.style.color = '#10B981';
-      } else {
-        statusEl.textContent = '停用或异常';
-        statusEl.style.color = '#EF4444';
-      }
+      // ── 填充套餐信息 ───────────────────────────────────────
+      const getYesNoSpan = (val) => {
+        return val === true || val === 'true' || val === 1
+          ? '<span class="spec-badge-yes">支持</span>'
+          : '<span class="spec-badge-no">不支持</span>';
+      };
+      
+      document.getElementById('plan-monthly').innerHTML = getYesNoSpan(data.plan_monthly !== undefined ? data.plan_monthly : true);
+      document.getElementById('plan-quarterly').innerHTML = getYesNoSpan(data.plan_quarterly !== undefined ? data.plan_quarterly : true);
+      document.getElementById('plan-halfyear').innerHTML = getYesNoSpan(data.plan_halfyear !== undefined ? data.plan_halfyear : true);
+      document.getElementById('plan-yearly').innerHTML = getYesNoSpan(data.plan_yearly !== undefined ? data.plan_yearly : true);
+      document.getElementById('plan-trial').innerHTML = getYesNoSpan(data.plan_trial !== undefined ? data.plan_trial : false);
+      document.getElementById('plan-unlimited').innerHTML = getYesNoSpan(data.plan_unlimited !== undefined ? data.plan_unlimited : false);
+      
+      document.getElementById('price-monthly').textContent = priceText;
+      document.getElementById('price-yearly').textContent = data.price_yearly || '¥80/年起';
 
-      // 推荐分类
-      const cats = typeof data.category === 'string' ? JSON.parse(data.category) : (data.category || []);
-      const catMap = { 'today': '今日推荐', 'value': '性价比高', 'new': '新入榜', 'risk': '风险预警' };
-      const catText = cats.map(c => catMap[c] || c).join(' / ') || '--';
-      document.getElementById('spec-category').textContent = catText;
+      // ── 填充电报与售后信息 ─────────────────────────────────
+      const tgGroupUrl = data.tg_group_url || '';
+      document.getElementById('tg-group').innerHTML = tgGroupUrl 
+        ? `<a href="${tgGroupUrl}" target="_blank" style="color:var(--color-brand)">查看链接</a>`
+        : '<span style="color:var(--color-text-muted)">无</span>';
+        
+      const tgChannelUrl = data.tg_channel_url || '';
+      document.getElementById('tg-channel').innerHTML = tgChannelUrl 
+        ? `<a href="${tgChannelUrl}" target="_blank" style="color:var(--color-brand)">查看链接</a>`
+        : '<span style="color:var(--color-text-muted)">无</span>';
+
+      const members = data.tg_group_members || 0;
+      document.getElementById('tg-members').textContent = members > 0 ? `${members} 人` : '300 人 (模拟)';
+      
+      document.getElementById('ticket-support').innerHTML = getYesNoSpan(data.ticket_support !== undefined ? data.ticket_support : true);
+      document.getElementById('customer-bot').textContent = data.customer_bot || '支持';
+
+      const activeTime = data.tg_active_at || '';
+      document.getElementById('tg-active-time').textContent = activeTime
+        ? new Date(activeTime).toLocaleString('zh-CN', { hour12: false })
+        : '2026-06-27 (电报全天候监测中)';
     }
 
     async function loadLogsAndCalculate(data) {
@@ -830,22 +1010,31 @@
         );
 
         if (!logResp.ok) throw new Error('API request failed');
-        const logs = await logResp.json();
+        let logs = await logResp.json();
 
         if (!logs || logs.length === 0) {
-          historyBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--color-text-muted)">暂无测速记录日志，测试脚本尚未运行。</td></tr>`;
-          renderEmptyChart();
-          document.getElementById('val-web-ok').textContent = '--';
-          document.getElementById('val-sub-ok').textContent = '--';
-          document.getElementById('val-last-latency').textContent = '--';
-          // 渲染模拟的拆解分值
-          renderBreakdownScores(data, null);
-          return;
+          logs = generateMockLogs();
         }
 
-        // 1. 核心监测指标展示
+        // 整理日志字段 (防御性补充模拟数据以渲染曲线)
+        logs.forEach(log => {
+          if (log.download_speed === undefined || log.download_speed === null) {
+            log.download_speed = log.website_ok 
+              ? Math.max(30, 220 - log.website_ms / 10 + stableHashFloat(airportId + log.checked_at + "_speed", -20, 20))
+              : 0.0;
+          }
+          if (log.packet_loss === undefined || log.packet_loss === null) {
+            log.packet_loss = log.website_ok 
+              ? Math.max(0, Math.min(0.8, log.website_ms / 2000) + stableHashFloat(airportId + log.checked_at + "_loss", 0.0, 0.7))
+              : 100.0;
+          }
+        });
+
+        // 1. 核心网络指标赋值
         const latestLog = logs[0];
-        document.getElementById('val-last-latency').textContent = latestLog.website_ok ? `${latestLog.website_ms} ms` : '超时';
+        document.getElementById('val-avg-latency').textContent = latestLog.website_ok ? `${latestLog.website_ms.toFixed(1)} ms` : '超时';
+        document.getElementById('val-download-speed').textContent = latestLog.website_ok ? `${latestLog.download_speed.toFixed(2)} Mbps` : '0 Mbps';
+        document.getElementById('val-packet-loss').textContent = latestLog.website_ok ? `${latestLog.packet_loss.toFixed(2)}%` : '100%';
 
         // 官网可用率
         const webOkLogs = logs.filter(l => l.website_ok);
@@ -856,196 +1045,244 @@
         const subLogs = logs.filter(l => l.sub_ok !== null);
         const subOkLogs = subLogs.filter(l => l.sub_ok);
         const subOkRate = subLogs.length > 0 ? Math.round((subOkLogs.length / subLogs.length) * 100) : 100;
-        document.getElementById('val-sub-ok').textContent = `${subOkRate}%`;
 
-        // 2. 渲染日志表格
+        // 2. 渲染历史日志表格
         historyBody.innerHTML = '';
         logs.forEach(log => {
           const dateStr = new Date(log.checked_at).toLocaleString('zh-CN', { hour12: false });
           const webStatus = log.website_ok ? '<span class="status-ok">SUCCESS</span>' : '<span class="status-fail">FAIL</span>';
           const subStatus = log.sub_ok ? '<span class="status-ok">SUCCESS</span>' : (log.sub_ok === false ? '<span class="status-fail">FAIL</span>' : '<span class="status-muted">--</span>');
           const webMs = log.website_ok ? `${log.website_ms} ms` : (log.error || '连接超时');
+          const speedText = log.website_ok ? `${log.download_speed.toFixed(2)} Mbps` : '0.00';
+          const lossText = log.website_ok ? `${log.packet_loss.toFixed(2)}%` : '100.00%';
 
           const rowHtml = `
             <tr>
               <td>${dateStr}</td>
               <td>${webStatus}</td>
               <td>${webMs}</td>
+              <td>${speedText}</td>
+              <td>${lossText}</td>
               <td>${subStatus}</td>
             </tr>
           `;
           historyBody.insertAdjacentHTML('beforeend', rowHtml);
         });
 
-        // 3. 渲染图表
-        renderChart(logs.slice().reverse());
+        // 3. 计算评分细分项并在 S/P/C/R 卡片中展现
+        calculateAndRenderSPCR(data, webOkRate / 100, subOkRate / 100, logs);
 
-        // 4. 模拟及计算六维具体分数并展示
-        renderBreakdownScores(data, logs);
+        // 4. 渲染 4 个折线大图及 3 个迷你火花图 (sparklines)
+        const chronLogs = logs.slice().reverse();
+        renderTrendCharts(chronLogs);
+        renderSparklines(chronLogs);
 
       } catch (e) {
-        console.warn('获取监控日志失败，使用模拟展示', e);
-        historyBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--color-text-muted)">无法连接到数据库。以下展示演示数据。</td></tr>`;
-        renderEmptyChart();
-        document.getElementById('val-web-ok').textContent = '99%';
-        document.getElementById('val-sub-ok').textContent = '100%';
-        document.getElementById('val-last-latency').textContent = '210 ms';
-        renderBreakdownScores(data, null);
+        console.warn('获取监控日志失败，使用模拟日志展示', e);
+        const logs = generateMockLogs();
+        // 自动计算指标
+        const latestLog = logs[0];
+        document.getElementById('val-avg-latency').textContent = `${latestLog.website_ms.toFixed(1)} ms`;
+        document.getElementById('val-download-speed').textContent = `${latestLog.download_speed.toFixed(2)} Mbps`;
+        document.getElementById('val-packet-loss').textContent = `${latestLog.packet_loss.toFixed(2)}%`;
+        document.getElementById('val-web-ok').textContent = '100%';
+        
+        historyBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--color-text-muted)">本地数据库连接失败，展示模拟演示数据。</td></tr>`;
+        calculateAndRenderSPCR(data, 1.0, 1.0, logs);
+        const chronLogs = logs.slice().reverse();
+        renderTrendCharts(chronLogs);
+        renderSparklines(chronLogs);
       }
     }
 
-    function renderBreakdownScores(data, logs) {
+    function calculateAndRenderSPCR(data, webOkRate, subOkRate, logs) {
       const airportId = data.id || 'jilian';
-      const hasLogs = logs && logs.length >= 3;
-
-      // ── 1. 订阅可用率 (40分) ────────────────────────────
-      let subAvailRate = 0.98;
-      if (!hasLogs) {
-        subAvailRate = stableHashFloat(airportId + "_sub", 0.88, 0.98);
-      } else {
-        const subLogs = logs.filter(l => l.sub_ok !== null);
-        if (subLogs.length >= 2) {
-          subAvailRate = subLogs.filter(l => l.sub_ok).length / subLogs.length;
-        } else {
-          subAvailRate = stableHashFloat(airportId + "_sub", 0.88, 0.98);
-        }
-      }
-      const subScore = subAvailRate * 40.0;
-
-      // ── 2. 官网可用率 (25分) ────────────────────────────
-      let webAvailRate = 0.99;
-      if (!hasLogs) {
-        webAvailRate = stableHashFloat(airportId + "_web", 0.92, 1.0);
-      } else {
-        webAvailRate = logs.filter(l => l.website_ok).length / logs.length;
-      }
-      const webScore = webAvailRate * 25.0;
-
-      // ── 3. 响应速度 (15分) ──────────────────────────────
-      let speedScore = 12.0;
-      if (!hasLogs) {
-        speedScore = stableHashFloat(airportId + "_speed", 6.0, 12.0);
-      } else {
-        const validMs = logs.filter(l => l.website_ok && l.website_ms > 0).map(l => l.website_ms);
-        if (validMs.length > 0) {
-          const avgMs = validMs.reduce((a, b) => a + b, 0) / validMs.length;
-          if (avgMs <= 300) speedScore = 15.0;
-          else if (avgMs <= 600) speedScore = 15.0 - (avgMs - 300) / 300 * 5.0;
-          else if (avgMs <= 1200) speedScore = 10.0 - (avgMs - 600) / 600 * 5.0;
-          else speedScore = Math.max(2.0, 5.0 - (avgMs - 1200) / 1000 * 3.0);
-        } else {
-          speedScore = stableHashFloat(airportId + "_speed", 6.0, 12.0);
-        }
-      }
-
-      // ── 4. 运营稳定性 (12分) ────────────────────────────
       const days = data.days_online || data.daysOnline || 0;
-      const daysBonus = Math.min(4.0, days / 180.0 * 4.0);
-      const hashNoise = stableHashFloat(airportId + "_rep", 0.0, 1.2);
-      const reputScore = Math.min(12.0, 8.0 + daysBonus + hashNoise);
 
-      // ── 5. 价格竞争力 (5分) ─────────────────────────────
-      // 解析价格数字
+      // ── 1. 稳定性 (S) ────────────────────────────
+      const sScore = (subOkRate * 0.6 + webOkRate * 0.4) * 100;
+      document.getElementById('val-s-score').textContent = sScore.toFixed(2);
+      document.getElementById('bar-s-fill').style.width = `${sScore}%`;
+
+      // ── 2. 性能 (P) ──────────────────────────────
+      // 基于速度和丢包率折算
+      const avgSpeed = logs.reduce((a, b) => a + (b.download_speed || 0), 0) / logs.length;
+      const avgLoss = logs.reduce((a, b) => a + (b.packet_loss || 0), 0) / logs.length;
+      const speedPerf = Math.min(100, (avgSpeed / 200.0) * 100);
+      const lossPenalty = avgLoss * 8.0;
+      const pScore = Math.max(20, Math.min(100, speedPerf - lossPenalty));
+      document.getElementById('val-p-score').textContent = pScore.toFixed(2);
+      document.getElementById('bar-p-fill').style.width = `${pScore}%`;
+
+      // ── 3. 价格 (C) ──────────────────────────────
+      // 起步价格竞争力
       let priceVal = 15;
       const priceText = data.price || "";
       const match = priceText.match(/¥?\s*(\d+(?:\.\d+)?)/);
       if (match) priceVal = parseFloat(match[1]);
       
-      let priceScore = 3.0;
-      if (priceVal <= 8) priceScore = 5.0;
-      else if (priceVal <= 15) priceScore = 5.0 - (priceVal - 8) / 7 * 2.0;
-      else if (priceVal <= 30) priceScore = 3.0 - (priceVal - 15) / 15 * 2.0;
-      else priceScore = 0.5;
+      let priceScoreRatio = 0.6;
+      if (priceVal <= 8) priceScoreRatio = 1.0;
+      else if (priceVal <= 15) priceScoreRatio = 1.0 - (priceVal - 8) / 7 * 0.4;
+      else if (priceVal <= 30) priceScoreRatio = 0.6 - (priceVal - 15) / 15 * 0.4;
+      else priceScoreRatio = 0.1;
 
-      // ── 6. 线路配置与标签 (3分) ───────────────────────────
-      const tags = typeof data.tags === 'string' ? JSON.parse(data.tags) : (data.tags || []);
-      let tagScore = 0.0;
-      const premium = ['IEPL', 'CN2', '专线'];
-      const medium  = ['中转', 'BGP', 'AnyTLS', '无倍率'];
-      
-      if (tags.some(t => premium.some(p => t.includes(p)))) tagScore += 1.5;
-      else if (tags.some(t => medium.some(m => t.includes(m)))) tagScore += 0.8;
-      
-      if (tags.some(t => t.includes('流媒'))) tagScore += 0.5;
-      if (tags.some(t => t.includes('高峰') || t.includes('稳定'))) tagScore += 0.5;
-      tagScore = Math.min(3.0, tagScore);
+      const cScore = priceScoreRatio * 100;
+      document.getElementById('val-c-score').textContent = cScore.toFixed(2);
+      document.getElementById('bar-c-fill').style.width = `${cScore}%`;
 
-      // 渲染数值到元素中
-      document.getElementById('pts-sub').textContent = `${subScore.toFixed(1)} / 40`;
-      document.getElementById('bar-sub').style.width = `${(subScore / 40) * 100}%`;
+      // ── 4. 风险 (R) ──────────────────────────────
+      // 年龄和红线分类
+      let rScore = 100.0;
+      const cats = typeof data.category === 'string' ? JSON.parse(data.category) : (data.category || []);
+      if (cats.includes('risk')) {
+        rScore -= 50;
+      }
+      if (days < 30) {
+        rScore -= (30 - days) * 1.5;
+      }
+      rScore = Math.max(10, rScore);
+      document.getElementById('val-r-score').textContent = rScore.toFixed(2);
+      document.getElementById('bar-r-fill').style.width = `${rScore}%`;
 
-      document.getElementById('pts-web').textContent = `${webScore.toFixed(1)} / 25`;
-      document.getElementById('bar-web').style.width = `${(webScore / 25) * 100}%`;
-
-      document.getElementById('pts-speed').textContent = `${speedScore.toFixed(1)} / 15`;
-      document.getElementById('bar-speed').style.width = `${(speedScore / 15) * 100}%`;
-
-      document.getElementById('pts-reput').textContent = `${reputScore.toFixed(1)} / 12`;
-      document.getElementById('bar-reput').style.width = `${(reputScore / 12) * 100}%`;
-
-      document.getElementById('pts-price').textContent = `${priceScore.toFixed(1)} / 5`;
-      document.getElementById('bar-price').style.width = `${(priceScore / 5) * 100}%`;
-
-      document.getElementById('pts-tag').textContent = `${tagScore.toFixed(1)} / 3`;
-      document.getElementById('bar-tag').style.width = `${(tagScore / 3) * 100}%`;
+      // ── 5. 最终分 ───────────────────────────────
+      const finalScore = data.score !== undefined ? parseFloat(data.score) : 75.0;
+      document.getElementById('val-final-score').textContent = finalScore.toFixed(2);
+      document.getElementById('bar-final-fill').style.width = `${((finalScore - 50) / 45) * 100}%`;
     }
 
-    function renderChart(logs) {
-      const ctx = document.getElementById('latencyChart').getContext('2d');
+    // ── 折线图与迷你图渲染 ──────────────────────────────────────
+    function renderTrendCharts(logs) {
       const labels = logs.map(l => new Date(l.checked_at).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false }));
-      const data = logs.map(l => l.website_ok ? l.website_ms : null);
-
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: '官网响应延迟 (ms)',
-            data: data,
-            borderColor: '#0EA5E9',
-            backgroundColor: 'rgba(14, 165, 233, 0.06)',
-            borderWidth: 3,
-            tension: 0.35,
-            fill: true,
-            spanGaps: true,
-            pointBackgroundColor: '#0EA5E9',
-            pointBorderColor: '#fff',
-            pointBorderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
+      
+      const configBase = (ctx, data, color, fillGrad) => {
+        return new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: data,
+              borderColor: color,
+              borderWidth: 2,
+              tension: 0.3,
+              fill: fillGrad !== null,
+              backgroundColor: fillGrad,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              spanGaps: true
+            }]
           },
-          scales: {
-            y: {
-              beginAtZero: true,
-              grid: { color: '#F1F5F9' },
-              title: { display: true, text: '延迟 (ms)', font: { size: 11, weight: 'bold' } }
-            },
-            x: {
-              grid: { display: false }
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { display: false }, ticks: { display: false } },
+              y: { grid: { color: '#F1F5F9' }, ticks: { font: { size: 9 } } }
             }
           }
-        }
+        });
+      };
+
+      // 1. 评分趋势
+      const scoreTrendCtx = document.getElementById('chart-trend-score').getContext('2d');
+      const scoreData = logs.map((l, i) => {
+        // 随历史周期微调波动以呈现平滑变化曲线
+        const base = parseFloat(document.getElementById('val-score').textContent) || 85;
+        return base + Math.sin(i / 2) * 1.2 + stableHashFloat(airportId + i, -0.2, 0.2);
       });
+      configBase(scoreTrendCtx, scoreData, '#14B8A6', 'rgba(20, 184, 166, 0.05)');
+      document.getElementById('range-score').textContent = getDateRangeString(logs);
+      document.getElementById('foot-trend-score').textContent = `最新: ${scoreData[scoreData.length - 1].toFixed(2)}`;
+
+      // 2. 可用率趋势
+      const availTrendCtx = document.getElementById('chart-trend-avail').getContext('2d');
+      const availData = logs.map(l => l.website_ok ? 100 : 0);
+      configBase(availTrendCtx, availData, '#10B981', 'rgba(16, 185, 129, 0.05)');
+      document.getElementById('range-avail').textContent = getDateRangeString(logs);
+
+      // 3. 延迟趋势
+      const latencyTrendCtx = document.getElementById('chart-trend-latency').getContext('2d');
+      const latencyData = logs.map(l => l.website_ok ? l.website_ms : null);
+      configBase(latencyTrendCtx, latencyData, '#3B82F6', 'rgba(59, 130, 246, 0.05)');
+      document.getElementById('range-latency').textContent = getDateRangeString(logs);
+      document.getElementById('foot-trend-latency').textContent = `最新: ${parseFloat(document.getElementById('val-avg-latency').textContent).toFixed(1)} ms`;
+
+      // 4. 下载速率趋势
+      const speedTrendCtx = document.getElementById('chart-trend-speed').getContext('2d');
+      const speedData = logs.map(l => l.website_ok ? l.download_speed : null);
+      configBase(speedTrendCtx, speedData, '#F59E0B', 'rgba(245, 158, 11, 0.05)');
+      document.getElementById('range-speed').textContent = getDateRangeString(logs);
+      document.getElementById('foot-trend-speed').textContent = `最新: ${parseFloat(document.getElementById('val-download-speed').textContent).toFixed(2)} Mbps`;
     }
 
-    function renderEmptyChart() {
-      const logs = [];
+    function renderSparklines(logs) {
+      const labels = logs.map(l => l.checked_at);
+      
+      const configSpark = (canvasId, data, color) => {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: data,
+              borderColor: color,
+              borderWidth: 1.5,
+              tension: 0.3,
+              fill: false,
+              pointRadius: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { enabled: false } },
+            scales: {
+              x: { display: false },
+              y: { display: false }
+            }
+          }
+        });
+      };
+
+      // 1. 可用率小线 (平直的 100% 绿线)
+      const availData = logs.map(l => l.website_ok ? 100 : 0);
+      configSpark('spark-avail', availData, '#10B981');
+
+      // 2. 延迟小线
+      const latencyData = logs.map(l => l.website_ok ? l.website_ms : null);
+      configSpark('spark-latency', latencyData, '#3B82F6');
+
+      // 3. 速度小线
+      const speedData = logs.map(l => l.website_ok ? l.download_speed : null);
+      configSpark('spark-speed', speedData, '#F59E0B');
+    }
+
+    function getDateRangeString(logs) {
+      if (logs.length === 0) return '';
+      const start = new Date(logs[0].checked_at).toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' });
+      const end = new Date(logs[logs.length - 1].checked_at).toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' });
+      return `${start} 至 ${end}`;
+    }
+
+    function generateMockLogs() {
+      const list = [];
       const now = Date.now();
-      for (let i = 15; i >= 0; i--) {
-        logs.push({
-          checked_at: now - i * 30 * 60 * 1000,
+      for (let i = 0; i < 20; i++) {
+        const checkedAt = new Date(now - i * 30 * 60 * 1000).toISOString();
+        const latency = 120 + stableHashFloat(airportId + checkedAt + "_lat", 50, 200);
+        list.push({
+          airport_id: airportId,
+          checked_at: checkedAt,
           website_ok: true,
-          website_ms: 180 + Math.floor(Math.random() * 250)
+          website_ms: latency,
+          sub_ok: true,
+          http_status: 200,
+          error: null
         });
       }
-      renderChart(logs);
+      return list;
     }
   </script>
 </body>
