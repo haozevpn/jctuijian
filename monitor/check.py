@@ -226,11 +226,12 @@ def compute_score(airport_id: str, airport: dict) -> tuple:
         # 运营天数：优先从 created_at 自动计算，fallback 到存储值
         created_at_str = airport.get("created_at")
         if created_at_str:
-            from dateutil.parser import parse as parse_dt
             try:
-                created_dt = parse_dt(created_at_str)
+                clean_str = created_at_str.replace("Z", "+00:00").replace("z", "+00:00")
+                created_dt = datetime.fromisoformat(clean_str)
                 days_online = max(0, (datetime.now(timezone.utc) - created_dt).days)
-            except Exception:
+            except Exception as dt_err:
+                log.warning(f"解析 created_at 失败 {airport_id}: {created_at_str}, 错误: {dt_err}")
                 days_online = airport.get("days_online") or 0
         else:
             days_online  = airport.get("days_online") or 0
