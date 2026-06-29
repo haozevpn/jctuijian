@@ -32,12 +32,22 @@
   const from      = params.get('from')    || 'unknown';
   const charged   = params.get('charged') || '0';  // 1 = 计费成功, 0 = 防刷跳过
 
+  // 从数据源查找机场信息
+  const airports = window.AIRPORTS_DATA || [];
+  const airport  = airports.find(a => a.id === airportId);
+  const name     = airport ? airport.name : '目标机场';
+
   // 解码目标 URL
   let targetUrl = '';
   try {
     targetUrl = decodeURIComponent(encodedUrl);
   } catch (e) {
     targetUrl = encodedUrl;
+  }
+
+  // 如果 URL 为空，尝试使用数据源中的默认 URL
+  if (!targetUrl && airport && airport.url) {
+    targetUrl = airport.url;
   }
 
   // 校验基本合法性（只允许 http/https）
@@ -48,11 +58,6 @@
     setTimeout(() => { window.location.href = '/'; }, 2000);
     return;
   }
-
-  // 从数据源查找机场名称
-  const airports = window.AIRPORTS_DATA || [];
-  const airport  = airports.find(a => a.id === airportId);
-  const name     = airport ? airport.name : '目标机场';
 
   // 更新页面文字
   document.getElementById('redirect-title').textContent =
