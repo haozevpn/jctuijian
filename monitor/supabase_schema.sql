@@ -146,6 +146,9 @@ DROP POLICY IF EXISTS "anon delete airports"       ON airports;
 DROP POLICY IF EXISTS "anon update recharge_orders" ON recharge_orders;
 DROP POLICY IF EXISTS "anon delete recharge_orders" ON recharge_orders;
 DROP POLICY IF EXISTS "anon delete promotions"      ON promotions;
+DROP POLICY IF EXISTS "anon insert click_logs"     ON click_logs;
+DROP POLICY IF EXISTS "anon read click_logs"       ON click_logs;
+
 
 -- 匿名用户可读机场基本信息（不含 sub_url / merchant 字段）
 -- 为了支持商家在 portal.html 里用邮箱密码查询登录，放宽 SELECT 权限为所有人可见
@@ -197,6 +200,11 @@ CREATE POLICY "anon insert promotions"     ON promotions FOR INSERT TO anon WITH
 CREATE POLICY "anon update promotions"     ON promotions FOR UPDATE TO anon USING (TRUE) WITH CHECK (TRUE);
 CREATE POLICY "anon delete promotions"     ON promotions FOR DELETE TO anon USING (TRUE);
 
+-- 点击计费日志策略
+CREATE POLICY "anon insert click_logs"     ON click_logs FOR INSERT TO anon WITH CHECK (TRUE);
+CREATE POLICY "anon read click_logs"       ON click_logs FOR SELECT TO anon USING (TRUE);
+
+
 -- service_role 可以做任何操作（监测脚本用）
 CREATE POLICY "service all airports"        ON airports        FOR ALL TO service_role USING (TRUE);
 CREATE POLICY "service all speed_logs"      ON speed_logs      FOR ALL TO service_role USING (TRUE);
@@ -222,7 +230,28 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+-- ── 自动扣除商户余额触发器 ──────────────────────────────
+CREATE OR REPLACE FUNCTION deduct_airport_balance()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.charged = TRUE THEN
+    UPDATE airports
+    SET balance = balance - NEW.amount,
+        updated_at = NOW()
+    WHERE id = NEW.airport_id;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS trg_deduct_balance ON click_logs;
+CREATE TRIGGER trg_deduct_balance
+AFTER INSERT ON click_logs
+FOR EACH ROW
+EXECUTE FUNCTION deduct_airport_balance();
+
 -- ── 初始数据（4个已入驻机场）─────────────────────────────
+
 INSERT INTO airports (
   id, name, website_url, affiliate_url, sub_url,
   status, tags, tag_colors, highlight, conclusion, price,

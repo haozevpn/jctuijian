@@ -112,7 +112,7 @@ window.SITE_STATS = {
 
     // B. Inject customized SEO tags (title, description, keywords, canonical)
     const titleRegex = /<title>机场测评与实时节点延迟报告 - JcTuijian<\/title>/;
-    const customTitle = `<title>【${row.name}】官网链接与2026年最新测速监控报告 - JcTuijian</title>\n  <meta name="description" content="【${row.name}】怎么样？本站提供${row.name}官网最新可用性监测，7x24小时全天候节点测速与丢包率分析。最新测评结论：${row.conclusion || '该商户已完成入驻与资料审核，节点全天候稳定在线监控中。'}" />\n  <meta name="keywords" content="${row.name},${row.name}官网,${row.name}怎么样,${row.name}测评,${row.name}科学上网" />\n  <link rel="canonical" href="https://jctuijian.com/airports/${row.id}/" />`;
+    const customTitle = `<title>【${row.name}】官网链接与2026年最新测速报告 - 科学上网梯子与VPN推荐 - JcTuijian</title>\n  <meta name="description" content="【${row.name}】怎么样？本站提供${row.name}官网最新可用性监测与翻墙梯子测速，7x24小时全天候节点延迟与丢包率分析。最新测评结论：${row.conclusion || '该商户已完成入驻与资料审核，节点全天候稳定在线监控中。'}" />\n  <meta name="keywords" content="${row.name},${row.name}官网,${row.name}怎么样,${row.name}测评,机场推荐,梯子推荐,vpn推荐,VPN推荐" />\n  <link rel="canonical" href="https://jctuijian.com/airports/${row.id}/" />`;
     pageHtml = pageHtml.replace(titleRegex, customTitle);
 
     // C. Pre-render static content blocks in HTML
@@ -169,7 +169,49 @@ window.SITE_STATS = {
     console.log(`Generated: /airports/${row.id}/index.html`);
   }
 
-  console.log('All static pages generated successfully!');
+  // 3. Generate sitemap.xml dynamically
+  console.log('Generating sitemap.xml...');
+  let sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://jctuijian.com/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/all.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/promo.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/risk.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/method.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>\n`;
+
+  for (const row of rows) {
+    sitemapContent += `  <url>
+    <loc>https://jctuijian.com/airports/${row.id}/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>\n`;
+  }
+
+  sitemapContent += `</urlset>\n`;
+  fs.writeFileSync(path.join(targetDir, 'sitemap.xml'), sitemapContent, 'utf8');
+  console.log('Successfully generated sitemap.xml.');
+
+  console.log('All static pages and sitemap generated successfully!');
 }
 
 main().catch(console.error);

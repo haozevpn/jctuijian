@@ -36,8 +36,8 @@ window.AIRPORTS_DATA = [
   {
     "id": "virajayti2047",
     "name": "Nice加速专线机场",
-    "score": 89.82,
-    "scoreDelta": "+0.06",
+    "score": 90.06,
+    "scoreDelta": "+0.00",
     "url": "https://web.nicecc.cc/#/register?code=7nNS5xdG",
     "reportSlug": "virajayti2047",
     "tags": [
@@ -50,7 +50,7 @@ window.AIRPORTS_DATA = [
       "green",
       "purple"
     ],
-    "daysOnline": 15,
+    "daysOnline": 16,
     "highlight": "官方推荐入驻",
     "conclusion": "专线机场，移动联通电信三网稳定，晚高峰测试无掉线，实际体验4K视频和海外文件下载速度很快，有独立的定制客户端，IP比较干净",
     "category": [
@@ -64,7 +64,7 @@ window.AIRPORTS_DATA = [
   {
     "id": "heysenxyz4193",
     "name": "Now加速",
-    "score": 89.54,
+    "score": 89.58,
     "scoreDelta": "+0.00",
     "url": "https://web.noww.cc/#/register?code=ebqgGHoQ",
     "reportSlug": "heysenxyz4193",
@@ -78,7 +78,7 @@ window.AIRPORTS_DATA = [
       "green",
       "purple"
     ],
-    "daysOnline": 15,
+    "daysOnline": 16,
     "highlight": "官方推荐入驻",
     "conclusion": "Now加速是市场上为数不多的IEPL真专线中转机场、拥有自研的客户端支持IOS等全平台",
     "category": [
@@ -92,8 +92,8 @@ window.AIRPORTS_DATA = [
   {
     "id": "bianjie",
     "name": "边界云",
-    "score": 89.09,
-    "scoreDelta": "+0.00",
+    "score": 89.07,
+    "scoreDelta": "-0.01",
     "url": "https://www.lvpn.cc/r/6UQDZT",
     "reportSlug": "bianjie",
     "tags": [
@@ -135,7 +135,7 @@ window.AIRPORTS_DATA = [
       "green",
       "purple"
     ],
-    "daysOnline": 21,
+    "daysOnline": 22,
     "highlight": "IPLC专线 解锁流媒体",
     "conclusion": "专线直达，极速无界",
     "category": [
@@ -175,38 +175,10 @@ window.AIRPORTS_DATA = [
     "status": "active"
   },
   {
-    "id": "huanyu",
-    "name": "寰宇云",
-    "score": 87.34,
-    "scoreDelta": "-0.01",
-    "url": "https://vip3.huanyuyunbest.com/#/register?code=K6h5VWw2",
-    "reportSlug": "huanyu",
-    "tags": [
-      "晚高峰稳定",
-      "AnyTLS",
-      "解锁流媒体"
-    ],
-    "tagColors": [
-      "blue",
-      "green",
-      "purple"
-    ],
-    "daysOnline": 22,
-    "highlight": "稳定好用",
-    "conclusion": "亮点：稳定可靠的老牌机场，支持 AnyTLS 协议，流媒体解锁全面，¥18/月起。",
-    "category": [
-      "today",
-      "stable"
-    ],
-    "price": "¥8/月起",
-    "risk": null,
-    "status": "active"
-  },
-  {
     "id": "kuaili0808225",
     "name": "快狸",
-    "score": 87.32,
-    "scoreDelta": "+0.00",
+    "score": 87.34,
+    "scoreDelta": "+0.01",
     "url": "https://yyo649929.kuailiaff.com/#/register?code=G56QwHto",
     "reportSlug": "kuaili0808225",
     "tags": [
@@ -219,7 +191,7 @@ window.AIRPORTS_DATA = [
       "green",
       "purple"
     ],
-    "daysOnline": 19,
+    "daysOnline": 20,
     "highlight": "官方推荐入驻",
     "conclusion": "快狸机场是一款专为极客、跨境电商、设计师及外贸企业打造的新一代高端网络加速服务商",
     "category": [
@@ -260,7 +232,7 @@ window.AIRPORTS_DATA = [
     "id": "guangnian",
     "name": "光年梯",
     "score": 87.12,
-    "scoreDelta": "-0.01",
+    "scoreDelta": "+0.00",
     "url": "https://gnt001.gntvipaff.cc/#/?code=j1ufpE44",
     "reportSlug": "guangnian",
     "tags": [
@@ -285,10 +257,38 @@ window.AIRPORTS_DATA = [
     "status": "active"
   },
   {
+    "id": "huanyu",
+    "name": "寰宇云",
+    "score": 87.08,
+    "scoreDelta": "-0.02",
+    "url": "https://vip3.huanyuyunbest.com/#/register?code=K6h5VWw2",
+    "reportSlug": "huanyu",
+    "tags": [
+      "晚高峰稳定",
+      "AnyTLS",
+      "解锁流媒体"
+    ],
+    "tagColors": [
+      "blue",
+      "green",
+      "purple"
+    ],
+    "daysOnline": 22,
+    "highlight": "稳定好用",
+    "conclusion": "亮点：稳定可靠的老牌机场，支持 AnyTLS 协议，流媒体解锁全面，¥18/月起。",
+    "category": [
+      "today",
+      "stable"
+    ],
+    "price": "¥8/月起",
+    "risk": null,
+    "status": "active"
+  },
+  {
     "id": "shun",
     "name": "瞬云",
     "score": 86.9,
-    "scoreDelta": "-0.01",
+    "scoreDelta": "+0.00",
     "url": "https://ccc.jichang.best/#/register?code=o4I4kToe",
     "reportSlug": "shun",
     "tags": [
@@ -315,7 +315,7 @@ window.AIRPORTS_DATA = [
   {
     "id": "3432393312705",
     "name": "EdgeNova",
-    "score": 86.86,
+    "score": 86.87,
     "scoreDelta": "+0.00",
     "url": "https://zoio.edgenovaaff.cc/#/register?code=Oy1wZvzJ",
     "reportSlug": "3432393312705",
@@ -329,7 +329,7 @@ window.AIRPORTS_DATA = [
       "green",
       "purple"
     ],
-    "daysOnline": 21,
+    "daysOnline": 22,
     "highlight": "官方推荐入驻",
     "conclusion": "国际 IPLC 专线骨干网",
     "category": [
@@ -372,7 +372,7 @@ window.AIRPORTS_DATA = [
   {
     "id": "xianluwan18088",
     "name": "仙路湾",
-    "score": 86.8,
+    "score": 86.6,
     "scoreDelta": "-0.02",
     "url": "https://mm.xlw.app/#/register?code=0PeDLkON",
     "reportSlug": "xianluwan18088",
@@ -454,7 +454,7 @@ window.AIRPORTS_DATA = [
   {
     "id": "manual_2714",
     "name": "Edge-X",
-    "score": 86.47,
+    "score": 86.48,
     "scoreDelta": "+0.01",
     "url": "https://edge-invite.com/#/register?code=73ienU2h",
     "reportSlug": "manual_2714",
@@ -480,37 +480,9 @@ window.AIRPORTS_DATA = [
     "status": "active"
   },
   {
-    "id": "movie0video6539",
-    "name": "牛马云",
-    "score": 85.66,
-    "scoreDelta": "+0.00",
-    "url": "https://js.niumayun.cc/#/register?code=Kgfyfyjn",
-    "reportSlug": "movie0video6539",
-    "tags": [
-      "CN2专线",
-      "解锁流媒体",
-      "多端支持"
-    ],
-    "tagColors": [
-      "blue",
-      "green",
-      "purple"
-    ],
-    "daysOnline": 13,
-    "highlight": "支持免费试用",
-    "conclusion": "已经稳定运营3年多了，稳定不掉线",
-    "category": [
-      "today",
-      "new"
-    ],
-    "price": "¥10/月起",
-    "risk": null,
-    "status": "active"
-  },
-  {
     "id": "yingzi",
     "name": "影子VPN",
-    "score": 85.64,
+    "score": 85.63,
     "scoreDelta": "+0.06",
     "url": "https://www.yingzi01.com/register?code=X7XPN1cS",
     "reportSlug": "yingzi",
@@ -534,10 +506,38 @@ window.AIRPORTS_DATA = [
     "status": "active"
   },
   {
+    "id": "movie0video6539",
+    "name": "牛马云",
+    "score": 85.43,
+    "scoreDelta": "-0.01",
+    "url": "https://js.niumayun.cc/#/register?code=Kgfyfyjn",
+    "reportSlug": "movie0video6539",
+    "tags": [
+      "CN2专线",
+      "解锁流媒体",
+      "多端支持"
+    ],
+    "tagColors": [
+      "blue",
+      "green",
+      "purple"
+    ],
+    "daysOnline": 14,
+    "highlight": "支持免费试用",
+    "conclusion": "已经稳定运营3年多了，稳定不掉线",
+    "category": [
+      "today",
+      "new"
+    ],
+    "price": "¥10/月起",
+    "risk": null,
+    "status": "active"
+  },
+  {
     "id": "36944573914120",
     "name": "可信云",
-    "score": 79.18,
-    "scoreDelta": "-0.02",
+    "score": 79.01,
+    "scoreDelta": "+0.00",
     "url": "https://lunvexa.bfsatt.lat/#/register?code=1o5FLG0v",
     "reportSlug": "36944573914120",
     "tags": [
@@ -550,7 +550,7 @@ window.AIRPORTS_DATA = [
       "green",
       "purple"
     ],
-    "daysOnline": 18,
+    "daysOnline": 19,
     "highlight": "官方推荐入驻",
     "conclusion": "可信云专注于IPLC专线服务，套餐无倍率，不限速，不限设备，支持解锁ChatGPT，Gemini，Netflix，Disney等常用服务",
     "category": [

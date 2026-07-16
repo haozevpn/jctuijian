@@ -640,10 +640,9 @@
       <div class="card-conclusion">监测结论：${conclusion}</div>
 
       <div class="card-actions">
-        <button class="btn-report"
-          onclick="window.JCT.goReport('${airport.id}')">
+        <a class="btn-report" href="/airports/${airport.id}/">
           查看报告 →
-        </button>
+        </a>
         <button class="btn-official" id="btn-official-${airport.id}"
           onclick="window.JCT.goOfficial(event,'${airport.id}','${encodeURIComponent(airport.url)}')">
           官网 <span class="btn-official-icon">↗</span>
