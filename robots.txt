@@ -3,4 +3,60 @@ Allow: /
 Disallow: /redirect.html
 Disallow: /api/
 
+# 字节跳动 / 豆包 AI 爬虫
+User-agent: Bytespider
+User-agent: Bytespider-AI
+Allow: /
+
+# 百度 / 文心一言 & 搜索引擎
+User-agent: Baiduspider
+Allow: /
+
+# 阿里 / 通义千问 & 夸克搜索
+User-agent: YisouSpider
+Allow: /
+
+# 搜狗搜索
+User-agent: Sogou web spider
+Allow: /
+
+# 360 智脑 / 奇虎搜索
+User-agent: 360Spider
+Allow: /
+
+# 智能通用 AI 抓取 Agent（如 Perplexity、各类大模型联网代理）
+User-agent: DeepSeek-Bot
+Allow: /
+
+# OpenAI GPTBot / ChatGPT
+User-agent: GPTBot
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic Claude
+User-agent: ClaudeBot
+User-agent: Claude-Web
+Allow: /
+
+# Google Gemini / Extended
+User-agent: Google-Extended
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+# Apple bot
+User-agent: Applebot
+User-agent: Applebot-Extended
+Allow: /
+
+# Meta Llama
+User-agent: Meta-ExternalAgent
+Allow: /
+
+# Cohere AI
+User-agent: cohere-ai
+Allow: /
+
 Sitemap: https://jctuijian.com/sitemap.xml

@@ -26,52 +26,12 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jctuijian.com/airports/shun/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jctuijian.com/airports/jilian/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jctuijian.com/airports/movie0video6539/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jctuijian.com/airports/guangnian/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jctuijian.com/airports/virajayti2047/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jctuijian.com/airports/yingzi/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jctuijian.com/airports/36944573914120/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jctuijian.com/airports/liponto334579/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://jctuijian.com/airports/xianluwan18088/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jctuijian.com/airports/heysenxyz4193/</loc>
+    <loc>https://jctuijian.com/airports/shun/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -81,22 +41,47 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://jctuijian.com/airports/yingzi/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/airports/liponto334579/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/airports/heysenxyz4193/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/airports/36944573914120/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/airports/movie0video6539/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://jctuijian.com/airports/kuaili0808225/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jctuijian.com/airports/huanyu/</loc>
+    <loc>https://jctuijian.com/airports/jilian/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jctuijian.com/airports/jinyun/</loc>
+    <loc>https://jctuijian.com/airports/virajayti2047/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jctuijian.com/airports/shanshui/</loc>
+    <loc>https://jctuijian.com/airports/guangnian/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -106,17 +91,32 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jctuijian.com/airports/jiuba/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://jctuijian.com/airports/miaomiao/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://jctuijian.com/airports/shanshui/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/airports/huanyu/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/airports/jiuba/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://jctuijian.com/airports/3432393312705/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/airports/jinyun/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

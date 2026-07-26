@@ -732,3 +732,72 @@ img { max-width: 100%; }
 .faq-item summary:hover { background: #F8FAFC; }
 .faq-item p { padding: 0 24px 18px; font-size: 0.84rem; line-height: 1.75; color: var(--color-text-secondary); }
 .faq-item p a { color: var(--color-brand); text-decoration: underline; }
+
+/* ── GEO FAQ Section Styles ───────────────────────────────── */
+.geo-section {
+  padding: 48px 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  margin-top: 48px;
+}
+.geo-intro {
+  margin-bottom: 32px;
+}
+.geo-intro h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin-bottom: 12px;
+}
+.geo-intro p {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+}
+.geo-faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+@media (max-width: 768px) {
+  .geo-faq-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.geo-faq-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  transition: all var(--transition);
+}
+.geo-faq-card:hover {
+  border-color: var(--color-brand);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.geo-faq-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.geo-faq-card h3 .icon {
+  color: var(--color-brand);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.geo-faq-card p {
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+.geo-faq-card p strong {
+  color: var(--color-text-primary);
+}
+

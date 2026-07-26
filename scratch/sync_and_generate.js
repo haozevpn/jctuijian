@@ -164,6 +164,9 @@ window.SITE_STATS = {
       `const airportId = '${row.id}';`
     );
 
+    // E. Replace all instances of __AIRPORT_NAME__ with row.name
+    pageHtml = pageHtml.replace(/__AIRPORT_NAME__/g, row.name);
+
     const destPath = path.join(destDir, 'index.html');
     fs.writeFileSync(destPath, pageHtml, 'utf8');
     console.log(`Generated: /airports/${row.id}/index.html`);
