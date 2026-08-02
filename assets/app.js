@@ -29,6 +29,32 @@
       });
     }
 
+    // 移动端菜单切换
+    const toggleBtn = document.getElementById('menu-toggle');
+    const navMenu = document.getElementById('navbar-nav');
+    if (toggleBtn && navMenu) {
+      toggleBtn.addEventListener('click', () => {
+        const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+        toggleBtn.setAttribute('aria-expanded', !expanded);
+        toggleBtn.textContent = expanded ? '☰' : '✕';
+        navMenu.classList.toggle('active');
+      });
+    }
+
+    // 移动端下拉菜单切换
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(d => {
+      const trigger = d.querySelector('.dropdown-trigger');
+      if (trigger) {
+        trigger.addEventListener('click', (e) => {
+          if (window.innerWidth <= 768) {
+            e.preventDefault();
+            d.classList.toggle('active');
+          }
+        });
+      }
+    });
+
     // 如果配置了 Supabase，从数据库拉取最新评分并合并到本地数据
     if (SUPABASE_URL && SUPABASE_ANON_KEY) {
       await syncFromSupabase();
@@ -48,6 +74,10 @@
     } else if (path.includes('method.html') || path.endsWith('/method')) {
       setActiveNavbar('method');
       renderMethods();
+    } else if (path.includes('tools') || path.indexOf('tools') !== -1) {
+      setActiveNavbar('tools');
+    } else if (path.includes('news') || path.indexOf('news') !== -1) {
+      setActiveNavbar('news');
     } else {
       setActiveNavbar('today');
       renderSection('today');

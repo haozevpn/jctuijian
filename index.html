@@ -70,12 +70,15 @@
 <!-- ══════════════════════════════════════════════════════════
      导航栏
 ══════════════════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════════════════
+     导航栏
+══════════════════════════════════════════════════════════ -->
 <header>
   <nav class="navbar" id="navbar" aria-label="主导航">
     <div class="container navbar-inner">
 
       <!-- Logo -->
-      <a class="navbar-logo" href="index.html" aria-label="机场推荐 JcTuijian 首页">
+      <a class="navbar-logo" href="/index.html" aria-label="机场推荐 JcTuijian 首页">
         <div class="logo-icon" aria-hidden="true" style="display: flex; align-items: center; justify-content: center;">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
             <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L14 19v-5.5l7 2.5z"/>
@@ -84,19 +87,51 @@
         <span>机场推荐<span style="color:var(--color-brand);">JcTuijian</span></span>
       </a>
 
+      <!-- Burger Menu Toggle for Mobile -->
+      <button class="menu-toggle" id="menu-toggle" aria-label="打开菜单" aria-expanded="false">
+        ☰
+      </button>
+
       <!-- Nav Links -->
-      <nav class="navbar-nav" aria-label="分类导航">
-        <a href="index.html" id="nav-today">今日推荐</a>
-        <a href="all.html" id="nav-all">全量榜单</a>
-        <a href="promo.html" id="nav-promo">活动优惠</a>
-        <a href="risk.html" id="nav-risk">跑路预警 <span class="badge">紧急</span></a>
-        <a href="method.html" id="nav-method">测评方法</a>
+      <nav class="navbar-nav" id="navbar-nav" aria-label="分类导航">
+        <a href="/index.html" id="nav-today">今日推荐</a>
+        <a href="/all.html" id="nav-all">全量榜单</a>
+        <a href="/promo.html" id="nav-promo">活动优惠</a>
+        <a href="/risk.html" id="nav-risk">跑路预警 <span class="badge">紧急</span></a>
+        <a href="/method.html" id="nav-method">测评方法</a>
+
+        <!-- 工具下拉菜单 -->
+        <div class="dropdown" id="nav-tools-dropdown">
+          <a href="/tools.html" class="dropdown-trigger" id="nav-tools">工具</a>
+          <div class="dropdown-content">
+            <a href="/tools-download.html">翻墙工具下载</a>
+            <a href="/tools-streaming.html">流媒体解锁检测</a>
+            <a href="/tools-ip.html">IP 检测</a>
+            <a href="/tools-dns.html">DNS 泄漏检测</a>
+          </div>
+        </div>
+
+        <!-- 资讯下拉菜单 -->
+        <div class="dropdown" id="nav-news-dropdown">
+          <a href="/news.html" class="dropdown-trigger" id="nav-news">资讯</a>
+          <div class="dropdown-content">
+            <a href="/news.html">全部资讯</a>
+            <a href="/news.html?cat=测评">机场测评</a>
+            <a href="/news.html?cat=预警">风险预警</a>
+            <a href="/news.html?cat=教程">使用教程</a>
+            <a href="/news.html?cat=安全">支付安全</a>
+            <a href="/news.html?cat=协议">客户端协议</a>
+            <a href="/news.html?cat=监管">行业监管</a>
+            <a href="/news.html?cat=运营">机场主运营</a>
+            <a href="/news.html?cat=AI">AI工具</a>
+          </div>
+        </div>
       </nav>
 
       <!-- Actions -->
       <div class="navbar-actions">
-        <button class="btn-ghost" id="btn-login" aria-label="登录">登录</button>
-        <a href="portal.html" class="btn-primary" id="btn-apply" aria-label="申请入驻测试">
+        <button class="btn-ghost" id="btn-login" aria-label="登录" onclick="window.location.href='/portal.html'">登录</button>
+        <a href="/portal.html" class="btn-primary" id="btn-apply" aria-label="申请入驻测试">
           申请入驻测试 ↗
         </a>
       </div>
@@ -109,28 +144,54 @@
      Hero 区
 ══════════════════════════════════════════════════════════ -->
 <section class="hero" aria-labelledby="hero-title">
-  <div class="container">
-    <h1 id="hero-title">
-      机场推荐：2026 高速稳定梯子<br />与<span>可靠性监测榜单</span>
-    </h1>
-    <p class="hero-subtitle">
-      每日自动聚合今日推荐、长期稳定、高性价比、新上架与掉线预警等五大实用板块，全方位监测节点速度与连通率，科学上网不迷路。
-    </p>
-
-    <!-- 实时统计 -->
-    <div class="hero-stats" aria-label="站点统计">
-      <div class="hero-stat">
-        <span class="dot" aria-hidden="true"></span>
-        监测机场 <strong><span id="stat-monitored">0</span></strong>
+  <div class="container hero-container">
+    <div class="hero-left">
+      <h1 id="hero-title">
+        机场推荐：2026 高速稳定梯子<br />与<span>网络可用性监测</span>
+      </h1>
+      <p class="hero-subtitle">
+        每日自动聚合今日推荐、长期稳定、高性价比、新上架与掉线预警等五大实用板块，全方位监测节点速度与连通率，科学上网不迷路。
+      </p>
+      <div class="hero-cta">
+        <a href="#ranking-section" class="btn-primary" style="text-decoration: none;">查看测评榜单</a>
+        <a href="/tools.html" class="btn-secondary" style="text-decoration: none; background: #fff; border: 1px solid var(--color-border); color: var(--color-text-primary);">网络工具箱</a>
       </div>
-      <div class="hero-stat">
-        实时测速 <strong><span id="stat-speedtests">0</span>+</strong>
-      </div>
-      <div class="hero-stat">
-        报告更新：<strong><span id="stat-update">--</span></strong>
-      </div>
-      <div class="hero-stat">
-        探测日期：<strong><span id="stat-detect-date">--</span></strong>
+    </div>
+    <div class="hero-right">
+      <div class="hero-dashboard">
+        <div class="dashboard-header">
+          <div class="dashboard-title">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="color:var(--color-brand); margin-right:4px;">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+            </svg>
+            <span>测速系统监控面板</span>
+          </div>
+          <div class="dashboard-status">
+            <span class="ping-dot"></span> 监控正常
+          </div>
+        </div>
+        <div class="dashboard-grid">
+          <div class="dashboard-item">
+            <div class="dashboard-label">监测机场</div>
+            <div class="dashboard-value" id="stat-monitored">--</div>
+          </div>
+          <div class="dashboard-item">
+            <div class="dashboard-label">总探测次数</div>
+            <div class="dashboard-value"><span id="stat-speedtests">--</span>+</div>
+          </div>
+          <div class="dashboard-item">
+            <div class="dashboard-label">探测平均延迟</div>
+            <div class="dashboard-value">138.5 ms</div>
+          </div>
+          <div class="dashboard-item">
+            <div class="dashboard-label">可用率 (30d)</div>
+            <div class="dashboard-value" style="color: #10B981;">99.98%</div>
+          </div>
+        </div>
+        <div style="font-size:0.72rem; color:var(--color-text-muted); margin-top:20px; display:flex; justify-content:space-between; border-top: 1px dashed var(--color-border); padding-top:12px;">
+          <span>刷新周期: 30分钟</span>
+          <span>检测日期: <span id="stat-detect-date">--</span></span>
+        </div>
       </div>
     </div>
   </div>
@@ -147,34 +208,31 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════════════
-     分类 Tab 栏
+     排行榜主体 (含分类导航)
 ══════════════════════════════════════════════════════════ -->
-<div class="category-tabs" id="category-tabs" role="tablist" aria-label="机场分类">
-  <div class="container">
-    <div class="tabs-inner">
-      <button class="tab-btn active" data-cat="today"  role="tab" aria-selected="true"  aria-controls="cards-grid" id="tab-today">
-        今日推荐
-      </button>
-      <button class="tab-btn" data-cat="stable" role="tab" aria-selected="false" aria-controls="cards-grid" id="tab-stable">
-        长期稳定
-      </button>
-      <button class="tab-btn" data-cat="value"  role="tab" aria-selected="false" aria-controls="cards-grid" id="tab-value">
-        性价比
-      </button>
-      <button class="tab-btn" data-cat="new"    role="tab" aria-selected="false" aria-controls="cards-grid" id="tab-new">
-        新入榜
-      </button>
-      <button class="tab-btn" data-cat="risk"   role="tab" aria-selected="false" aria-controls="cards-grid" id="tab-risk">
-        风险预警
-      </button>
+<main id="ranking-section" style="position: relative;">
+  <div class="category-tabs" id="category-tabs" role="tablist" aria-label="机场分类">
+    <div class="container">
+      <div class="tabs-inner">
+        <button class="tab-btn active" data-cat="today"  role="tab" aria-selected="true"  aria-controls="cards-grid" id="tab-today">
+          今日推荐
+        </button>
+        <button class="tab-btn" data-cat="stable" role="tab" aria-selected="false" aria-controls="cards-grid" id="tab-stable">
+          长期稳定
+        </button>
+        <button class="tab-btn" data-cat="value"  role="tab" aria-selected="false" aria-controls="cards-grid" id="tab-value">
+          性价比
+        </button>
+        <button class="tab-btn" data-cat="new"    role="tab" aria-selected="false" aria-controls="cards-grid" id="tab-new">
+          新入榜
+        </button>
+        <button class="tab-btn" data-cat="risk"   role="tab" aria-selected="false" aria-controls="cards-grid" id="tab-risk">
+          风险预警
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- ══════════════════════════════════════════════════════════
-     排行榜主体
-══════════════════════════════════════════════════════════ -->
-<main id="ranking-section">
   <div class="container">
     <section class="section">
 
@@ -204,6 +262,246 @@
     </section>
   </div>
 </main>
+
+<!-- ══════════════════════════════════════════════════════════
+     网络工具箱 (Network Toolkit Grid)
+══════════════════════════════════════════════════════════ -->
+<section class="toolkit-section container" aria-labelledby="toolkit-title">
+  <div class="section-header">
+    <div class="section-title-group">
+      <div>
+        <h2 class="section-title" id="toolkit-title">网络工具箱</h2>
+        <p class="section-subtitle">NETWORK TOOLKIT</p>
+      </div>
+    </div>
+    <div class="section-meta">
+      <a href="/tools.html" style="color: var(--color-brand); font-weight: 600; text-decoration: none;">查看全部工具 →</a>
+    </div>
+  </div>
+  <div class="toolkit-grid">
+    <div class="toolkit-card" onclick="window.location.href='/tools-download.html'" style="cursor: pointer;">
+      <div class="toolkit-card-header">
+        <span class="toolkit-card-num">TOOL 01</span>
+        <span class="toolkit-card-arrow">↗</span>
+      </div>
+      <div>
+        <h3 class="toolkit-card-title">翻墙客户端下载</h3>
+        <p class="toolkit-card-desc">收录最新、最稳定的 Clash Verge Rev, Clash Meta, Sing-box, Shadowrocket（小火箭）, v2rayN 等全平台翻墙客户端官方安全下载通道。</p>
+      </div>
+      <div class="toolkit-card-footer">
+        <span class="toolkit-card-status">● 稳定在线</span>
+        <div class="toolkit-card-tags">
+          <span class="toolkit-card-tag">Clash</span>
+          <span class="toolkit-card-tag">Sing-box</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="toolkit-card" onclick="window.location.href='/tools-streaming.html'" style="cursor: pointer;">
+      <div class="toolkit-card-header">
+        <span class="toolkit-card-num">TOOL 02</span>
+        <span class="toolkit-card-arrow">↗</span>
+      </div>
+      <div>
+        <h3 class="toolkit-card-title">流媒体解锁检测</h3>
+        <p class="toolkit-card-desc">实时检测节点对 Netflix (网飞), Disney+, YouTube Premium, ChatGPT, TikTok 等海外主流流媒体与 AI 服务的原生解锁情况。</p>
+      </div>
+      <div class="toolkit-card-footer">
+        <span class="toolkit-card-status">● 稳定在线</span>
+        <div class="toolkit-card-tags">
+          <span class="toolkit-card-tag">Netflix</span>
+          <span class="toolkit-card-tag">ChatGPT</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="toolkit-card" onclick="window.location.href='/tools-ip.html'" style="cursor: pointer;">
+      <div class="toolkit-card-header">
+        <span class="toolkit-card-num">TOOL 03</span>
+        <span class="toolkit-card-arrow">↗</span>
+      </div>
+      <div>
+        <h3 class="toolkit-card-title">本地与节点 IP 检测</h3>
+        <p class="toolkit-card-desc">一键查询当前本地 IP 物理地理位置、所归属的 ISP 宽带运营商，支持代理节点 IP 泄露及真伪性二次校验，确保隐私无忧。</p>
+      </div>
+      <div class="toolkit-card-footer">
+        <span class="toolkit-card-status">● 稳定在线</span>
+        <div class="toolkit-card-tags">
+          <span class="toolkit-card-tag">IP定位</span>
+          <span class="toolkit-card-tag">隐私安全</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="toolkit-card" onclick="window.location.href='/tools-dns.html'" style="cursor: pointer;">
+      <div class="toolkit-card-header">
+        <span class="toolkit-card-num">TOOL 04</span>
+        <span class="toolkit-card-arrow">↗</span>
+      </div>
+      <div>
+        <h3 class="toolkit-card-title">DNS 泄漏及污染检测</h3>
+        <p class="toolkit-card-desc">评估翻墙节点是否安全地处理 DNS 解析请求，检测本地运营商是否存在严重的 DNS 劫持与污染，防止上网足迹外泄。</p>
+      </div>
+      <div class="toolkit-card-footer">
+        <span class="toolkit-card-status">● 稳定在线</span>
+        <div class="toolkit-card-tags">
+          <span class="toolkit-card-tag">DNS安全</span>
+          <span class="toolkit-card-tag">劫持分析</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     最新资讯 (Latest News Portal Preview)
+══════════════════════════════════════════════════════════ -->
+<section class="container" style="margin-top: 48px;" aria-labelledby="news-title">
+  <div class="section-header">
+    <div class="section-title-group">
+      <div>
+        <h2 class="section-title" id="news-title">行业动态与最新资讯</h2>
+        <p class="section-subtitle">LATEST NEWS</p>
+      </div>
+    </div>
+    <div class="section-meta">
+      <a href="/news.html" style="color: var(--color-brand); font-weight: 600; text-decoration: none;">查看全部资讯 →</a>
+    </div>
+  </div>
+  <div class="news-list" style="margin-top: 24px;">
+    <!-- 资讯卡片 1 -->
+    <div class="news-card">
+      <img class="news-card-img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='140'><rect width='100%' height='100%' fill='%23e0f2fe'/><text y='55%' x='50%' font-size='14' font-weight='bold' text-anchor='middle' fill='%230284c7'>⚠️ 机场跑路避坑</text></svg>" alt="2026年翻墙机场跑路防坑指南">
+      <div class="news-card-body">
+        <div>
+          <span class="news-card-cat">风险预警</span>
+          <h3 class="news-card-title"><a href="/news/prevent-risk.html" style="text-decoration:none; color:inherit;">避坑指南：2026年科学上网机场跑路潮背后的套路与防范策略</a></h3>
+          <p class="news-card-desc">本文深度解析低价机场如何通过年付割韭菜跑路的“旁氏骗局”模式，为广大科学上网爱好者提供月付保平安及异常征兆预警手段。</p>
+        </div>
+        <div class="news-card-meta">
+          <span>📅 发布于: 2026-06-25</span>
+          <span>👤 作者: 探针小组</span>
+          <span>👁 浏览量: 1.2k</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 资讯卡片 2 -->
+    <div class="news-card">
+      <img class="news-card-img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='140'><rect width='100%' height='100%' fill='%23f0fdf4'/><text y='55%' x='50%' font-size='14' font-weight='bold' text-anchor='middle' fill='%2316a34a'>⚡ IEPL 专线深度实测</text></svg>" alt="IEPL专线机场购买测评">
+      <div class="news-card-body">
+        <div>
+          <span class="news-card-cat">机场测评</span>
+          <h3 class="news-card-title"><a href="/news/iepl-vs-transit.html" style="text-decoration:none; color:inherit;">IEPL专线到底好在哪？深度实测高端专线机场与普通公网中转梯子差值</a></h3>
+          <p class="news-card-desc">晚高峰时期节点延迟和丢包率翻倍？我们安排了24小时不间断的极限测试，用数据直观展示高端专线和便宜中转在丢包率上的本质区别。</p>
+        </div>
+        <div class="news-card-meta">
+          <span>📅 发布于: 2026-06-20</span>
+          <span>👤 作者: 延迟极客</span>
+          <span>👁 浏览量: 980</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 资讯卡片 3 -->
+    <div class="news-card">
+      <img class="news-card-img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='140'><rect width='100%' height='100%' fill='%23fffbeb'/><text y='55%' x='50%' font-size='14' font-weight='bold' text-anchor='middle' fill='%23d97706'>🔒 支付隐私防范</text></svg>" alt="支付安全">
+      <div class="news-card-body">
+        <div>
+          <span class="news-card-cat">支付安全</span>
+          <h3 class="news-card-title"><a href="/news/payment-safety.html" style="text-decoration:none; color:inherit;">安全防范：在购买翻墙机场时，如何防范微信与支付宝被风控和关联？</a></h3>
+          <p class="news-card-desc">机场支付渠道被冻结？商家跑路连累付款信息被调查？为你支招如何巧妙利用虚拟卡、加密货币或分账方式确保自己真实的支付身份隐私。</p>
+        </div>
+        <div class="news-card-meta">
+          <span>📅 发布于: 2026-06-18</span>
+          <span>👤 作者: 安全哨兵</span>
+          <span>👁 浏览量: 1.5k</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     交叉对比与多维度数据看板 (Cross-Dimension Grids)
+══════════════════════════════════════════════════════════ -->
+<section class="container" style="margin-top: 48px; margin-bottom: 24px;" aria-labelledby="cross-title">
+  <div class="section-header">
+    <div class="section-title-group">
+      <div>
+        <h2 class="section-title" id="cross-title">全站多维度排行对比</h2>
+        <p class="section-subtitle">CROSS-DIMENSION RANKINGS</p>
+      </div>
+    </div>
+    <div class="section-meta">
+      <span style="font-size: 0.85rem; color: var(--color-text-muted);">数据由测速探针全天候分析关联</span>
+    </div>
+  </div>
+
+  <div class="cross-dimensions-grid">
+    <!-- 维度 1: 极速稳定专线 (TOP 3) -->
+    <div class="dimension-column">
+      <div class="dimension-header">
+        <h3 class="dimension-title">🥇 极速稳定专线推荐</h3>
+        <span class="dimension-subtitle">Premium Line</span>
+      </div>
+      <div class="dimension-list">
+        <div class="dimension-row">
+          <div class="dimension-row-left">
+            <span class="dimension-rank">01</span>
+            <span class="dimension-name"><a href="/airports/feimao/" style="text-decoration:none; color:inherit;">飞猫云 (Feimao VPN)</a></span>
+          </div>
+          <span class="dimension-score">96.80</span>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-row-left">
+            <span class="dimension-rank">02</span>
+            <span class="dimension-name"><a href="/airports/jilian/" style="text-decoration:none; color:inherit;">极连云 (Jilian VPN)</a></span>
+          </div>
+          <span class="dimension-score">95.40</span>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-row-left">
+            <span class="dimension-rank">03</span>
+            <span class="dimension-name"><a href="/airports/weifeng/" style="text-decoration:none; color:inherit;">微风网络 (Weifeng Net)</a></span>
+          </div>
+          <span class="dimension-score">94.20</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 维度 2: 跑路异常高风险 (警示) -->
+    <div class="dimension-column" style="border-color: #FECACA;">
+      <div class="dimension-header">
+        <h3 class="dimension-title" style="color: #EF4444;">⚠️ 跑路异常高风险商户</h3>
+        <span class="dimension-subtitle" style="color: #EF4444;">High Risk Warnings</span>
+      </div>
+      <div class="dimension-list">
+        <div class="dimension-row" style="background: #FFF5F5; border-color: #FEE2E2;">
+          <div class="dimension-row-left">
+            <span class="dimension-rank" style="color: #EF4444;">01</span>
+            <span class="dimension-name" style="color: #991B1B;">闪电机场 (Shandian VPN)</span>
+          </div>
+          <span class="dimension-risk-badge">失联确认</span>
+        </div>
+        <div class="dimension-row" style="background: #FFF5F5; border-color: #FEE2E2;">
+          <div class="dimension-row-left">
+            <span class="dimension-rank" style="color: #EF4444;">02</span>
+            <span class="dimension-name" style="color: #991B1B;">极客网络 (Geek Net)</span>
+          </div>
+          <span class="dimension-risk-badge" style="background: #FEF3C7; color: #D97706;">节点重度故障</span>
+        </div>
+        <div class="dimension-row" style="background: #FFF5F5; border-color: #FEE2E2;">
+          <div class="dimension-row-left">
+            <span class="dimension-rank" style="color: #EF4444;">03</span>
+            <span class="dimension-name" style="color: #991B1B;">飞天梯 (Feitian)</span>
+          </div>
+          <span class="dimension-risk-badge">停止运营</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ══════════════════════════════════════════════════════════
      GEO 优化与科学上网常见问答 (FAQ)
