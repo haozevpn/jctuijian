@@ -245,6 +245,31 @@ window.SITE_STATS = {
     <loc>https://jctuijian.com/news/payment-safety.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/news/clash-verge-tutorial.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/news/protocol-evolution.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/news/regulation-trends.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/news/airport-operation-cost.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/news/ai-proxy-rules.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>\n`;
 
   for (const row of rows) {

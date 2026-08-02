@@ -36,8 +36,8 @@ window.AIRPORTS_DATA = [
   {
     "id": "heysenxyz4193",
     "name": "Now加速",
-    "score": 90.23,
-    "scoreDelta": "+0.04",
+    "score": 90.29,
+    "scoreDelta": "+0.06",
     "url": "https://web.noww.cc/#/register?code=ebqgGHoQ",
     "reportSlug": "heysenxyz4193",
     "tags": [
@@ -122,8 +122,8 @@ window.AIRPORTS_DATA = [
   {
     "id": "liuajieok9840",
     "name": "速界机场",
-    "score": 89.06,
-    "scoreDelta": "+0.00",
+    "score": 89.07,
+    "scoreDelta": "+0.01",
     "url": "https://everett7623.speedworldaff.com/#/register?code=r7IOqoY7",
     "reportSlug": "liuajieok9840",
     "tags": [
@@ -150,7 +150,7 @@ window.AIRPORTS_DATA = [
   {
     "id": "jiuba",
     "name": "99吧",
-    "score": 88.61,
+    "score": 88.6,
     "scoreDelta": "-0.01",
     "url": "https://99vpn.bar/#/register?code=Uni7IOJh",
     "reportSlug": "jiuba",
@@ -207,7 +207,7 @@ window.AIRPORTS_DATA = [
     "id": "kuaili0808225",
     "name": "快狸",
     "score": 87.55,
-    "scoreDelta": "-0.23",
+    "scoreDelta": "+0.00",
     "url": "https://yyo649929.kuailiaff.com/#/register?code=G56QwHto",
     "reportSlug": "kuaili0808225",
     "tags": [
@@ -234,8 +234,8 @@ window.AIRPORTS_DATA = [
   {
     "id": "3432393312705",
     "name": "EdgeNova",
-    "score": 87.54,
-    "scoreDelta": "+0.00",
+    "score": 87.55,
+    "scoreDelta": "+0.01",
     "url": "https://zoio.edgenovaaff.cc/#/register?code=Oy1wZvzJ",
     "reportSlug": "3432393312705",
     "tags": [
@@ -344,8 +344,8 @@ window.AIRPORTS_DATA = [
   {
     "id": "xianluwan18088",
     "name": "仙路湾",
-    "score": 86.37,
-    "scoreDelta": "+0.04",
+    "score": 86.43,
+    "scoreDelta": "+0.06",
     "url": "https://mm.xlw.app/#/register?code=0PeDLkON",
     "reportSlug": "xianluwan18088",
     "tags": [
@@ -398,8 +398,8 @@ window.AIRPORTS_DATA = [
   {
     "id": "shun",
     "name": "瞬云",
-    "score": 85.8,
-    "scoreDelta": "+0.04",
+    "score": 85.86,
+    "scoreDelta": "+0.06",
     "url": "https://ccc.jichang.best/#/register?code=o4I4kToe",
     "reportSlug": "shun",
     "tags": [
@@ -427,7 +427,7 @@ window.AIRPORTS_DATA = [
     "id": "manual_2714",
     "name": "Edge-X",
     "score": 85.34,
-    "scoreDelta": "-0.09",
+    "scoreDelta": "+0.00",
     "url": "https://edge-invite.com/#/register?code=73ienU2h",
     "reportSlug": "manual_2714",
     "tags": [
@@ -455,7 +455,7 @@ window.AIRPORTS_DATA = [
     "id": "movie0video6539",
     "name": "牛马云",
     "score": 85,
-    "scoreDelta": "-0.01",
+    "scoreDelta": "+0.00",
     "url": "https://js.niumayun.cc/#/register?code=Kgfyfyjn",
     "reportSlug": "movie0video6539",
     "tags": [
@@ -538,8 +538,8 @@ window.AIRPORTS_DATA = [
   {
     "id": "jinyun",
     "name": "锦云",
-    "score": 74.14,
-    "scoreDelta": "-0.02",
+    "score": 74.13,
+    "scoreDelta": "-0.01",
     "url": "https://w2.whengdl.com/#/register?code=BIGc8qrQ",
     "reportSlug": "jinyun",
     "tags": [

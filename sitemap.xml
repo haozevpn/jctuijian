@@ -71,7 +71,27 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jctuijian.com/airports/jilian/</loc>
+    <loc>https://jctuijian.com/news/clash-verge-tutorial.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/news/protocol-evolution.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/news/regulation-trends.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/news/airport-operation-cost.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/news/ai-proxy-rules.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -82,6 +102,26 @@
   </url>
   <url>
     <loc>https://jctuijian.com/airports/movie0video6539/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/airports/virajayti2047/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/airports/yingzi/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/airports/xianluwan18088/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/airports/jilian/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -111,22 +151,17 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jctuijian.com/airports/virajayti2047/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jctuijian.com/airports/yingzi/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jctuijian.com/airports/xianluwan18088/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://jctuijian.com/airports/liponto334579/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/airports/miaomiao/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jctuijian.com/airports/jinyun/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -152,16 +187,6 @@
   </url>
   <url>
     <loc>https://jctuijian.com/airports/shanshui/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jctuijian.com/airports/miaomiao/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jctuijian.com/airports/jinyun/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

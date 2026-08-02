@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clash/Sing-box/Shadowrocket 全平台翻墙客户端官方下载 - JcTuijian</title>
-  <meta name="description" content="科学上网客户端下载汇总，收集Windows/macOS/iOS/Android/路由器全平台主流代理软件，包含Clash Verge Rev、Sing-box、小火箭等，保障纯净无毒安全安装。" />
-  <meta name="keywords" content="Clash下载,Sing-box下载,小火箭下载,Shadowrocket,科学上网软件,Clash Verge Rev" />
+  <title>翻墙工具下载 | 科学上网客户端、机场订阅工具与代理软件官方下载 - JcTuijian</title>
+  <meta name="description" content="JcTuijian 翻墙工具下载页收录 Windows、macOS、Android、iOS、Linux 常用科学上网客户端，支持 Clash Verge Rev、v2rayN、Shadowrocket、Stash、sing-box、Hiddify、Karing 等工具的官方页面与高速下载。" />
+  <meta name="keywords" content="Clash Verge Rev, v2rayN, Shadowrocket, Stash, sing-box, Hiddify, Karing, 客户端下载, 科学上网软件" />
   <link rel="canonical" href="https://jctuijian.com/tools-download.html" />
   <link rel="stylesheet" href="assets/style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230EA5E9'/><text y='22' x='5' font-size='20'>✈</text></svg>" />
@@ -32,18 +32,27 @@
       background: var(--color-brand-bg);
       color: var(--color-brand);
     }
+    .client-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
     .client-card {
       background: var(--color-surface);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-xl);
       padding: 24px;
-      margin-bottom: 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       box-shadow: var(--shadow-sm);
+      transition: all var(--transition);
     }
-    @media (max-width: 768px) {
+    .client-card:hover {
+      border-color: var(--color-brand);
+      box-shadow: var(--shadow-md);
+    }
+    @media (max-width: 850px) {
       .client-card {
         flex-direction: column;
         align-items: flex-start;
@@ -53,43 +62,62 @@
     .client-info {
       flex-grow: 1;
     }
+    .client-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
     .client-title {
       font-size: 1.25rem;
       font-weight: 800;
       color: var(--color-text-primary);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    }
+    .client-platform-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
     }
     .client-desc {
       font-size: 0.88rem;
       color: var(--color-text-secondary);
       margin-top: 8px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
     .client-meta {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       margin-top: 12px;
       font-size: 0.75rem;
       flex-wrap: wrap;
     }
-    .client-badge {
+    .client-badge-item {
       background: var(--color-bg);
       border: 1px solid var(--color-border);
       padding: 2px 8px;
       border-radius: 4px;
       color: var(--color-text-secondary);
+      font-weight: 600;
     }
     .client-actions {
       display: flex;
-      gap: 12px;
+      flex-direction: column;
+      gap: 8px;
       flex-shrink: 0;
+      min-width: 160px;
     }
-    @media (max-width: 768px) {
+    @media (max-width: 850px) {
       .client-actions {
         width: 100%;
-        justify-content: flex-start;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      .client-actions a {
+        flex: 1 1 120px;
+        text-align: center;
       }
     }
     .btn-download {
@@ -101,23 +129,94 @@
       font-size: 0.85rem;
       text-decoration: none;
       transition: background var(--transition);
+      text-align: center;
+      display: inline-block;
     }
     .btn-download:hover {
       background: #0284c7;
     }
-    .btn-tutorial {
-      background: #f1f5f9;
-      color: #475569;
-      padding: 10px 20px;
+    .btn-official {
+      background: var(--color-surface);
+      color: var(--color-text-secondary);
+      padding: 9px 20px;
       border-radius: var(--radius-md);
       font-weight: 700;
       font-size: 0.85rem;
       text-decoration: none;
-      transition: background var(--transition);
+      transition: all var(--transition);
       border: 1px solid var(--color-border);
+      text-align: center;
+      display: inline-block;
     }
-    .btn-tutorial:hover {
-      background: #e2e8f0;
+    .btn-official:hover {
+      border-color: var(--color-text-secondary);
+      color: var(--color-text-primary);
+    }
+
+    /* FAQ accordion styles */
+    .faq-section {
+      margin-top: 64px;
+      margin-bottom: 80px;
+    }
+    .faq-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--color-text-primary);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .faq-accordion {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .faq-item {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: border-color var(--transition);
+    }
+    .faq-item:hover {
+      border-color: var(--color-brand);
+    }
+    .faq-question {
+      padding: 18px 24px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    .faq-question::after {
+      content: '＋';
+      font-size: 1.1rem;
+      color: var(--color-text-secondary);
+      transition: transform var(--transition);
+    }
+    .faq-item.active .faq-question::after {
+      content: '－';
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--transition) ease-out, padding var(--transition) ease-out;
+      background: var(--color-bg);
+      border-top: 0 solid var(--color-border);
+      padding: 0 24px;
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      line-height: 1.7;
+    }
+    .faq-item.active .faq-answer {
+      max-height: 500px;
+      padding: 18px 24px;
+      border-top-width: 1px;
     }
   </style>
 </head>
@@ -176,123 +275,661 @@
 
 <!-- Title Section -->
 <section class="container" style="margin-top: 48px; text-align: center;">
-  <h1>翻墙代理客户端<span>官方高速下载</span></h1>
+  <h1>翻墙代理客户端<span>全系统安全下载</span></h1>
   <p class="hero-subtitle" style="margin: 12px auto 40px auto; max-width: 600px;">
-    为您提供主流科学上网客户端的官方开源与发布平台高速下载入口，拒绝夹带木马、防止广告后门与假冒钓鱼版本。
+    按系统筛选常用代理客户端，优先展示官方页面和可信备用安装包，避免下载夹带后门或广告的假冒钓鱼版本。
   </p>
 </section>
 
 <!-- Tabs & List -->
-<main class="container" style="margin-bottom: 80px;">
+<main class="container">
   <!-- Platform tabs -->
   <div class="platform-tabs">
-    <button class="platform-tab-btn active" onclick="switchPlatform('all')">全部系统</button>
-    <button class="platform-tab-btn" onclick="switchPlatform('win')">🖥 Windows</button>
-    <button class="platform-tab-btn" onclick="switchPlatform('mac')">🍏 macOS</button>
-    <button class="platform-tab-btn" onclick="switchPlatform('ios')">📱 iOS (苹果手机)</button>
-    <button class="platform-tab-btn" onclick="switchPlatform('android')">🤖 Android (安卓)</button>
+    <button class="platform-tab-btn active" onclick="switchPlatform('all')">📚 全部系统</button>
+    <button class="platform-tab-btn" onclick="switchPlatform('windows')">🖥 Windows</button>
+    <button class="platform-tab-btn" onclick="switchPlatform('macos')">🍏 macOS</button>
+    <button class="platform-tab-btn" onclick="switchPlatform('android')">🤖 Android</button>
+    <button class="platform-tab-btn" onclick="switchPlatform('ios')">📱 iOS (iPhone)</button>
+    <button class="platform-tab-btn" onclick="switchPlatform('linux')">🐧 Linux</button>
   </div>
 
   <!-- Client List -->
-  <div id="clients-list">
-    <!-- Clash Verge Rev -->
-    <div class="client-card" data-platforms="win,mac">
+  <div class="client-grid" id="clients-container">
+    
+    <!-- Clash Verge Rev (Windows) -->
+    <div class="client-card" data-platforms="windows">
       <div class="client-info">
-        <div class="client-title">
-          <span>Clash Verge Rev</span>
-          <span style="background: #e0f2fe; color: #0284c7; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;">强烈推荐</span>
+        <div class="client-title-row">
+          <span class="client-title">Clash Verge Rev</span>
+          <span class="client-platform-badge" style="background:#e0f2fe; color:#0369a1; border-color:#bae6fd;">Windows</span>
+          <span style="background:#ECFDF5; color:#10B981; font-size:0.7rem; padding:2px 6px; border-radius:4px; font-weight:700;">最推荐</span>
         </div>
-        <p class="client-desc">目前最主流的 Clash 开源桌面客户端，拥有精美的现代化界面、原生支持中文、支持规则模式切流、支持多内核（Clash Meta/Mihomo）以及脚本扩展。</p>
+        <p class="client-desc">最新核心重构的 Clash 桌面主流客户端。原生内置中文，完美支持 Clash Meta (Mihomo) 内核，支持分流策略组及脚本扩展，界面现代美观。</p>
         <div class="client-meta">
-          <span class="client-badge">支持协议: SS, Vmess, Trojan, Snell, Vless, Hysteria</span>
-          <span class="client-badge">最新版本: v2.0.2</span>
-          <span class="client-badge">开源免费</span>
+          <span class="client-badge-item">版本：2.5.2</span>
+          <span class="client-badge-item">大小：44.8 MB</span>
+          <span class="client-badge-item">平台：Win 10/11</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
         </div>
       </div>
       <div class="client-actions">
-        <a href="https://github.com/clash-verge-rev/clash-verge-rev/releases" class="btn-download" target="_blank">官方 Github 下载 ↗</a>
-        <a href="/news.html?cat=教程" class="btn-tutorial">配置教程</a>
+        <a href="https://gate-rank.com/download/file/clash-verge-rev-windows?platform=windows" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/clash-verge-rev/clash-verge-rev" class="btn-official" target="_blank">Github 官方页 ↗</a>
       </div>
     </div>
 
-    <!-- Sing-box -->
-    <div class="client-card" data-platforms="win,mac,ios,android">
+    <!-- Karing (Windows) -->
+    <div class="client-card" data-platforms="windows">
       <div class="client-info">
-        <div class="client-title">
-          <span>Sing-box</span>
-          <span style="background: #f0fdf4; color: #16a34a; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;">超低资源占用</span>
+        <div class="client-title-row">
+          <span class="client-title">Karing</span>
+          <span class="client-platform-badge">Windows</span>
         </div>
-        <p class="client-desc">新一代网络代理通用平台，底层采用 Go 语言实现，对系统资源要求极低，原生支持 Hysteria 2、TUIC v5 等最新极速抗封锁协议，支持全平台多内核运行。</p>
+        <p class="client-desc">一款功能丰富的网络连接代理工具，基于规则的分流支持，界面整洁友好，完美对接各种主流科学上网协议。</p>
         <div class="client-meta">
-          <span class="client-badge">支持协议: SS, Vmess, Vless, Trojan, Hysteria 2, TUIC</span>
-          <span class="client-badge">最新版本: v1.9.3</span>
-          <span class="client-badge">全平台兼容</span>
+          <span class="client-badge-item">版本：1.2.22.2502</span>
+          <span class="client-badge-item">大小：44.0 MB</span>
+          <span class="client-badge-item">平台：Win 10/11</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
         </div>
       </div>
       <div class="client-actions">
-        <a href="https://github.com/SagerNet/sing-box/releases" class="btn-download" target="_blank">官方 Github 下载 ↗</a>
-        <a href="/news.html?cat=教程" class="btn-tutorial">配置教程</a>
+        <a href="https://gate-rank.com/download/file/karing-windows?platform=windows" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/KaringX/karing" class="btn-official" target="_blank">Github 官方页 ↗</a>
       </div>
     </div>
 
-    <!-- Shadowrocket -->
-    <div class="client-card" data-platforms="ios">
+    <!-- Hiddify (Windows) -->
+    <div class="client-card" data-platforms="windows">
       <div class="client-info">
-        <div class="client-title">
-          <span>Shadowrocket (小火箭)</span>
-          <span style="background: #fffbeb; color: #d97706; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;">iOS 首选</span>
+        <div class="client-title-row">
+          <span class="client-title">Hiddify</span>
+          <span class="client-platform-badge">Windows</span>
+          <span style="background:#FEF3C7; color:#D97706; font-size:0.7rem; padding:2px 6px; border-radius:4px; font-weight:700;">新手友好</span>
         </div>
-        <p class="client-desc">iOS 平台最为经典和装机量最大的付费代理客户端，支持扫码导入订阅、规则配置分流，操作极其傻瓜式。需准备美区或港区 Apple ID 并在 App Store 购买（2.99$）。</p>
+        <p class="client-desc">全平台通用科学上网工具，支持多种最新防污染协议。一键导入，界面极简化，非常适合零基础的新手使用。</p>
         <div class="client-meta">
-          <span class="client-badge">支持协议: SS, SSR, Vmess, Trojan, Snell, Hysteria 2, TUIC</span>
-          <span class="client-badge">App Store 售价: $2.99</span>
-          <span class="client-badge">独占 App</span>
+          <span class="client-badge-item">版本：4.1.1</span>
+          <span class="client-badge-item">大小：34.8 MB</span>
+          <span class="client-badge-item">平台：Win 10/11</span>
+          <span class="client-badge-item">日期：2026-07-09</span>
         </div>
       </div>
       <div class="client-actions">
-        <a href="https://apps.apple.com/us/app/shadowrocket/id932747118" class="btn-download" target="_blank">前往 App Store ↗</a>
-        <a href="/news.html?cat=教程" class="btn-tutorial">获取美区ID</a>
+        <a href="https://gate-rank.com/download/file/hiddify-windows?platform=windows" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/hiddify/hiddify-app" class="btn-official" target="_blank">Github 官方页 ↗</a>
       </div>
     </div>
 
-    <!-- v2rayN -->
-    <div class="client-card" data-platforms="win">
+    <!-- v2rayN (Windows) -->
+    <div class="client-card" data-platforms="windows">
       <div class="client-info">
-        <div class="client-title">
-          <span>v2rayN</span>
+        <div class="client-title-row">
+          <span class="client-title">v2rayN</span>
+          <span class="client-platform-badge">Windows</span>
         </div>
-        <p class="client-desc">Windows 平台上非常经典的代理客户端，支持 V2ray, Xray 内核，支持自定义规则，扩展性极其强大，适合有一定自定义配置经验的极客玩家。</p>
+        <p class="client-desc">经典老牌代理工具，支持 Xray/v2fly/sing-box 等多种底层核心，适合对配置参数有高阶调优要求的技术型用户。</p>
         <div class="client-meta">
-          <span class="client-badge">支持协议: SS, Vmess, Vless, Trojan, Hysteria, TUIC</span>
-          <span class="client-badge">最新版本: v6.33</span>
-          <span class="client-badge">老牌工具</span>
+          <span class="client-badge-item">版本：7.23.4</span>
+          <span class="client-badge-item">大小：158.7 MB</span>
+          <span class="client-badge-item">平台：Win 10/11</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
         </div>
       </div>
       <div class="client-actions">
-        <a href="https://github.com/2dust/v2rayN/releases" class="btn-download" target="_blank">官方 Github 下载 ↗</a>
-        <a href="/news.html?cat=教程" class="btn-tutorial">配置教程</a>
+        <a href="https://gate-rank.com/download/file/v2rayn-windows?platform=windows" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/2dust/v2rayN" class="btn-official" target="_blank">Github 官方页 ↗</a>
       </div>
     </div>
 
-    <!-- ClashMetaForAndroid -->
+    <!-- Clashmi (Windows) -->
+    <div class="client-card" data-platforms="windows">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Clashmi</span>
+          <span class="client-platform-badge">Windows</span>
+        </div>
+        <p class="client-desc">基于 Clash 生态及现代渲染器开发的轻量化客户端，支持多种加密规则配置，能耗极低。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：1.0.28.1401</span>
+          <span class="client-badge-item">大小：38.6 MB</span>
+          <span class="client-badge-item">平台：Win 10/11</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/clashmi-windows?platform=windows" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/KaringX/clashmi" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- Karing (macOS) -->
+    <div class="client-card" data-platforms="macos">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Karing</span>
+          <span class="client-platform-badge" style="background:#f3e8ff; color:#7e22ce; border-color:#e9d5ff;">macOS</span>
+        </div>
+        <p class="client-desc">macOS 平台的 Karing 客户端，完美继承跨平台操作逻辑，稳定高效，支持 M 系列芯片与 Intel 架构。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：1.2.22.2502</span>
+          <span class="client-badge-item">大小：98.1 MB</span>
+          <span class="client-badge-item">平台：macOS 12+</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/karing-macos-universal-macos?platform=macos" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/KaringX/karing" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- Hiddify (macOS) -->
+    <div class="client-card" data-platforms="macos">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Hiddify</span>
+          <span class="client-platform-badge">macOS</span>
+        </div>
+        <p class="client-desc">苹果电脑端极简一键代理工具，支持极速网络握手，后台配置傻瓜化，可防 DNS 劫持。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：4.1.1</span>
+          <span class="client-badge-item">大小：79.6 MB</span>
+          <span class="client-badge-item">平台：macOS 12+</span>
+          <span class="client-badge-item">日期：2026-07-09</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/hiddify-macos?platform=macos" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/hiddify/hiddify-app" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- Clash Verge M芯片 (macOS) -->
+    <div class="client-card" data-platforms="macos">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Clash Verge (Apple Silicon)</span>
+          <span class="client-platform-badge">macOS (M1/M2/M3)</span>
+          <span style="background:#ECFDF5; color:#10B981; font-size:0.7rem; padding:2px 6px; border-radius:4px; font-weight:700;">硅片原生</span>
+        </div>
+        <p class="client-desc">适配苹果 Apple Silicon 处理器（M1、M2、M3系列芯片）的原生客户端，提供极致性能和更低功耗表现。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：2.5.2</span>
+          <span class="client-badge-item">大小：58.1 MB</span>
+          <span class="client-badge-item">平台：macOS 12+</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/clash-verge-rev-mac-macos?platform=macos" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/clash-verge-rev/clash-verge-rev" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- Clash Verge Intel芯片 (macOS) -->
+    <div class="client-card" data-platforms="macos">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Clash Verge (Intel CPU)</span>
+          <span class="client-platform-badge">macOS (Intel)</span>
+        </div>
+        <p class="client-desc">针对搭载英特尔处理器的历史苹果电脑（MacBook Pro/iMac等）打包的 Clash 客户端。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：2.5.2</span>
+          <span class="client-badge-item">大小：62.8 MB</span>
+          <span class="client-badge-item">平台：macOS 12+</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/clash-verge-rev-intel-macos?platform=macos" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/clash-verge-rev/clash-verge-rev" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- v2rayN (macOS) -->
+    <div class="client-card" data-platforms="macos">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">v2rayN for macOS</span>
+          <span class="client-platform-badge">macOS</span>
+        </div>
+        <p class="client-desc">移植于 macOS 系统的 v2rayN 通用版本，支持快速导入并切换多节点配置。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：7.23.4</span>
+          <span class="client-badge-item">大小：123.8 MB</span>
+          <span class="client-badge-item">平台：macOS 12+</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/v2rayn-macos?platform=macos" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/2dust/v2rayN" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- Clashmi (macOS) -->
+    <div class="client-card" data-platforms="macos">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Clashmi for Mac</span>
+          <span class="client-platform-badge">macOS</span>
+        </div>
+        <p class="client-desc">轻量化 macOS 代理程序，占用低内存，专为规则切换及极速握手而设计。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：1.0.28.1401</span>
+          <span class="client-badge-item">大小：79.8 MB</span>
+          <span class="client-badge-item">平台：macOS 12+</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/clashmi-macos?platform=macos" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/KaringX/clashmi" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- V2rayU (macOS) -->
+    <div class="client-card" data-platforms="macos">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">V2rayU</span>
+          <span class="client-platform-badge">macOS</span>
+        </div>
+        <p class="client-desc">基于 V2Ray 核心的经典 macOS 图形客户端。支持多节点协议，支持在顶部系统栏一键切换节点。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：5.1.0</span>
+          <span class="client-badge-item">大小：77.1 MB</span>
+          <span class="client-badge-item">平台：macOS 12+</span>
+          <span class="client-badge-item">日期：2026-07-09</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/v2rayu-macos?platform=macos" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/yanue/V2rayU" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- v2rayNG (Android) -->
     <div class="client-card" data-platforms="android">
       <div class="client-info">
-        <div class="client-title">
-          <span>ClashMetaForAndroid (CMFA)</span>
+        <div class="client-title-row">
+          <span class="client-title">v2rayNG</span>
+          <span class="client-platform-badge" style="background:#f0fdf4; color:#15803d; border-color:#bbf7d0;">Android</span>
+          <span style="background:#ECFDF5; color:#10B981; font-size:0.7rem; padding:2px 6px; border-radius:4px; font-weight:700;">最常用</span>
         </div>
-        <p class="client-desc">基于 Clash Meta 内核的安卓端客户端，相比原版 Clash for Android 支持了更多的最新协议（如 Vless-Reality 和 Hysteria），且支持中文和分流控制。</p>
+        <p class="client-desc">安卓平台最主流好用的开源科学上网工具。支持几乎所有常规 V2ray 协议与订阅导入，简单、直接、省电。</p>
         <div class="client-meta">
-          <span class="client-badge">支持协议: SS, Vmess, Vless, Trojan, Hysteria 2</span>
-          <span class="client-badge">最新版本: v2.10.8</span>
-          <span class="client-badge">开源免费</span>
+          <span class="client-badge-item">版本：2.2.6</span>
+          <span class="client-badge-item">大小：27.3 MB</span>
+          <span class="client-badge-item">平台：Android 8+</span>
+          <span class="client-badge-item">日期：2026-07-08</span>
         </div>
       </div>
       <div class="client-actions">
-        <a href="https://github.com/MetaCubeX/ClashMetaForAndroid/releases" class="btn-download" target="_blank">官方 Github 下载 ↗</a>
-        <a href="/news.html?cat=教程" class="btn-tutorial">配置教程</a>
+        <a href="https://gate-rank.com/download/file/v2rayng-for-andraw-android?platform=android" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/2dust/v2rayNG" class="btn-official" target="_blank">Github 官方页 ↗</a>
       </div>
     </div>
+
+    <!-- Karing (Android) -->
+    <div class="client-card" data-platforms="android">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Karing for Android</span>
+          <span class="client-platform-badge">Android</span>
+        </div>
+        <p class="client-desc">跨平台规则客户端在安卓系统的实现，支持自动识别主流订阅链接，UI 交互直观舒服。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：1.2.22.2502</span>
+          <span class="client-badge-item">大小：51.1 MB</span>
+          <span class="client-badge-item">平台：Android 8+</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/karing-android-arm64-v8a-android?platform=android" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/KaringX/karing" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- Hiddify (Android) -->
+    <div class="client-card" data-platforms="android">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Hiddify for Android</span>
+          <span class="client-platform-badge">Android</span>
+        </div>
+        <p class="client-desc">全新架构的一键连接客户端。采用极简环形开关界面，支持分流规则导入，自带多语言。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：4.1.1</span>
+          <span class="client-badge-item">大小：113.5 MB</span>
+          <span class="client-badge-item">平台：Android 8+</span>
+          <span class="client-badge-item">日期：2026-07-09</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/hiddify-android?platform=android" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/hiddify/hiddify-app" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- Clash Meta (Android) -->
+    <div class="client-card" data-platforms="android">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Clash Meta (CMFA)</span>
+          <span class="client-platform-badge">Android</span>
+        </div>
+        <p class="client-desc">基于开源 Mihomo 核心开发的安卓高级客户端，完美支持 Vless-Reality 以及 Hysteria 2 等极速抗封锁协议。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：2.11.32</span>
+          <span class="client-badge-item">大小：41.9 MB</span>
+          <span class="client-badge-item">平台：Android 8+</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/android-android?platform=android" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/MetaCubeX/ClashMetaForAndroid" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- Surfboard (Android) -->
+    <div class="client-card" data-platforms="android">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Surfboard</span>
+          <span class="client-platform-badge">Android</span>
+        </div>
+        <p class="client-desc">被称为安卓版“Surge”的精品规则中转工具。界面完全遵循 Google Material Design 规范，图表功能极其强大。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：2.33</span>
+          <span class="client-badge-item">大小：22.7 MB</span>
+          <span class="client-badge-item">平台：Android 8+</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/surfboard-android?platform=android" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/getsurfboard" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- Clashmi (Android) -->
+    <div class="client-card" data-platforms="android">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Clashmi for Android</span>
+          <span class="client-platform-badge">Android</span>
+        </div>
+        <p class="client-desc">轻量化安卓网络中转助手，能有效拦截冗余垃圾流量，节省后台耗电及数据流量。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：1.0.28.1401</span>
+          <span class="client-badge-item">大小：43.6 MB</span>
+          <span class="client-badge-item">平台：Android 8+</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/clashmi-android?platform=android" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/KaringX/clashmi" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- NekoBox (Android) -->
+    <div class="client-card" data-platforms="android">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">NekoBox for Android</span>
+          <span class="client-platform-badge">Android</span>
+        </div>
+        <p class="client-desc">基于 sing-box 核心的高级科学上网客户端，支持海量自定义协议与极速配置扩展。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：1.4.2</span>
+          <span class="client-badge-item">大小：14.5 MB</span>
+          <span class="client-badge-item">平台：Android 8+</span>
+          <span class="client-badge-item">日期：2026-07-09</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/nekobox-android?platform=android" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/MatsuriDayo/NekoBoxForAndroid" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- Shadowrocket (iOS) -->
+    <div class="client-card" data-platforms="ios">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Shadowrocket (小火箭)</span>
+          <span class="client-platform-badge" style="background:#fff7ed; color:#c2410c; border-color:#ffedd5;">iOS</span>
+          <span style="background:#ECFDF5; color:#10B981; font-size:0.7rem; padding:2px 6px; border-radius:4px; font-weight:700;">首选必备</span>
+        </div>
+        <p class="client-desc">iOS 平台最经典的付费科学上网客户端，上手难度极低，扫码即可自动导入订阅并分流。需要使用外区（如美区、港区）Apple ID 并在 App Store 购买（售价 $2.99）。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">平台：iOS 12+</span>
+          <span class="client-badge-item">售价：$2.99</span>
+          <span class="client-badge-item">状态：需使用外区ID</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://apps.apple.com/us/app/shadowrocket/id932747118" class="btn-download" target="_blank">前往 App Store 下载 ↗</a>
+        <a href="/news.html?cat=教程" class="btn-official">如何获取美区ID</a>
+      </div>
+    </div>
+
+    <!-- Stash (iOS) -->
+    <div class="client-card" data-platforms="ios">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Stash</span>
+          <span class="client-platform-badge">iOS</span>
+        </div>
+        <p class="client-desc">iOS 上知名的“Clash 原生代理工具”，界面与交互专为移动端打造，支持完整的 Clash 配置规则与策略组切换。（售价 $3.99）</p>
+        <div class="client-meta">
+          <span class="client-badge-item">平台：iOS 12+</span>
+          <span class="client-badge-item">售价：$3.99</span>
+          <span class="client-badge-item">状态：需使用外区ID</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://apps.apple.com/us/app/stash/id1596060483" class="btn-download" target="_blank">前往 App Store 下载 ↗</a>
+      </div>
+    </div>
+
+    <!-- Karing (Linux) -->
+    <div class="client-card" data-platforms="linux">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Karing for Linux</span>
+          <span class="client-platform-badge" style="background:#f1f5f9; color:#334155; border-color:#cbd5e1;">Linux</span>
+        </div>
+        <p class="client-desc">针对 Linux 分发版本打包的通用 Karing 代理客户端，支持终端命令行运行或 GUI 界面控制。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：1.2.22.2502</span>
+          <span class="client-badge-item">大小：70.3 MB</span>
+          <span class="client-badge-item">平台：Ubuntu / Debian</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/karing-linux-amd64-linux?platform=linux" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/KaringX/karing" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- v2rayN (Linux) -->
+    <div class="client-card" data-platforms="linux">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">v2rayN for Linux</span>
+          <span class="client-platform-badge">Linux</span>
+        </div>
+        <p class="client-desc">适配 Linux 操作系统的多协议代理客户端，完美集成多内核规则控制与节点测速。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：7.23.4</span>
+          <span class="client-badge-item">大小：75.9 MB</span>
+          <span class="client-badge-item">平台：Ubuntu / Debian</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/v2rayn-linux?platform=linux" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/2dust/v2rayN" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- Hiddify (Linux) -->
+    <div class="client-card" data-platforms="linux">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Hiddify for Linux</span>
+          <span class="client-platform-badge">Linux</span>
+        </div>
+        <p class="client-desc">针对 Linux 用户的轻量化极简一键直连工具，提供极低延迟的多协议绕过体验。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：4.1.1</span>
+          <span class="client-badge-item">大小：40.5 MB</span>
+          <span class="client-badge-item">平台：Ubuntu / Debian</span>
+          <span class="client-badge-item">日期：2026-07-09</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/hiddify-linux?platform=linux" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/hiddify/hiddify-app" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- Clashmi (Linux) -->
+    <div class="client-card" data-platforms="linux">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Clashmi Linux AMD64</span>
+          <span class="client-platform-badge">Linux</span>
+        </div>
+        <p class="client-desc">基于 Linux GUI 框架编写的极速中转应用，支持完整规则流与自定义拦截清单。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：1.0.28.1401</span>
+          <span class="client-badge-item">大小：44.9 MB</span>
+          <span class="client-badge-item">平台：Ubuntu / Debian</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/clashmi-linux-amd64-linux?platform=linux" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/KaringX/clashmi" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
+    <!-- Clash Verge Rev (Linux) -->
+    <div class="client-card" data-platforms="linux">
+      <div class="client-info">
+        <div class="client-title-row">
+          <span class="client-title">Clash Verge Rev for Linux</span>
+          <span class="client-platform-badge">Linux</span>
+        </div>
+        <p class="client-desc">深受 Linux 用户喜爱的跨平台桌面代理应用，支持完整的 Mihomo 分流架构与代理组设定。</p>
+        <div class="client-meta">
+          <span class="client-badge-item">版本：2.5.2</span>
+          <span class="client-badge-item">大小：79.2 MB</span>
+          <span class="client-badge-item">平台：Ubuntu / Debian</span>
+          <span class="client-badge-item">日期：2026-07-26</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <a href="https://gate-rank.com/download/file/clash-verge-rev-linux?platform=linux" class="btn-download">立即下载 📥</a>
+        <a href="https://github.com/clash-verge-rev/clash-verge-rev" class="btn-official" target="_blank">Github 官方页 ↗</a>
+      </div>
+    </div>
+
   </div>
+
+  <!-- FAQ Section -->
+  <section class="faq-section">
+    <h2 class="faq-title">❓ 科学上网客户端常见问题解答 (FAQ)</h2>
+    <div class="faq-accordion">
+      
+      <div class="faq-item">
+        <div class="faq-question">1. Windows 翻墙工具推荐选择哪个？</div>
+        <div class="faq-answer">
+          Windows 用户通常优先建议使用 <strong>Clash Verge Rev</strong> 或 <strong>v2rayN</strong>。<br/>
+          * <strong>Clash Verge Rev</strong>：拥有更加现代化美观的图形操作界面，支持中文，非常适合追求美观与跨平台统一体验的用户。<br/>
+          * <strong>v2rayN</strong>：是 Windows 上的老牌多协议代理客户端，支持最底层的核心组件高度调优，适合对规则、协议有高度自定义要求的极客玩家。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">2. iPhone (iOS) 用户推荐用什么翻墙工具？</div>
+        <div class="faq-answer">
+          iPhone 常见首选是 <strong>Shadowrocket (小火箭)</strong> 和 <strong>Stash</strong>。<br/>
+          * <strong>Shadowrocket</strong>：操作极其简单，通过扫码即可自动完成订阅导入，是大多数机场新手的首选。<br/>
+          * <strong>Stash</strong>：是 iOS 平台非常知名的 Clash 原生协议管理客户端，策略组与分流能力更加细致。这两款软件都属于付费应用，需要配合外区 Apple ID 购买。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">3. Android (安卓) 翻墙推荐用 v2rayNG 还是 Karing？</div>
+        <div class="faq-answer">
+          * <strong>v2rayNG</strong>：非常轻量且省电，只保留核心的节点导入、一键测速及连通开关，适合只想要节点代理直连的普通用户。<br/>
+          * <strong>Karing</strong>：界面更为现代化美观，交互逻辑更友好。您可根据自身偏好选择，建议优先参考您购买的机场后台提供的推荐与专属配置包。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">4. Clash Verge Rev 和 v2rayN 有什么本质区别？</div>
+        <div class="faq-answer">
+          * <strong>Clash Verge Rev</strong>：主要基于 Clash / Mihomo 开源内核，核心逻辑围绕“策略组与分流机制”，适合实现国内外流量自动路由分流。<br/>
+          * <strong>v2rayN</strong>：作为经典的 Windows 外壳程序，支持导入 Xray/v2fly/sing-box 等多种协议内核，更偏好原生的配置调优与协议多合一兼容。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">5. Clash Verge Rev 怎么快速导入机场订阅？</div>
+        <div class="faq-answer">
+          您只需要在机场后台复制 Clash 订阅链接（或点击“一键导入 Clash”），随后在 Clash Verge Rev 的 <strong>Profiles (配置)</strong> 选项卡中，将链接粘贴至输入框，点击 <strong>Import (导入)</strong> 并选中激活该配置即可。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">6. v2rayN 怎么导入机场订阅链接并使用？</div>
+        <div class="faq-answer">
+          在 v2rayN 顶部栏选择 <strong>订阅分组</strong> -> <strong>订阅分组设置</strong>，点击 <strong>添加</strong>，输入别名并在“可选地址(url)”粘贴机场订阅，保存后点击顶部栏 <strong>更新订阅</strong> 即可载入所有节点。最后在底部系统状态栏将“系统代理”模式设为【自动配置系统代理】。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">7. 为什么我下载了客户端后依然打不开外网？</div>
+        <div class="faq-answer">
+          科学上网客户端<strong>只是连接和路由工具，不自带节点资源</strong>。您必须购买一个可用的机场服务，获取其“订阅链接”并导入客户端，然后开启代理开关（系统代理或 Tun 虚拟网卡模式），才能够正常访问外网。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">8. 机场提供的订阅链接是什么意思？</div>
+        <div class="faq-answer">
+          机场订阅链接是服务商提供的一串私密 API 配置地址，其内部包含了所有可用节点的服务器地址、加密密钥、端口、混淆规则以及剩余流量/过期时间等元数据。客户端通过解析该地址才能拉取并自动更新节点列表。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">9. 官方 Github 下载和本地下载有什么不同？</div>
+        <div class="faq-answer">
+          * <strong>Github 官方下载</strong>：会跳转至开发者的官方项目源，确保您可以获取到最新最纯净的版本。<br/>
+          * <strong>本地下载</strong>：为本站提供的本地分流备用包，通常适合在 GFW 封锁严重、用户直连 Github 官方页面速度缓慢甚至完全打不开时使用，安全度与官方包一致。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">10. iOS 的 Shadowrocket 为什么在国内 App Store 找不到？</div>
+        <div class="faq-answer">
+          由于中国区 App Store 的监管政策，所有代理类、VPN 类的应用程序均无法在中国大陆区上架及购买。用户必须注册或租赁一个外区（如美国、香港、日本等）的 Apple ID，登录外区 App Store 才能搜索并下载到 Shadowrocket 或 Stash。
+        </div>
+      </div>
+
+    </div>
+  </section>
 </main>
 
 <!-- Footer -->
@@ -354,7 +991,7 @@
     // Update active tab styling
     const buttons = document.querySelectorAll('.platform-tab-btn');
     buttons.forEach(btn => {
-      if (btn.textContent.includes(platform) || (platform === 'all' && btn.textContent === '全部系统')) {
+      if (btn.getAttribute('onclick').includes(platform)) {
         btn.classList.add('active');
       } else {
         btn.classList.remove('active');
@@ -376,6 +1013,22 @@
       }
     });
   }
+
+  // FAQ Accordion Interactivity
+  document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const isActive = item.classList.contains('active');
+      
+      // Close all other items
+      document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
+      
+      // Toggle current item
+      if (!isActive) {
+        item.classList.add('active');
+      }
+    });
+  });
 </script>
 </body>
 </html>

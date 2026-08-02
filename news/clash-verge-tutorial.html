@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>新手教程：Clash Verge Rev 订阅导入与常用分流规则设置 - JcTuijian</title>
+  <meta name="description" content="新手小白必看的Clash Verge Rev客户端基础配置与使用教程，指导如何正确导入机场订阅、切换分流策略组及配置系统代理实现翻墙。" />
+  <meta name="keywords" content="Clash Verge Rev教程,Clash Verge怎么用,Clash订阅导入,科学上网新手教程" />
+  <link rel="canonical" href="https://jctuijian.com/news/clash-verge-tutorial.html" />
+  <link rel="stylesheet" href="../assets/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230EA5E9'/><text y='22' x='5' font-size='20'>✈</text></svg>" />
+</head>
+<body>
+
+<!-- 导航栏 -->
+<header>
+  <nav class="navbar" id="navbar" aria-label="主导航">
+    <div class="container navbar-inner">
+      <a class="navbar-logo" href="/index.html" aria-label="机场推荐 JcTuijian 首页">
+        <div class="logo-icon" aria-hidden="true" style="display: flex; align-items: center; justify-content: center;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L14 19v-5.5l7 2.5z"/>
+          </svg>
+        </div>
+        <span>机场推荐<span style="color:var(--color-brand);">JcTuijian</span></span>
+      </a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="打开菜单" aria-expanded="false">☰</button>
+      <nav class="navbar-nav" id="navbar-nav" aria-label="分类导航">
+        <a href="/index.html" id="nav-today">今日推荐</a>
+        <a href="/all.html" id="nav-all">全量榜单</a>
+        <a href="/promo.html" id="nav-promo">活动优惠</a>
+        <a href="/risk.html" id="nav-risk">跑路预警 <span class="badge">紧急</span></a>
+        <a href="/method.html" id="nav-method">测评方法</a>
+        <div class="dropdown" id="nav-tools-dropdown">
+          <a href="/tools.html" class="dropdown-trigger" id="nav-tools">工具</a>
+          <div class="dropdown-content">
+            <a href="/tools-download.html">翻墙工具下载</a>
+            <a href="/tools-streaming.html">流媒体解锁检测</a>
+            <a href="/tools-ip.html">IP 检测</a>
+            <a href="/tools-dns.html">DNS 泄漏检测</a>
+          </div>
+        </div>
+        <div class="dropdown active" id="nav-news-dropdown">
+          <a href="/news.html" class="dropdown-trigger active" id="nav-news">资讯</a>
+          <div class="dropdown-content">
+            <a href="/news.html">全部资讯</a>
+            <a href="/news.html?cat=测评">机场测评</a>
+            <a href="/news.html?cat=预警">风险预警</a>
+            <a href="/news.html?cat=教程">使用教程</a>
+            <a href="/news.html?cat=安全">支付安全</a>
+            <a href="/news.html?cat=协议">客户端协议</a>
+            <a href="/news.html?cat=监管">行业监管</a>
+            <a href="/news.html?cat=运营">机场主运营</a>
+            <a href="/news.html?cat=AI">AI工具</a>
+          </div>
+        </div>
+      </nav>
+      <div class="navbar-actions">
+        <button class="btn-ghost" id="btn-login" aria-label="登录" onclick="window.location.href='/portal.html'">登录</button>
+        <a href="/portal.html" class="btn-primary" id="btn-apply" aria-label="申请入驻测试">申请入驻测试 ↗</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Main content -->
+<main class="container" style="margin-top: 48px; margin-bottom: 80px; max-width: 800px;">
+  <article class="article-layout">
+    <header style="margin-bottom: 28px;">
+      <span class="news-card-cat" style="display:inline-block; margin-bottom:12px;">使用教程</span>
+      <h1 style="font-size: 2.2rem; line-height:1.25; color:var(--color-text-primary); margin-bottom:16px;">新手教程：Clash Verge Rev 订阅导入与常用分流规则设置</h1>
+      <div style="font-size: 0.85rem; color:var(--color-text-muted); display:flex; gap:16px;">
+        <span>📅 发布日期: 2026-07-28</span>
+        <span>👤 作者: JcTuijian 教程小组</span>
+        <span>👁 阅读量: 820 次</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+      <p>Clash Verge Rev 凭借优雅的图形界面以及对新一代 Clash Meta (Mihomo) 内核的完美兼容，已逐步成为 Windows 和 macOS 平台上最主流的科学上网代理客户端。为了帮助零基础的机场新手快速上手，本篇将为您详细梳理软件的安装、订阅配置与常见设置要点。</p>
+      
+      <h2>一、 下载与首次打开</h2>
+      <p>首先，您需要访问我们的 <a href="/tools-download.html">翻墙客户端下载页</a> 获取 Clash Verge Rev 官方安装包或本地纯净分流。安装完成后，首次打开软件可能会提示系统管理员权限弹窗，请选择【允许】以保证虚拟 TUN 网卡驱动可以正确载入。</p>
+      
+      <h2>二、 导入您的机场订阅链接</h2>
+      <p>准备好您已购买的科学上网机场“Clash订阅链接”，随后按以下步骤操作：</p>
+      <ol>
+        <li>在客户端左侧菜单栏中点击 <strong>Profiles (配置)</strong>。</li>
+        <li>在顶部输入框中粘贴您的机场订阅链接。</li>
+        <li>点击输入框右侧的 <strong>Import (导入)</strong> 按钮。</li>
+        <li>等待几秒钟下载完毕后，列表中会多出一个卡片，<strong>鼠标左键点击它</strong> 使其高亮（表示选中激活此配置）。</li>
+      </ol>
+      <p>若遇到导入失败，通常是订阅地址被本地宽带屏蔽（直连 Github 失败），可在官网临时开启代理，或联系机场主获取代理后的备份链接。</p>
+
+      <h2>三、 选择节点与启用系统代理</h2>
+      <p>订阅激活后，接下来进行连接设置：</p>
+      <ul>
+        <li>点击左侧菜单的 <strong>Proxies (代理)</strong> 选项。</li>
+        <li>在策略组中，选择您中意的地区（如：香港、新加坡、美国、日本等），点击展开并选中一个活跃的节点。</li>
+        <li>点击左侧菜单的 <strong>Settings (设置)</strong>，在系统设置模块中，勾选并打开 <strong>System Proxy (系统代理)</strong> 选项开关。</li>
+      </ul>
+      <p>此时，您即可在浏览器中输入 `google.com` 尝试畅快访问，默认的“Rule (规则) 模式”会自动确保国内网站直连、海外站点自动走代理分流。</p>
+    </div>
+  </article>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo-row">
+          <div class="logo-icon" style="width:30px;height:30px;background:linear-gradient(135deg,#0EA5E9,#6366F1);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 2px 8px rgba(14,165,233,.35)">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+              <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L14 19v-5.5l7 2.5z"/>
+            </svg>
+          </div>
+          <span class="logo-text">机场推荐 JcTuijian</span>
+        </div>
+        <p>专注 VPN 机场可靠性测评与推荐，帮助用户找到稳定、高速、安全的科学上网工具。</p>
+      </div>
+      <div class="footer-links">
+        <h4>机场分类</h4>
+        <ul>
+          <li><a href="/index.html">今日推荐</a></li>
+          <li><a href="/all.html">全量稳定机场</a></li>
+          <li><a href="/all.html">性价比机场</a></li>
+          <li><a href="/risk.html">跑路预警</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>网络工具箱</h4>
+        <ul>
+          <li><a href="/tools-download.html">客户端下载</a></li>
+          <li><a href="/tools-streaming.html">流媒体检测</a></li>
+          <li><a href="/tools-ip.html">IP 地理位置</a></li>
+          <li><a href="/tools-dns.html">DNS 泄露分析</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>关于我们</h4>
+        <ul>
+          <li><a href="/method.html">测评标准说明</a></li>
+          <li><a href="/portal.html">商家入驻申请</a></li>
+          <li><a href="mailto:admin@jctuijian.com">联系我们</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 <a href="https://jctuijian.com/">JcTuijian.com</a> · 机场推荐榜单</span>
+      <span>
+        <a href="/sitemap.xml">Sitemap</a> ·
+        <a href="/robots.txt">Robots</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>
