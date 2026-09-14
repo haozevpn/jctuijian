@@ -153,12 +153,16 @@
   <div class="form-group">
     <label for="urls-input">输入要提交的URL（每行一个）</label>
     <div class="quick-urls">
-      <button class="quick-url-btn" onclick="addQuickUrl('https://jctuijian.com/')">首页</button>
-      <button class="quick-url-btn" onclick="addQuickUrl('https://jctuijian.com/index.html')">今日推荐</button>
-      <button class="quick-url-btn" onclick="addQuickUrl('https://jctuijian.com/all.html')">全量榜单</button>
-      <button class="quick-url-btn" onclick="addQuickUrl('https://jctuijian.com/news.html')">资讯中心</button>
-      <button class="quick-url-btn" onclick="addQuickUrl('https://jctuijian.com/jichang-tuijian.html')">机场推荐专题</button>
-      <button class="quick-url-btn" onclick="addQuickUrl('https://jctuijian.com/risk.html')">跑路预警</button>
+      <button class="quick-url-btn" onclick="addQuickUrl('https://jctuijian.com/')">🏠 首页</button>
+      <button class="quick-url-btn" onclick="addQuickUrl('https://jctuijian.com/all.html')">📋 全量榜单</button>
+      <button class="quick-url-btn" onclick="addQuickUrl('https://jctuijian.com/jichang-tuijian.html')">⭐ 机场推荐专题</button>
+      <button class="quick-url-btn" onclick="addQuickUrl('https://jctuijian.com/news.html')">📰 资讯中心</button>
+      <button class="quick-url-btn" onclick="addQuickUrl('https://jctuijian.com/news/cost-effective-airports.html')">💰 性价比机场推荐(新)</button>
+      <button class="quick-url-btn" onclick="addQuickUrl('https://jctuijian.com/news/stable-ladder-guide.html')">🛡️ 稳定梯子指南(新)</button>
+      <button class="quick-url-btn" onclick="addQuickUrl('https://jctuijian.com/news/jilian-jiuba-review.html')">📊 极连云与99吧实测(新)</button>
+      <button class="quick-url-btn" onclick="addQuickUrl('https://jctuijian.com/news/clash-github-airport-guide.html')">🚀 Clash与GitHub(新)</button>
+      <button class="quick-url-btn" onclick="addQuickUrl('https://jctuijian.com/news/free-airports-risks-guide.html')">⚠️ 免费试用陷阱(新)</button>
+      <button class="quick-url-btn" style="background:#0284c7; color:#fff; font-weight:600;" onclick="loadAllSitemapUrls()">⚡ 一键载入全站Sitemap全部URL</button>
     </div>
     <textarea
       id="urls-input"
@@ -192,6 +196,22 @@ function addQuickUrl(url) {
   if (!urls.includes(url)) {
     urls.push(url);
     textarea.value = urls.join('\n');
+  }
+}
+
+async function loadAllSitemapUrls() {
+  try {
+    const res = await fetch('/sitemap.xml');
+    const text = await res.text();
+    const matches = text.match(/<loc>(https?:\/\/[^<]+)<\/loc>/g);
+    if (matches) {
+      const urls = matches.map(m => m.replace(/<\/?loc>/g, '').trim());
+      const textarea = document.getElementById('urls-input');
+      textarea.value = urls.join('\n');
+      alert(`已成功载入 Sitemap 中的 ${urls.length} 个 URL！点击下方按钮即可提交。`);
+    }
+  } catch (err) {
+    alert('读取 sitemap.xml 失败，请直接输入 URL');
   }
 }
 
