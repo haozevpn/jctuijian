@@ -242,6 +242,115 @@ button, input, select { font-family: inherit; }
 }
 .hero-cta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 
+/* ── Hero 区统计面板 (Hero Stats Bar & Cards) ───────────────── */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+  max-width: 920px;
+}
+
+.hero-stat-card,
+.hero-stat {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+  transition: all var(--transition);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-stat-card:hover,
+.hero-stat:hover {
+  background: #FFFFFF;
+  border-color: rgba(14, 165, 233, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -4px rgba(14, 165, 233, 0.12);
+}
+
+.hero-stat-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-stat-value,
+.hero-stat strong {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+/* 兼容未包含 hero-stat-card 的 html 结构 */
+.hero-stat {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.hero-stat strong {
+  display: block;
+  margin-top: 4px;
+}
+
+.hero-stat .dot,
+.hero-stat-label .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10B981;
+  display: inline-block;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.hero-stat .dot::after,
+.hero-stat-label .dot::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 50%;
+  border: 2px solid #10B981;
+  animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@media (max-width: 860px) {
+  .hero-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .hero-stat-card,
+  .hero-stat {
+    padding: 12px 14px;
+  }
+  .hero-stat-value,
+  .hero-stat strong {
+    font-size: 1.15rem;
+  }
+}
+
 /* 测速控制面板 (Dashboard Card) */
 .hero-dashboard {
   background: rgba(255, 255, 255, 0.92);

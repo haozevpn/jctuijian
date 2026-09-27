@@ -154,18 +154,21 @@
 
     <!-- 实时统计 -->
     <div class="hero-stats" aria-label="站点统计">
-      <div class="hero-stat">
-        <span class="dot" aria-hidden="true"></span>
-        监测机场 <strong><span id="stat-monitored">0</span></strong>
+      <div class="hero-stat-card">
+        <div class="hero-stat-label"><span class="dot" aria-hidden="true"></span> 监测机场</div>
+        <div class="hero-stat-value" id="stat-monitored">0</div>
       </div>
-      <div class="hero-stat">
-        实时测速 <strong><span id="stat-speedtests">0</span>+</strong>
+      <div class="hero-stat-card">
+        <div class="hero-stat-label">实时测速</div>
+        <div class="hero-stat-value"><span id="stat-speedtests">0</span>+</div>
       </div>
-      <div class="hero-stat">
-        报告更新：<strong><span id="stat-update">--</span></strong>
+      <div class="hero-stat-card">
+        <div class="hero-stat-label">报告更新</div>
+        <div class="hero-stat-value" id="stat-update">--</div>
       </div>
-      <div class="hero-stat">
-        探测日期：<strong><span id="stat-detect-date">--</span></strong>
+      <div class="hero-stat-card">
+        <div class="hero-stat-label">探测日期</div>
+        <div class="hero-stat-value" id="stat-detect-date">--</div>
       </div>
     </div>
   </div>
