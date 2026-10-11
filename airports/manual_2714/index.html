@@ -1102,12 +1102,15 @@
       document.getElementById('price-yearly').textContent = data.price_yearly || '¥80/年起';
 
       // ── 填充电报与售后信息 ─────────────────────────────────
-      const tgGroupUrl = data.tg_group_url || '';
+      const safeExternalUrl = (value) => {
+        const raw = String(value || '').trim(); if (!/^(https?:\/\/|tg:)/i.test(raw)) return ''; try { const url = new URL(raw); return ['http:', 'https:', 'tg:'].includes(url.protocol) ? url.href : ''; } catch { return ''; }
+      };
+      const tgGroupUrl = safeExternalUrl(data.tg_group_url);
       document.getElementById('tg-group').innerHTML = tgGroupUrl 
         ? `<a href="${tgGroupUrl}" target="_blank" style="color:var(--color-brand)">查看链接</a>`
         : '<span style="color:var(--color-text-muted)">无</span>';
         
-      const tgChannelUrl = data.tg_channel_url || '';
+      const tgChannelUrl = safeExternalUrl(data.tg_channel_url);
       document.getElementById('tg-channel').innerHTML = tgChannelUrl 
         ? `<a href="${tgChannelUrl}" target="_blank" style="color:var(--color-brand)">查看链接</a>`
         : '<span style="color:var(--color-text-muted)">无</span>';
@@ -1125,7 +1128,8 @@
       document.getElementById('ticket-support').innerHTML = getYesNoSpan(data.ticket_support !== undefined ? data.ticket_support : true);
       
       // 客服机器人/客服号如果是链接则渲染为超链接
-      const customerBot = data.customer_bot || '';
+      const customerBotRaw = String(data.customer_bot || '').trim();
+      const customerBot = safeExternalUrl(customerBotRaw);
       if (customerBot) {
         if (customerBot.startsWith('http') || customerBot.includes('t.me/')) {
           document.getElementById('customer-bot').innerHTML = `<a href="${customerBot}" target="_blank" style="color:var(--color-brand)">查看链接</a>`;
@@ -1133,7 +1137,7 @@
           document.getElementById('customer-bot').textContent = customerBot;
         }
       } else {
-        document.getElementById('customer-bot').textContent = '暂无';
+        document.getElementById('customer-bot').textContent = String(data.customer_bot || '暂无');
       }
 
       // 智能展示监测时间

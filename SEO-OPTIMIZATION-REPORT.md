@@ -75,3 +75,29 @@
    - 在 Telegram 相关交流群与 V2EX 社区发布技术测评文章，引入天然优质流量。
 3. **定期更新内容与测速数据**：
    - 保持 30 分钟/次的后台自动化测速，确保榜单数据的真实性与新鲜度（Freshness Score）。
+
+---
+
+## 6. 2026-10-12 增量优化记录
+
+针对近期流量下滑与截图中暴露的关键词机会，本次新增并验证了以下改动：
+
+- 新增《2026机场推荐怎么选？VPN机场、机场节点与稳定梯子实测指标指南》，覆盖 `机场推荐`、`VPN机场`、`机场节点`、`机场测速`、`稳定梯子`、`免费机场试用` 等高意向词，并加入晚高峰测速、丢包、月付防风险等可执行内容。
+- 在 `news.html` 增加最新文章卡片和热门文章内链，更新页面 Title、Description、Keywords、Open Graph 与 `CollectionPage` 结构化数据。
+- 新文章加入 `Article` 与 `BreadcrumbList` JSON-LD、规范 canonical、作者与发布日期字段，便于搜索引擎理解文章主题和更新时间。
+- 在 `sitemap.xml` 登记新文章并将资讯索引页 `lastmod` 更新为 `2026-10-12`，上线后应在 Search Console / IndexNow 提交新 URL。
+
+### 发布后检查清单
+
+1. 在 Google Search Console 和 Bing Webmaster Tools 分别检查新 URL 是否可抓取、canonical 是否指向自身。
+2. 观察 7 天内 `机场推荐`、`机场测速`、`VPN机场` 等词的展现与点击变化，再根据实际查询词补充 FAQ 或更新段落。
+3. 每次更新测速数据时同步修改文章中的“最后更新”信息，避免页面内容与榜单状态不一致。
+
+## 7. 2026-10-12 全站内链与抓取规范修复
+
+- 修复首页两个失效机场入口，将不存在的 `feimao`、`weifeng` 链接替换为实际存在的机场详情页。
+- 将机场详情页内链、canonical 与 sitemap 统一为目录形式，例如 `/airports/jilian/`，避免 `index.html` 与目录 URL 信号分裂。
+- 更新 `robots.txt`，移除会覆盖通配规则的搜索引擎专属分组，确保 `/admin.html`、`/portal.html`、`/redirect.html` 对所有爬虫一致禁止抓取。
+- 为 `indexnow-submit.html` 补充 description 与 canonical，同时保留 `noindex, nofollow`。
+- 对机场详情页和报告页中的 Telegram、客服机器人动态地址增加 `http/https/tg` 协议白名单与空值保护，并为新窗口链接补充 `noopener noreferrer`。
+- 二次审计结果：静态内链缺失 0、sitemap 指向不存在文件 0、重复 sitemap URL 0、公共页 SEO 基础标签缺失 0。

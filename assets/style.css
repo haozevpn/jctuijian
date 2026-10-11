@@ -1812,3 +1812,328 @@ button, input, select { font-family: inherit; }
   font-weight: 700;
 }
 
+/* ============================================================
+   2026 Editorial Refresh
+   将原先的玻璃拟态和蓝紫渐变统一为克制的编辑部 / 数据工具风格。
+   只覆盖共享组件，保留页面结构与交互脚本。
+   ============================================================ */
+:root {
+  --font-body: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  --font-display: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  --color-bg: #f4f6f5;
+  --color-surface: #ffffff;
+  --color-surface-glass: #ffffff;
+  --color-border: #d8dfdc;
+  --color-border-hover: #b7c6c0;
+  --color-border-accent: #a7c9c1;
+  --color-text-primary: #15252c;
+  --color-text-secondary: #52636a;
+  --color-text-muted: #809097;
+  --color-brand: #0f766e;
+  --color-brand-dark: #115e59;
+  --color-brand-indigo: #334e68;
+  --color-brand-purple: #334e68;
+  --color-brand-bg: #e8f3f1;
+  --gradient-brand: #0f766e;
+  --gradient-text: #0f766e;
+  --gradient-card-top: #0f766e;
+  --color-score-high: #087f5b;
+  --color-score-high-bg: #e8f5ef;
+  --color-score-mid: #b35c00;
+  --color-score-mid-bg: #fff4df;
+  --color-score-low: #b42318;
+  --color-score-low-bg: #fff0ee;
+  --color-risk-bg: #fff8f5;
+  --color-risk-border: #efc6bb;
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px rgba(21, 37, 44, .05);
+  --shadow-md: 0 5px 18px rgba(21, 37, 44, .08);
+  --shadow-lg: 0 12px 30px rgba(21, 37, 44, .12);
+  --shadow-brand: 0 5px 14px rgba(15, 118, 110, .18);
+  --shadow-hover: 0 8px 22px rgba(21, 37, 44, .1);
+  --transition: .18s ease;
+}
+
+html { background: var(--color-bg); }
+body {
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  font-size: 15px;
+}
+a { text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration: none; }
+:focus-visible { outline: 3px solid rgba(15, 118, 110, .28); outline-offset: 2px; }
+
+/* 顶部导航：取消毛玻璃和胶囊式选中态 */
+.navbar {
+  background: #fff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid #d8dfdc;
+  box-shadow: 0 1px 0 rgba(21, 37, 44, .03);
+}
+.navbar-inner { height: 62px; gap: 24px; }
+.navbar-logo { font-size: 1.05rem; letter-spacing: 0; }
+.navbar-logo .logo-icon {
+  width: 32px; height: 32px; border-radius: 7px;
+  background: var(--color-text-primary) !important;
+  box-shadow: none !important;
+}
+.navbar-logo:hover .logo-icon { transform: none; background: var(--color-brand) !important; }
+.navbar-nav { gap: 2px; }
+.navbar-nav a {
+  padding: 20px 12px 17px;
+  border-radius: 0;
+  font-size: .86rem;
+  font-weight: 600;
+  color: #586970;
+  border-bottom: 3px solid transparent;
+}
+.navbar-nav a:hover,
+.navbar-nav a.active {
+  color: var(--color-text-primary);
+  background: transparent;
+  border-bottom-color: var(--color-brand);
+}
+.navbar-nav .badge {
+  background: #d94841;
+  box-shadow: none;
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+.navbar-actions { gap: 8px; }
+.btn-ghost, .btn-primary, .btn-secondary {
+  border-radius: 6px;
+  box-shadow: none;
+  font-size: .83rem;
+}
+.btn-ghost { padding: 8px 14px; background: #fff; border-color: #cbd6d2; }
+.btn-ghost:hover { background: #f4f8f7; border-color: var(--color-brand); color: var(--color-brand-dark); }
+.btn-primary {
+  padding: 9px 16px;
+  background: var(--color-brand) !important;
+  color: #fff;
+}
+.btn-primary:hover { transform: none; background: var(--color-brand-dark) !important; box-shadow: var(--shadow-brand); }
+.btn-secondary { background: #fff; }
+.btn-secondary:hover { transform: none; box-shadow: var(--shadow-sm); }
+.dropdown-content {
+  top: calc(100% - 1px);
+  background: #fff;
+  backdrop-filter: none;
+  border-radius: 6px;
+  box-shadow: var(--shadow-lg);
+  padding: 5px;
+}
+.dropdown-content a { padding: 9px 11px; border: 0; }
+.dropdown-content a:hover { background: var(--color-brand-bg); }
+
+/* 首页头图：从营销渐变改为白底信息层级 */
+.hero {
+  padding: 58px 0 50px;
+  background: #eef3f2;
+  border-bottom: 1px solid #d8dfdc;
+}
+.hero::before { display: none; }
+.hero-container { gap: 48px; }
+.hero h1 {
+  font-size: clamp(2rem, 4.2vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -.045em;
+  line-height: 1.16;
+}
+.hero h1 span span {
+  background: none;
+  color: var(--color-brand);
+  -webkit-text-fill-color: currentColor;
+}
+.hero-subtitle { color: #52636a; max-width: 620px; }
+.hero-badge {
+  background: #fff !important;
+  border-color: #b7d8d0 !important;
+  color: var(--color-brand-dark) !important;
+  border-radius: 5px !important;
+  box-shadow: none !important;
+}
+.hero-dashboard {
+  background: #fff;
+  backdrop-filter: none;
+  border-color: #d8dfdc;
+  border-radius: 10px;
+  box-shadow: 0 10px 28px rgba(21, 37, 44, .08);
+}
+.hero-dashboard:hover { transform: none; }
+.dashboard-item, .hero-stat-card, .hero-stat {
+  background: #f7f9f8;
+  border-color: #d8dfdc;
+  border-radius: 7px;
+  box-shadow: none;
+}
+.dashboard-item:hover, .hero-stat-card:hover, .hero-stat:hover {
+  background: #f1f7f5;
+  border-color: #a7c9c1;
+  transform: none;
+  box-shadow: none;
+}
+.dashboard-status { border-radius: 5px; box-shadow: none; }
+
+/* 分类筛选：更像工具栏而非渐变胶囊 */
+.category-tabs {
+  padding: 10px 0 0;
+  background: #fff;
+  backdrop-filter: none;
+  top: 62px;
+  box-shadow: none;
+}
+.tab-btn {
+  padding: 9px 15px;
+  border-radius: 6px;
+  background: #fff;
+  font-size: .84rem;
+}
+.tab-btn.active {
+  background: var(--color-text-primary);
+  color: #fff;
+  border-color: var(--color-text-primary);
+  box-shadow: none;
+}
+.tab-btn:hover { background: var(--color-brand-bg); border-color: #a7c9c1; }
+
+/* 标题和卡片：统一细边框、低阴影、少装饰 */
+.section { padding: 44px 0; }
+.section-title, .geo-intro h2 { font-weight: 800; letter-spacing: -.035em; }
+.section-subtitle { color: var(--color-brand-dark); }
+.section-icon {
+  width: 38px; height: 38px; border-radius: 7px;
+  background: var(--color-text-primary);
+  box-shadow: none;
+}
+.section-meta .live-dot { box-shadow: none; }
+.cards-grid, .promo-list, .toolkit-grid, .news-list, .geo-faq-grid { gap: 18px; }
+.airport-card, .promo-card, .toolkit-card, .news-card, .method-step,
+.dimension-column, .geo-faq-card, .sidebar-widget, .method-intro-text,
+.method-card, .score-dim-item, .score-range-item, .timeline-content,
+.faq-item, .article-layout {
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+}
+.airport-card, .promo-card, .toolkit-card, .news-card, .method-step,
+.dimension-column, .geo-faq-card, .method-card, .score-dim-item,
+.score-range-item, .timeline-content, .faq-item, .article-layout { border-color: #d8dfdc; }
+.airport-card { padding: 22px; }
+.airport-card::before { height: 2px; background: var(--color-brand); opacity: 1; }
+.airport-card:hover, .promo-card:hover, .toolkit-card:hover, .news-card:hover,
+.method-step:hover, .geo-faq-card:hover, .method-card:hover {
+  transform: translateY(-2px);
+  border-color: #a7c9c1;
+  box-shadow: var(--shadow-hover);
+}
+.card-meta, .dimension-row, .toolkit-card-tag { background: #f7f9f8; border-color: #d8dfdc; }
+.card-conclusion { background: #f1f7f5; border-left-color: var(--color-brand); }
+.card-score.high, .dimension-score { color: var(--color-score-high); }
+.btn-report { border-radius: 6px; background: var(--color-text-primary); }
+.btn-report:hover { background: #263b44; transform: none; box-shadow: none; }
+.btn-official { border-radius: 6px; background: var(--color-brand-bg); color: var(--color-brand-dark); border-color: #b7d8d0; }
+.btn-official:hover { background: var(--color-brand); transform: none; box-shadow: none; }
+.promo-badge { border-radius: 4px; box-shadow: none; background: #d94841; }
+.promo-copy-btn { background: var(--color-text-primary); border-radius: 5px; box-shadow: none; }
+.promo-copy-btn:hover { transform: none; }
+.warning-log-card { border-radius: 8px; box-shadow: var(--shadow-sm); }
+.warning-status-badge, .dimension-risk-badge { border-radius: 4px; box-shadow: none; }
+
+/* 工具、资讯和 FAQ */
+.toolkit-card::before { background: var(--color-brand); }
+.toolkit-card-num { border-radius: 4px; background: var(--color-brand-bg); border-color: #b7d8d0; }
+.news-card-img { filter: saturate(.82); }
+.news-card-cat { border-radius: 4px; background: var(--color-brand-bg); border-color: #b7d8d0; }
+.news-card-meta { border-top-color: #e8eeeb; }
+.geo-section { background: #fff; }
+.geo-faq-card { background: #f7f9f8; }
+.geo-faq-card:hover { background: #fff; }
+
+/* 资讯侧栏和文章页 */
+.news-layout .news-card { border-radius: 8px; }
+.news-sidebar { top: 82px; }
+.sidebar-widget-title { border-bottom-color: #dce6e2; }
+.sidebar-widget-title::after { background: var(--color-brand); border-radius: 0; }
+#sidebar-categories .sidebar-item a { border-radius: 5px; background: #f7f9f8; border-color: #d8dfdc; }
+#sidebar-categories .sidebar-item a:hover { transform: none; }
+.article-layout { padding: 38px 46px; }
+.article-body h2 { border-left: 3px solid var(--color-brand); }
+.article-body blockquote { background: #f1f7f5; border-left-color: var(--color-brand); border-radius: 0 5px 5px 0; }
+
+/* 页脚 */
+.footer { margin-top: 64px; background: #17272e; border-top: 0; color: #dce6e2; }
+.footer-brand .logo-icon { background: var(--color-brand) !important; box-shadow: none !important; }
+.footer-brand p, .footer-links a, .footer-bottom, .footer-bottom a { color: #9fb1b0; }
+.footer-links h4, .footer-brand .logo-text { color: #f7faf9; }
+.footer-links a:hover, .footer-bottom a:hover { color: #8bd1c4; }
+.footer-bottom { border-top-color: rgba(255,255,255,.14); }
+
+/* 机场推荐长页底部行动区：与新的编辑部配色保持一致 */
+.recommend-cta {
+  margin-bottom: 60px;
+  padding: 42px 48px;
+  border: 1px solid #b7d8d0;
+  border-radius: 10px;
+  background: #e8f3f1;
+  color: var(--color-text-primary);
+  text-align: center;
+}
+.recommend-cta h2 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: var(--color-text-primary);
+}
+.recommend-cta p {
+  font-size: 1rem;
+  margin-bottom: 26px;
+  color: var(--color-text-secondary);
+}
+.recommend-cta .btn-primary { background: var(--color-brand) !important; color: #fff; }
+.recommend-cta .btn-secondary { background: #fff; color: var(--color-text-primary); border-color: #b7c6c0; }
+
+/* 报告页 / 机场详情页的局部组件也统一到同一套色板 */
+.report-hero-card, .report-container .metric-card, .report-container .trend-card,
+.report-container .content-card, .report-container .result-box,
+.report-container .conclusion-card, .report-container .history-card,
+.report-container .stat-card, .report-container .rating-breakdown-grid > *,
+.report-container .breakdown-stat-card {
+  border-radius: 8px !important;
+  border-color: #d8dfdc !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+.report-hero-card::before { background: var(--color-brand) !important; height: 2px !important; }
+.report-container .score-circle-wrap { box-shadow: none !important; }
+.report-container .hero-verify-tag, .report-container .score-delta-badge,
+.report-container .status-badge { border-radius: 4px !important; box-shadow: none !important; }
+.report-container .btn-test, .report-container .btn-refresh,
+.report-container .btn-download { border-radius: 6px !important; box-shadow: none !important; }
+.report-container .btn-test { background: var(--color-brand) !important; }
+.report-container .trend-header, .report-container .metric-title { color: var(--color-text-primary); }
+.score-dim-bar, .score-dim-bar-fill { border-radius: 3px !important; }
+.airport-live-score, .score-rating, .score-circle-wrap { background: #f1f7f5 !important; }
+.spec-card, .spec-row-item, .detail-grid-2col > *, .faq-accordion,
+.faq-item, .indicator-box, .info-box { border-radius: 8px !important; box-shadow: var(--shadow-sm) !important; }
+
+/* 减少大面积浮动动画，保留必要的交互反馈 */
+.airport-card, .toolkit-card, .news-card, .promo-card, .warning-log-card,
+.method-step, .geo-faq-card { animation: none; }
+.ping-dot::after, .hero-stat .dot::after, .hero-stat-label .dot::after { animation: none; }
+
+@media (max-width: 768px) {
+  .navbar-inner { height: 58px; }
+  .navbar-nav { top: 58px; padding: 10px 18px; gap: 0; }
+  .navbar-nav a { padding: 11px 12px; border-bottom: 1px solid #edf1ef; }
+  .navbar-actions .btn-ghost { display: none; }
+  .hero { padding: 42px 0 36px; }
+  .hero h1 { font-size: 2rem; }
+  .category-tabs { top: 58px; }
+  .article-layout { padding: 26px 20px; }
+}
+

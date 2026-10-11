@@ -1,32 +1,11 @@
-# 允许所有搜索引擎爬虫访问
+# 允许搜索引擎抓取公开页面
 User-agent: *
 Allow: /
 
-# 禁止访问后台管理页面
+# 禁止访问后台、登录和跳转页面
 Disallow: /admin.html
 Disallow: /portal.html
 Disallow: /redirect.html
 
-# Sitemap位置
+# Sitemap 位置
 Sitemap: https://jctuijian.com/sitemap.xml
-
-# 针对主流搜索引擎的特殊配置
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 0
-
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 0
-
-User-agent: Baiduspider
-Allow: /
-Crawl-delay: 1
-
-User-agent: Sogou web spider
-Allow: /
-Crawl-delay: 1
-
-User-agent: 360Spider
-Allow: /
-Crawl-delay: 1
